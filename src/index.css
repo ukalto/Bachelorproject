@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?&family=Secular+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    scroll-behavior: smooth;
+}
+
+:root {
+    ---primary: #fff;
+    ---secondary: #01be96;
+    ---tertiary: rgb(43, 43, 53);
+    ---fourth: #f2f2f2;
+    ---error: red;
+}
+
+body {
+    width: 100%;
+    background-color: var(---primary);
+    color: var(---tertiary);
+}
+
+.primary {
+    color: var(---primary);
+}
+
+.secondary {
+    color: var(---secondary);
+}
+
+.tertiary {
+    color: var(---tertiary);
+}
+
+.fourth {
+    color: var(---fourth);
+}
+
+.error {
+    color: var(---error);
+}
+
+header {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 6px 0 rgba(0, 0, 0, 0.1);
+    color: var(---tertiary);
+}
