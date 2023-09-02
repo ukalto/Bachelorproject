@@ -34,8 +34,3 @@ function App() {
 
 export default App;
 
-// const LightColor = styled.div`
-//   background: var(---secondary);
-//   color: var(---primary);
-// `;
-

@@ -14,7 +14,7 @@
       "details": [
         {
           "type": "scenario",
-          "content": "Description for Item 2 goes here."
+          "content": "Description for Item Berkeley goes here."
         }
       ]
     },
@@ -23,7 +23,7 @@
       "details": [
         {
           "type": "scenario",
-          "content": "A brief scenario of Item 3."
+          "content": "A brief scenario of Item CryptoSystem."
         }
       ]
     },
@@ -32,7 +32,7 @@
       "details": [
         {
           "type": "scenario",
-          "content": "A brief scenario of Item 3."
+          "content": "A brief scenario of Item DiffieHellman."
         }
       ]
     },
@@ -41,7 +41,7 @@
       "details": [
         {
           "type": "scenario",
-          "content": "A brief scenario of Item 3."
+          "content": "A brief scenario of Item Greedy."
         }
       ]
     },
@@ -50,7 +50,7 @@
       "details": [
         {
           "type": "scenario",
-          "content": "A brief scenario of Item 3."
+          "content": "A brief scenario of Item Kademlia."
         }
       ]
     },
@@ -59,7 +59,7 @@
       "details": [
         {
           "type": "scenario",
-          "content": "A brief scenario of Item 3."
+          "content": "A brief scenario of Item LamportsLogicalClocks."
         }
       ]
     },
@@ -68,7 +68,7 @@
       "details": [
         {
           "type": "scenario",
-          "content": "A brief scenario of Item 3."
+          "content": "A brief scenario of Item VectorClock."
         }
       ]
     }

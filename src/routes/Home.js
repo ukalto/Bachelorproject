@@ -33,10 +33,10 @@ const Home = () => {
                 This is a big information field
             </InfoField>
             <ButtonGrid>
-                <BigButton onClick={() => routeChange(1)}>P2P</BigButton>
-                <BigButton onClick={() => routeChange(2)}>CS</BigButton>
-                <BigButton onClick={() => routeChange(3)}>KEM</BigButton>
-                <BigButton onClick={() => routeChange(4)}>SP</BigButton>
+                <BigButton onClick={() => routeChange(1)}>Peer2Peer Systems</BigButton>
+                <BigButton onClick={() => routeChange(2)}>Clocks && Synchronisation</BigButton>
+                <BigButton onClick={() => routeChange(3)}>Key-Exchange && Messaging</BigButton>
+                <BigButton onClick={() => routeChange(4)}>Server-Placement</BigButton>
             </ButtonGrid>
         </HomeContainer>
     );
@@ -63,8 +63,6 @@ const InfoField = styled.div`
   position: relative;
 `;
 
-
-
 const ButtonGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -74,17 +72,16 @@ const ButtonGrid = styled.div`
 const BigButton = styled.button`
   width: 100%;
   padding: 20px;
-  font-size: 100px;
+  font-size: 60px;
   background-color: var(---primary); /* Make sure to define these variables in your CSS */
   border-radius: 10px;
   border: solid 2px var(---secondary);
   color: var(---tertiary);
-  box-shadow:
-            -10px -10px 15px -3px rgba(46, 41, 51, 0.08),
-            10px -10px 15px -3px rgba(46, 41, 51, 0.08),
-          -10px 10px 15px -3px rgba(46, 41, 51, 0.08),
-          10px 10px 15px -3px rgba(46, 41, 51, 0.08),
-          0 10px 15px -3px rgba(46, 41, 51, 0.08),
-          0 4px 6px -2px rgba(71, 63, 79, 0.16);
+  box-shadow: -10px -10px 15px -3px rgba(46, 41, 51, 0.08),
+    10px -10px 15px -3px rgba(46, 41, 51, 0.08),
+  -10px 10px 15px -3px rgba(46, 41, 51, 0.08),
+  10px 10px 15px -3px rgba(46, 41, 51, 0.08),
+  0 10px 15px -3px rgba(46, 41, 51, 0.08),
+  0 4px 6px -2px rgba(71, 63, 79, 0.16);
   cursor: pointer;
 `;

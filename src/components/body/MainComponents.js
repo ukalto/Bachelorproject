@@ -3,15 +3,19 @@ import data from '../../assets/data.json'
 
 export const FieldGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 2fr;
   gap: 50px;
 `;
 
-export const Field = styled.button`
+export const Headline = styled.h6`
+    font-size: 40px;
+`;
+
+export const Field = styled.div`
   width: 100%;
   padding: 20px;
-  font-size: 100px;
-  background-color: var(---primary); /* Make sure to define these variables in your CSS */
+  background-color: var(---primary);
   border-radius: 10px;
   border: solid 2px var(---secondary);
   color: var(---tertiary);
@@ -21,8 +25,33 @@ export const Field = styled.button`
   10px 10px 15px -3px rgba(46, 41, 51, 0.08),
   0 10px 15px -3px rgba(46, 41, 51, 0.08),
   0 4px 6px -2px rgba(71, 63, 79, 0.16);
-  cursor: pointer;
 `;
+
+export const FieldText = styled.div`
+  font-size: 16px;
+  margin: 0;
+  text-align: justify;
+`;
+
+export const InputField = styled.div`
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  flex-direction: column;
+  background-color: var(---primary);
+  border-radius: 10px;
+  border: solid 2px var(---secondary);
+  color: var(---tertiary);
+  box-shadow: -10px -10px 15px -3px rgba(46, 41, 51, 0.08),
+    10px -10px 15px -3px rgba(46, 41, 51, 0.08),
+  -10px 10px 15px -3px rgba(46, 41, 51, 0.08),
+  10px 10px 15px -3px rgba(46, 41, 51, 0.08),
+  0 10px 15px -3px rgba(46, 41, 51, 0.08),
+  0 4px 6px -2px rgba(71, 63, 79, 0.16);
+`;
+
 
 export function getScenario(details, type) {
     const systemDetails = data.data.find(item => item.name === details);

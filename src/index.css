@@ -7,6 +7,7 @@
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
     scroll-behavior: smooth;
+    font-size: 16px;
 }
 
 :root {
@@ -14,6 +15,7 @@
     ---secondary: #40A3D6;
     ---tertiary: #000;
     ---fourth: #f2f2f2;
+    ---fifth: #4CAF50;
     ---error: red;
     ---shadow: 0 10px 15px -3px rgba(46, 41, 51, 0.08), 0 4px 6px -2px rgba(71, 63, 79, 0.16);
     ---lightshadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 6px 0 rgba(0, 0, 0, 0.1);
@@ -41,6 +43,10 @@ body {
     color: var(---fourth);
 }
 
+.fifth {
+    color: var(---fifth);
+}
+
 .error {
     color: var(---error);
 }
@@ -48,4 +54,10 @@ body {
 header {
     box-shadow: var(---lightshadow);
     color: var(---tertiary);
+}
+
+.content {
+    max-width: 90%;
+    margin: auto;
+    padding: 3rem 20px;
 }
