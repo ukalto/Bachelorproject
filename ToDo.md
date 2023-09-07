@@ -20,7 +20,7 @@
     - [X] Berkeley
     - [X] Diffie Hellman
     - [X] Crypto-System
-    - [ ] Greedy
+    - [X] Greedy
     - [X] Kademlia
     - [ ] LamportsLogicClocks
     - [ ] Vector Clock

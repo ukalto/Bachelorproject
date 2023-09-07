@@ -61,12 +61,21 @@ const InfoField = styled.div`
   border: solid 2px var(---error);
   box-shadow: var(---shadow);
   position: relative;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 
 const ButtonGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 50px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(1, 1fr);
+    padding-bottom: 16px;
+  }
 `;
 
 const BigButton = styled.button`
@@ -84,4 +93,8 @@ const BigButton = styled.button`
   0 10px 15px -3px rgba(46, 41, 51, 0.08),
   0 4px 6px -2px rgba(71, 63, 79, 0.16);
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    font-size: 40px;
+  }
 `;
