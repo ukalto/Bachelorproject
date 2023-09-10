@@ -26,11 +26,7 @@ const Home = () => {
     return (
         <HomeContainer>
             <InfoField>
-                This is a big information field
-                This is a big information field
-                This is a big information field
-                This is a big information field
-                This is a big information field
+                This Bachelorproject simulates various Distributed System Algorithms which are explained through scenarios and include benchmarks, serving as an educational tool to explain these concepts.
             </InfoField>
             <ButtonGrid>
                 <BigButton onClick={() => routeChange(1)}>Peer2Peer Systems</BigButton>
@@ -53,6 +49,7 @@ const HomeContainer = styled.div`
 
 const InfoField = styled.div`
   background-color: white;
+  text-align: center;
   padding: 20px;
   font-size: 24px;
   font-weight: bold;

@@ -5,10 +5,11 @@ import {
     getScenario,
     Headline,
     InputField, marginsInput
-} from '../../components/MainComponents';
+} from '../../components/MainComponentsCSS';
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
 import {MDBCol, MDBInput, MDBRow} from "mdb-react-ui-kit";
+import StickMan from "../../components/StickMan";
 
 const CryptoSystem = () => {
     const [formValue, setFormValue] = useState({
@@ -121,6 +122,8 @@ const CryptoSystem = () => {
             <Scenario scenario={getScenario("CryptoSystem", "scenario")}/>
             <Field>
                 <Headline>Algorithm</Headline>
+                <StickMan character={'A'}/>
+                <StickMan character={'B'}/>
             </Field>
             <Field>
                 <Headline>Benchmarks</Headline>

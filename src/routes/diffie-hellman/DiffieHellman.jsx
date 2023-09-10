@@ -5,10 +5,11 @@ import {
     getScenario,
     Headline,
     InputField, marginsInput
-} from '../../components/MainComponents';
+} from '../../components/MainComponentsCSS';
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
 import {MDBCol, MDBInput, MDBRow} from "mdb-react-ui-kit";
+import StickMan from "../../components/StickMan";
 
 const DiffieHellman = () => {
     const [formValue, setFormValue] = useState({
@@ -59,7 +60,6 @@ const DiffieHellman = () => {
                             label='Base Value'
                         />
                     </MDBCol>
-
                     <MDBCol md="6">
                         <MDBInput
                             value={formValue.person_b}
@@ -76,6 +76,8 @@ const DiffieHellman = () => {
             <Scenario scenario={getScenario("DiffieHellman", "scenario")}/>
             <Field>
                 <Headline>Algorithm</Headline>
+                <StickMan character={'A'}/>
+                <StickMan character={'B'}/>
             </Field>
             <Field>
                 <Headline>Benchmarks</Headline>

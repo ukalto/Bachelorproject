@@ -1,4 +1,4 @@
-import {Field, FieldText, Headline} from "./MainComponents";
+import {Field, FieldText, Headline} from "./MainComponentsCSS";
 
 export const Scenario = ({scenario}) => {
     return (

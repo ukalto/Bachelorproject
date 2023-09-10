@@ -4,7 +4,7 @@ import {
     Field,
     getScenario,
     Headline, InputField, marginsInput,
-} from '../../components/MainComponents';
+} from '../../components/MainComponentsCSS';
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
 import {

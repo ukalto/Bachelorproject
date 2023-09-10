@@ -4,12 +4,11 @@ import data from '../assets/data.json'
 export const FieldGrid = styled.div`
   display: grid;
   grid-template-columns: 2fr 1fr;
-  grid-template-rows: 2fr 1fr;
   gap: 50px;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    grid-template-rows: 2fr 1fr 1fr 1fr;
+    grid-template-rows: 0.5fr 0.5fr 1fr 1fr;
   }
 `;
 
@@ -42,7 +41,6 @@ export const InputField = styled.div`
   width: 100%;
   padding: 20px;
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
   flex-direction: column;
   background-color: var(---primary);

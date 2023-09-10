@@ -35,4 +35,9 @@ const Button = styled.button`
     border-color: var(---tertiary);
     color: var(---primary);
   }
+
+  @media (max-width: 768px) {
+    padding: 5px 10px;
+    font-size: 16px;
+  }
 `;
