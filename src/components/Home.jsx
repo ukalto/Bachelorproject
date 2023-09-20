@@ -1,38 +1,74 @@
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
+import {useState} from "react";
 
 const Home = () => {
     let navigate = useNavigate();
 
-    const routeChange = (path) => {
-        switch (path) {
-            case 1:
-                navigate(`chord-system`)
-                break;
-            case 2:
-                navigate(`berkeley`)
-                break;
-            case 3:
-                navigate(`diffie-hellman`)
-                break;
-            case 4:
-                navigate(`greedy`)
-                break;
-            default:
-                break;
-        }
-    }
+    const [options] = useState([
+        {
+            label: "Peer2Peer Systems",
+            subOptions: [["Chord System", "chord-system"], ["Kademlia", "kademlia"]],
+        },
+        {
+            label: "Clocks && Synchronisation",
+            subOptions: [["Berkeley", "berkeley"], ["Lamport's Logical Clocks", "lamports-logical-clocks"], ["Vector Clock", "vector-clock"]],
+        },
+        {
+            label: "Key-Exchange && Messaging",
+            subOptions: [["Diffie Hellman", "diffie-hellman"], ["Crypto System", "crypto-system"]],
+        },
+        {
+            label: "Server-Placement",
+            subOptions: [["Greedy", "greedy"]],
+        },
+    ]);
+
+    const [selectedOption, setSelectedOption] = useState(null);
+
+    const handleOptionClick = (option) => {
+        setSelectedOption(option);
+    };
+
+    const handleSubOptionClick = (path) => {
+        navigate(path);
+    };
+
+    const clearSelection = () => {
+        setSelectedOption(null);
+    };
 
     return (
         <HomeContainer>
             <InfoField>
-                This Bachelorproject simulates various Distributed System Algorithms which are explained through scenarios and include benchmarks, serving as an educational tool to explain these concepts.
+                This Bachelorproject simulates various Distributed System Algorithms which are explained through
+                scenarios and include benchmarks, serving as an educational tool to explain these concepts.
             </InfoField>
             <ButtonGrid>
-                <BigButton onClick={() => routeChange(1)}>Peer2Peer Systems</BigButton>
-                <BigButton onClick={() => routeChange(2)}>Clocks && Synchronisation</BigButton>
-                <BigButton onClick={() => routeChange(3)}>Key-Exchange && Messaging</BigButton>
-                <BigButton onClick={() => routeChange(4)}>Server-Placement</BigButton>
+                {selectedOption ? (
+                    <Overlay onClick={clearSelection}>
+                        <SubButtonGrid>
+                            {selectedOption.subOptions.map(([name, path], index) => (
+                                    <BigButton
+                                        key={index}
+                                        onClick={() => handleSubOptionClick(path)}
+                                    >
+                                        {name}
+                                    </BigButton>
+                                )
+                            )}
+                        </SubButtonGrid>
+                    </Overlay>
+                ) : (
+                    options.map((option, index) => (
+                        <BigButton
+                            key={index}
+                            onClick={() => handleOptionClick(option)}
+                        >
+                            {option.label}
+                        </BigButton>
+                    ))
+                )}
             </ButtonGrid>
         </HomeContainer>
     );
@@ -45,6 +81,8 @@ const HomeContainer = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100vh;
+  background-color: ${(props) => (props.isOverlayVisible ? "rgba(0, 0, 0, 0.5)" : "transparent")};
+  position: relative;
 `;
 
 const InfoField = styled.div`
@@ -68,10 +106,35 @@ const ButtonGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 50px;
-  
+
   @media (max-width: 768px) {
     grid-template-columns: repeat(1, 1fr);
     padding-bottom: 16px;
+  }
+`;
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+`;
+
+const SubButtonGrid = styled.div`
+  display: grid;
+  margin-top: 40px;
+  width: 70%;
+  gap: 20px;
+  grid-template-columns: repeat(1, 1fr);
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(1, 1fr);
   }
 `;
 
@@ -90,6 +153,12 @@ const BigButton = styled.button`
   0 10px 15px -3px rgba(46, 41, 51, 0.08),
   0 4px 6px -2px rgba(71, 63, 79, 0.16);
   cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+
+
+  &:hover {
+    transform: scale(1.05);
+  }
 
   @media (max-width: 768px) {
     font-size: 40px;

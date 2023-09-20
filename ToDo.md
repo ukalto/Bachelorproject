@@ -1,16 +1,16 @@
 # ToDo
 - [X] create NavBar
 - [X] add all possible routes
-- [ ] create HomePage
-- [ ] finish routes content
+- [X] create HomePage
+- [X] finish routes content
 
 ## HomePage
 - [X] create it
 - [X] create Styling
-- [ ] add infofield text
+- [X] add infofield text
 - [X] adabt routing when onClick event is triggerd
-- [ ] add images instead of Text or something else
-- [ ] fix routing logic
+- [X] add images instead of Text or something else
+- [X] fix routing logic
 
 ## Routes
 - [X] Scenarios
