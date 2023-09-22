@@ -3,6 +3,7 @@
 - [X] add all possible routes
 - [X] create HomePage
 - [X] finish routes content
+- [X] Homepage and Navigation Responsive (Phone)
 
 ## HomePage
 - [X] create it

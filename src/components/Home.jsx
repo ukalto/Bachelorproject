@@ -160,7 +160,10 @@ const BigButton = styled.button`
     transform: scale(1.05);
   }
 
-  @media (max-width: 768px) {
-    font-size: 40px;
+  @media (max-width: 1000px) {
+    font-size: 30px;
+  }
+  @media (max-width: 1400px) and (min-width: 1001px){
+    font-size: 50px;
   }
 `;
