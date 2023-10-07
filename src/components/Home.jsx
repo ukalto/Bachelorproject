@@ -41,7 +41,7 @@ const Home = () => {
     return (
         <HomeContainer>
             <InfoField>
-                This Bachelorproject simulates various Distributed System Algorithms which are explained through
+                This <u>Bachelorproject</u> simulates various <u>Distributed System Algorithms</u> which are explained through
                 scenarios and include benchmarks, serving as an educational tool to explain these concepts.
             </InfoField>
             <ButtonGrid>
@@ -96,10 +96,19 @@ const InfoField = styled.div`
   border: solid 2px var(---error);
   box-shadow: var(---shadow);
   position: relative;
+  
+  u {
+    font-size: 24px;
+  }
 
   @media (max-width: 768px) {
     font-size: 16px;
+    u {
+      font-size: 16px
+    }
   }
+
+
 `;
 
 const ButtonGrid = styled.div`

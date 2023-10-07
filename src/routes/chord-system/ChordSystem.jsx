@@ -3,7 +3,7 @@ import {
     FieldGrid,
     Field,
     getScenario,
-    Headline, InputField, marginsInput,
+    Headline, InputField, marginsInput, InfoBox,
 } from '../../components/MainComponentsCSS';
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
@@ -82,6 +82,7 @@ const ChordSystem = () => {
             </Field>
             <Field>
                 <Headline>Benchmarks</Headline>
+                <InfoBox>Coming Soon</InfoBox>
             </Field>
         </FieldGrid>
     );

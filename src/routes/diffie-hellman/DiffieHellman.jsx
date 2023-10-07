@@ -4,7 +4,7 @@ import {
     Field,
     getScenario,
     Headline,
-    InputField, marginsInput
+    InputField, marginsInput, InfoBox
 } from '../../components/MainComponentsCSS';
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
@@ -81,6 +81,7 @@ const DiffieHellman = () => {
             </Field>
             <Field>
                 <Headline>Benchmarks</Headline>
+                <InfoBox>Coming Soon</InfoBox>
             </Field>
         </FieldGrid>
     );

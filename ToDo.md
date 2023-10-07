@@ -15,25 +15,7 @@
 
 ## Routes
 - [X] Scenarios
-- [ ] Input Fields
-  - [ ] Styling
-    - [X] Chord-System
-    - [X] Berkeley
-    - [X] Diffie Hellman
-    - [X] Crypto-System
-    - [X] Greedy
-    - [X] Kademlia
-    - [ ] LamportsLogicClocks
-    - [ ] Vector Clock
-  - [ ] Logic/Working
-    - [ ] Chord-System
-    - [ ] Berkeley
-    - [ ] Diffie Hellman
-    - [ ] Crypto-System
-    - [ ] Greedy
-    - [ ] Kademlia
-    - [ ] LamportsLogicClocks
-    - [ ] Vector Clock
+- [X] Input Fields
 - [ ] Algorithms
   - [ ] Chord-System
   - [ ] Berkeley

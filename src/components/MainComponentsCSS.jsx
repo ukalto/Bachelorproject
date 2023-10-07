@@ -12,6 +12,12 @@ export const FieldGrid = styled.div`
   }
 `;
 
+export const GridItem = styled.div`
+  @media (max-width: 768px) {
+    grid-row: ${({switchRows}) => (switchRows ? 1 : 0)};
+  }
+`;
+
 export const Headline = styled.h6`
     font-size: 40px;
 `;
@@ -55,6 +61,14 @@ export const InputField = styled.div`
   0 4px 6px -2px rgba(71, 63, 79, 0.16);
 `;
 
+export const RangeBox = styled.div`
+  border-radius: 10px;
+  border: solid 2px lightgray;
+  color: var(---tertiary);
+  padding: 10px;
+  font-weight: bold;
+`;
+
 
 export function getScenario(details, type) {
     const systemDetails = data.data.find(item => item.name === details);
@@ -70,3 +84,24 @@ export function getScenario(details, type) {
 export const marginsInput = {
     marginBottom: '10px',
 };
+
+export const InfoBox = styled.div`
+  font-size: 48px;
+  font-weight: bold;
+  color: var(---error);
+  border: 3px solid var(---error);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 80px;
+  margin-top: 20%;
+  position: relative;
+  @media (max-width: 1512px) {
+    font-size: 28px;
+  }
+`;
