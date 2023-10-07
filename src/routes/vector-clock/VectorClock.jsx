@@ -4,101 +4,54 @@ import {
     Field,
     getScenario,
     Headline,
-    InputField, marginsInput
+    InputField,
+    marginsInput, RangeBox, InfoBox, GridItem
 } from '../../components/MainComponentsCSS';
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
-import {MDBCol, MDBInput, MDBRow} from "mdb-react-ui-kit";
+import {MDBCol, MDBRow} from "mdb-react-ui-kit";
+import RangeSlider from "../../components/RangeSlider";
+import VectorClockAlgorithm from "./VectorClockAlgorithm";
 
 const VectorClock = () => {
-    const [formValue, setFormValue] = useState({
-        vectors_amount: '',
-        row_amount: '',
-        messages: {'': ''},
-        vector_selection: '',
-        vector_start_values: {'': [0,0,0]},
-    });
-
-    const onChange = (e) => {
-        setFormValue({...formValue, [e.target.name]: e.target.value});
-    };
+    const [vectorsAmount, setVectorsAmount] = useState(3);
+    const [timeSteps, setTimeSteps] = useState(4);
+    // const [messages, setMessages] = useState({'': ''});
+    // const [vectorSelection, setVectorSelection] = useState('');
+    // const [vectorStartValues, setVectorStartValues] = useState({'': [0, 0, 0]});
 
     return (
         <FieldGrid>
-            <InputField>
-                <Headline>Inputs</Headline>
-                <MDBRow tag="form" className='g-3' style={marginsInput}>
-                    <MDBCol md="3">
-                        <MDBInput
-                            value={formValue.vectors_amount}
-                            name='vectors_amount'
-                            onChange={onChange}
-                            id='validationCustom01'
-                            required
-                            label='Vectors Amount'
-                        />
-                    </MDBCol>
-                    <MDBCol md="4">
-                        <MDBInput
-                            value={formValue.vector_selection}
-                            name='vector_selection'
-                            onChange={onChange}
-                            id='validationCustom01'
-                            required
-                            label='Select Vector'
-                        />
-                    </MDBCol>
-                    <MDBCol md="5">
-                        <MDBInput
-                            value={formValue.messages[""]}
-                            name='messages'
-                            onChange={onChange}
-                            id='validationCustom01'
-                            required
-                            label='Current Message'
-                        />
-                    </MDBCol>
-                </MDBRow>
-                <MDBRow tag="form" className='g-3' style={marginsInput}>
-                    <MDBCol md="3">
-                        <MDBInput
-                            value={formValue.row_amount}
-                            name='row_amount'
-                            onChange={onChange}
-                            id='validationCustom02'
-                            required
-                            label='Rows Amount'
-                        />
-                    </MDBCol>
-                    <MDBCol md="4">
-                        <MDBInput
-                            value={formValue.vector_start_values[""]}
-                            name='vector_start_values'
-                            onChange={onChange}
-                            id='validationCustom01'
-                            required
-                            label='Processors n Sequence'
-                        />
-                    </MDBCol>
-                    <MDBCol md="5">
-                        <MDBInput
-                            value={formValue.messages[""]}
-                            name='messages'
-                            onChange={onChange}
-                            id='validationCustom01'
-                            required
-                            label='Message List'
-                        />
-                    </MDBCol>
-                </MDBRow>
-                <InputButtons/>
-            </InputField>
-            <Scenario scenario={getScenario("VectorClock", "scenario")}/>
+            <GridItem>
+                <InputField>
+                    <Headline>Inputs</Headline>
+                    <MDBRow tag="form" className='g-3' style={marginsInput}>
+                        <MDBCol md="6">
+                            <RangeBox>
+                                <RangeSlider text={"Vectors"} min={2} max={4} value={vectorsAmount}
+                                             onChange={setVectorsAmount}/>
+                            </RangeBox>
+                        </MDBCol>
+                        <MDBCol md="6">
+                            <RangeBox>
+                                <RangeSlider text={"Time Steps"} min={3} max={7} value={timeSteps}
+                                             onChange={setTimeSteps}/>
+                            </RangeBox>
+                        </MDBCol>
+                    </MDBRow>
+                    <InputButtons/>
+                </InputField>
+            </GridItem>
+            <GridItem switchRows>
+                <Scenario scenario={getScenario("VectorClock", "scenario")}/>
+            </GridItem>
             <Field>
                 <Headline>Algorithm</Headline>
+                <VectorClockAlgorithm timeSteps={timeSteps} vectorsAmount={vectorsAmount}/>
             </Field>
             <Field>
                 <Headline>Benchmarks</Headline>
+                <InfoBox>Not Available</InfoBox>
             </Field>
         </FieldGrid>
     );
