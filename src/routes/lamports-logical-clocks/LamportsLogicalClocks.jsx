@@ -4,91 +4,37 @@ import {
     Field,
     getScenario,
     Headline,
-    InputField, marginsInput
+    InputField, marginsInput, InfoBox, RangeBox
 } from '../../components/MainComponentsCSS';
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
-import {MDBCol, MDBInput, MDBRow} from "mdb-react-ui-kit";
+import {MDBCol, MDBRow} from "mdb-react-ui-kit";
+import RangeSlider from "../../components/RangeSlider";
+import LamportsLogicalClocksAlgorithm from "./LamportsLogicalClocksAlgorithm";
 
 const LamportsLogicalClocks = () => {
-    const [formValue, setFormValue] = useState({
-        processor_amount: '',
-        row_amount: '',
-        messages: {'': ''},
-        processor_selection: '',
-        processor_sequence: {'': ''},
-    });
-
-    const onChange = (e) => {
-        setFormValue({...formValue, [e.target.name]: e.target.value});
-    };
+    const [processorAmount, setProcessorAmount] = useState(3);
+    const [rowAmount, setRowAmount] = useState(9);
+    // const [messages, setMessages] = useState({'': ''});
+    // const [processorSelection, setProcessorSelection] = useState('');
+    // const [processorSequence, setProcessorSequence] = useState({'': ''});
 
     return (
         <FieldGrid>
             <InputField>
                 <Headline>Inputs</Headline>
                 <MDBRow tag="form" className='g-3' style={marginsInput}>
-                    <MDBCol md="3">
-                        <MDBInput
-                            value={formValue.processor_amount}
-                            name='processor_amount'
-                            onChange={onChange}
-                            id='validationCustom01'
-                            required
-                            label='Processors Amount'
-                        />
+                    <MDBCol md="6">
+                        <RangeBox>
+                            <RangeSlider text={"Processors"} min={2} max={5} value={processorAmount}
+                                         onChange={setProcessorAmount}/>
+                        </RangeBox>
                     </MDBCol>
-                    <MDBCol md="4">
-                        <MDBInput
-                            value={formValue.processor_selection}
-                            name='processor_selection'
-                            onChange={onChange}
-                            id='validationCustom01'
-                            required
-                            label='Select Processor'
-                        />
-                    </MDBCol>
-                    <MDBCol md="5">
-                        <MDBInput
-                            value={formValue.messages[""]}
-                            name='messages'
-                            onChange={onChange}
-                            id='validationCustom01'
-                            required
-                            label='Current Message'
-                        />
-                    </MDBCol>
-                </MDBRow>
-                <MDBRow tag="form" className='g-3' style={marginsInput}>
-                    <MDBCol md="3">
-                        <MDBInput
-                            value={formValue.row_amount}
-                            name='row_amount'
-                            onChange={onChange}
-                            id='validationCustom02'
-                            required
-                            label='Rows Amount'
-                        />
-                    </MDBCol>
-                    <MDBCol md="4">
-                        <MDBInput
-                            value={formValue.processor_sequence[""]}
-                            name='processor_sequence'
-                            onChange={onChange}
-                            id='validationCustom01'
-                            required
-                            label='Processors n Sequence'
-                        />
-                    </MDBCol>
-                    <MDBCol md="5">
-                        <MDBInput
-                            value={formValue.messages[""]}
-                            name='messages'
-                            onChange={onChange}
-                            id='validationCustom01'
-                            required
-                            label='Message List'
-                        />
+                    <MDBCol md="6">
+                        <RangeBox>
+                            <RangeSlider text={"Rows"} min={6} max={12} value={rowAmount}
+                                         onChange={setRowAmount}/>
+                        </RangeBox>
                     </MDBCol>
                 </MDBRow>
                 <InputButtons/>
@@ -96,9 +42,11 @@ const LamportsLogicalClocks = () => {
             <Scenario scenario={getScenario("LamportsLogicalClocks", "scenario")}/>
             <Field>
                 <Headline>Algorithm</Headline>
+                <LamportsLogicalClocksAlgorithm processorAmount={processorAmount} rowAmount={rowAmount}/>
             </Field>
             <Field>
                 <Headline>Benchmarks</Headline>
+                <InfoBox>Not Available</InfoBox>
             </Field>
         </FieldGrid>
     );
