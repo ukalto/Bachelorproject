@@ -2,22 +2,22 @@ import React, {useState} from 'react';
 import {
     FieldGrid,
     Field,
-    getScenario,
     Headline,
-    InputField, marginsInput, InfoBox
+    InputField, marginsInput, InfoBox, RangeBox
 } from '../../components/MainComponentsCSS';
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
-import {MDBCol, MDBInput, MDBRow} from "mdb-react-ui-kit";
+import {MDBCol, MDBRow} from "mdb-react-ui-kit";
+import {getScenario} from "../../components/Helper.jsx";
+import RangeSlider from "../../components/RangeSlider.jsx";
 
 const Greedy = () => {
-    const [formValue, setFormValue] = useState({
-        rows_amount: '',
-        columns_amount: '',
-    });
+    const [rowsAmount, setRowsAmount] = useState(3);
+    const [columnsAmount, setColumnsAmount] = useState(3);
 
-    const onChange = (e) => {
-        setFormValue({...formValue, [e.target.name]: e.target.value});
+    const resetFormValues = () => {
+        setRowsAmount(3);
+        setColumnsAmount(3);
     };
 
     return (
@@ -26,27 +26,19 @@ const Greedy = () => {
                 <Headline>Inputs</Headline>
                 <MDBRow tag="form" className='g-3' style={marginsInput}>
                     <MDBCol md="6">
-                        <MDBInput
-                            value={formValue.rows_amount}
-                            name='rows_amount'
-                            onChange={onChange}
-                            id='validationCustom04'
-                            required
-                            label='Amount of Rows'
-                        />
+                        <RangeBox>
+                            <RangeSlider text={"Rows"} min={2} max={7} value={rowsAmount}
+                                         onChange={setRowsAmount}/>
+                        </RangeBox>
                     </MDBCol>
                     <MDBCol md="6">
-                        <MDBInput
-                            value={formValue.columns_amount}
-                            name='columns_amount'
-                            onChange={onChange}
-                            id='validationCustom01'
-                            required
-                            label='Amount of Columns'
-                        />
+                        <RangeBox>
+                            <RangeSlider text={"Columns"} min={2} max={7} value={columnsAmount}
+                                         onChange={setColumnsAmount}/>
+                        </RangeBox>
                     </MDBCol>
                 </MDBRow>
-                <InputButtons/>
+                <InputButtons resetForm={resetFormValues}/>
             </InputField>
             <Scenario scenario={getScenario("Greedy", "scenario")}/>
             <Field>
@@ -54,7 +46,7 @@ const Greedy = () => {
             </Field>
             <Field>
                 <Headline>Benchmarks</Headline>
-                <InfoBox>Coming Soon</InfoBox>
+                <InfoBox>Not Available</InfoBox>
             </Field>
         </FieldGrid>
     );

@@ -1,6 +1,7 @@
 import React from 'react';
 import VectorBlock from "./VectorBlock";
 import styled from "styled-components";
+import Arrow from "../../components/Arrow.jsx";
 
 const VectorClockAlgorithm = ({timeSteps, vectorsAmount}) => {
     const marginPercentage = 20 / timeSteps;
@@ -16,10 +17,7 @@ const VectorClockAlgorithm = ({timeSteps, vectorsAmount}) => {
                 ))}
             </VectorBlockContainer>
             <Timeline>
-                <LineContainer>
-                    <Line/>
-                    <Arrow/>
-                </LineContainer>
+                <Arrow isRight={true} width={90}/>
                 <CenteredText>Zeit/Time</CenteredText>
             </Timeline>
         </BlockContainer>
@@ -55,27 +53,6 @@ const TextWrapper = styled.div`
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
-`;
-
-const LineContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-
-const Line = styled.div`
-  width: 90%;
-  border-bottom: 1px solid #000;
-`;
-
-const Arrow = styled.div`
-  width: 0;
-  height: 0;
-  transform: translateY(5px);
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-left: 5px solid #000;
-  margin-right: 5px;
 `;
 
 const CenteredText = styled.div`

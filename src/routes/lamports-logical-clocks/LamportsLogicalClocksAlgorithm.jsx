@@ -1,21 +1,22 @@
 import React from 'react';
-import styled from "styled-components";
-import ProcessorBlock from "./ProcessorBlock";
+import styled from 'styled-components';
+import ProcessorBlock from './ProcessorBlock';
 
-const LamportsLogicalClocksAlgorithm = ({processorAmount, rowAmount}) => {
+const LamportsLogicalClocksAlgorithm = ({ processorAmount, rowAmount }) => {
     const marginPercentage = 20 / processorAmount;
 
     return (
         <BlockContainer>
-            {Array.from({length: processorAmount}, (_, index) => (
+            {Array.from({ length: processorAmount }, (_, index) => (
                 <MarginWrapper key={index} marginPercentage={marginPercentage}>
-                    <TextWrapper>P{index+1}</TextWrapper>
-                    <ProcessorBlock rowAmount={rowAmount}/>
+                    <TextWrapper>P{index + 1}</TextWrapper>
+                    <ProcessorBlock rowAmount={rowAmount} />
                 </MarginWrapper>
             ))}
         </BlockContainer>
     );
 };
+
 export default LamportsLogicalClocksAlgorithm;
 
 const BlockContainer = styled.div`
@@ -29,8 +30,8 @@ const MarginWrapper = styled.div`
   flex: 1;
   align-items: center;
   justify-content: center;
-  margin-left: ${({marginPercentage}) => marginPercentage}%;
-  margin-right: ${({marginPercentage}) => marginPercentage}%;
+  margin-left: ${({ marginPercentage }) => marginPercentage}%;
+  margin-right: ${({ marginPercentage }) => marginPercentage}%;
   box-sizing: border-box;
   position: relative;
   display: flex;
@@ -39,8 +40,9 @@ const MarginWrapper = styled.div`
 
 const TextWrapper = styled.div`
   position: absolute;
-  top: -10%;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
+  margin-top: -30px;
 `;

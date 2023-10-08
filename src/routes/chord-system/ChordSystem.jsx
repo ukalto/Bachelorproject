@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
     FieldGrid,
     Field,
-    getScenario,
     Headline, InputField, marginsInput, InfoBox,
 } from '../../components/MainComponentsCSS';
 import {Scenario} from "../../components/Scenario";
@@ -12,18 +11,25 @@ import {
     MDBRow,
     MDBCol
 } from 'mdb-react-ui-kit';
+import {getScenario} from "../../components/Helper.jsx";
 
 
 const ChordSystem = () => {
-    const [formValue, setFormValue] = useState({
+    const initialFormValues = {
         key: '',
         bitidentifier: '',
-        nodesamount: '16',
+        nodesamount: '',
         startnode: '',
-    });
+    };
+
+    const [formValue, setFormValue] = useState(initialFormValues);
 
     const onChange = (e) => {
         setFormValue({...formValue, [e.target.name]: e.target.value});
+    };
+
+    const resetFormValues = () => {
+        setFormValue(initialFormValues);
     };
 
     return (
@@ -36,9 +42,9 @@ const ChordSystem = () => {
                             value={formValue.startnode}
                             name='startnode'
                             onChange={onChange}
-                            id='validationCustom04'
                             required
                             label='Start Node'
+                            type={"number"}
                         />
                     </MDBCol>
                     <MDBCol md="6">
@@ -46,9 +52,9 @@ const ChordSystem = () => {
                             value={formValue.bitidentifier}
                             name='bitidentifier'
                             onChange={onChange}
-                            id='validationCustom02'
                             required
                             label='Bit Identifier'
+                            type={"number"}
                         />
                     </MDBCol>
                 </MDBRow>
@@ -58,9 +64,9 @@ const ChordSystem = () => {
                             value={formValue.key}
                             name='key'
                             onChange={onChange}
-                            id='validationCustom01'
                             required
                             label='Key'
+                            type={"number"}
                         />
                     </MDBCol>
                     <MDBCol md="6">
@@ -68,13 +74,13 @@ const ChordSystem = () => {
                             value={formValue.nodesamount}
                             name='nodesamount'
                             onChange={onChange}
-                            id='validationCustom03'
                             required
                             label='Amount of Nodes'
+                            type={"number"}
                         />
                     </MDBCol>
                 </MDBRow>
-                <InputButtons/>
+                <InputButtons resetForm={resetFormValues}/>
             </InputField>
             <Scenario scenario={getScenario("ChordSystem", "scenario")}/>
             <Field>

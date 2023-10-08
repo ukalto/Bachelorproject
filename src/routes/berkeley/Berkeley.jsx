@@ -2,23 +2,21 @@ import React, {useState} from 'react';
 import {
     FieldGrid,
     Field,
-    getScenario,
     Headline,
-    InputField, marginsInput, InfoBox
+    InputField, marginsInput, InfoBox, RangeBox
 } from '../../components/MainComponentsCSS';
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
-import {MDBCol, MDBInput, MDBRow} from "mdb-react-ui-kit";
+import {MDBRow} from "mdb-react-ui-kit";
+import {getScenario} from "../../components/Helper.jsx";
+import RangeSlider from "../../components/RangeSlider.jsx";
+
 
 const Berkeley = () => {
-    const [formValue, setFormValue] = useState({
-        server_amount: '',
-        time_deamon: '',
-        servers_time: {'': ''},
-    });
+    const [serverAmount, setServerAmount] = useState(3);
 
-    const onChange = (e) => {
-        setFormValue({...formValue, [e.target.name]: e.target.value});
+    const resetFormValues = () => {
+        setServerAmount(3);
     };
 
     return (
@@ -26,40 +24,12 @@ const Berkeley = () => {
             <InputField>
                 <Headline>Inputs</Headline>
                 <MDBRow tag="form" className='g-3' style={marginsInput}>
-                    <MDBCol>
-                        <MDBInput
-                            value={formValue.server_amount}
-                            name='server_amount'
-                            onChange={onChange}
-                            id='validationCustom01'
-                            required
-                            label='Server Amount'
-                        />
-                    </MDBCol>
-                    <MDBCol>
-                        <MDBInput
-                            value={formValue.time_deamon}
-                            name='time_deamon'
-                            onChange={onChange}
-                            id='validationCustom02'
-                            required
-                            label='Time Daemon'
-                        />
-                    </MDBCol>
+                    <RangeBox>
+                        <RangeSlider text={"Servers"} min={2} max={5} value={serverAmount}
+                                     onChange={setServerAmount}/>
+                    </RangeBox>
                 </MDBRow>
-                <MDBRow tag="form" className='g-3' style={marginsInput}>
-                    <MDBCol>
-                        <MDBInput
-                            value={formValue.servers_time[""]}
-                            name='servers_time'
-                            onChange={onChange}
-                            id='validationCustom03'
-                            required
-                            label='Sever Time'
-                        />
-                    </MDBCol>
-                </MDBRow>
-                <InputButtons/>
+                <InputButtons resetForm={resetFormValues}/>
             </InputField>
             <Scenario scenario={getScenario("Berkeley", "scenario")}/>
             <Field>

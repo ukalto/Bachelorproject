@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
     FieldGrid,
     Field,
-    getScenario,
     Headline,
     InputField,
     marginsInput, RangeBox, InfoBox, GridItem
@@ -12,6 +11,7 @@ import InputButtons from "../../components/InputButtons";
 import {MDBCol, MDBRow} from "mdb-react-ui-kit";
 import RangeSlider from "../../components/RangeSlider";
 import VectorClockAlgorithm from "./VectorClockAlgorithm";
+import {getScenario} from "../../components/Helper.jsx";
 
 const VectorClock = () => {
     const [vectorsAmount, setVectorsAmount] = useState(3);
@@ -19,6 +19,11 @@ const VectorClock = () => {
     // const [messages, setMessages] = useState({'': ''});
     // const [vectorSelection, setVectorSelection] = useState('');
     // const [vectorStartValues, setVectorStartValues] = useState({'': [0, 0, 0]});
+
+    const resetFormValues = () => {
+        setVectorsAmount(3);
+        setTimeSteps(4);
+    };
 
     return (
         <FieldGrid>
@@ -39,7 +44,7 @@ const VectorClock = () => {
                             </RangeBox>
                         </MDBCol>
                     </MDBRow>
-                    <InputButtons/>
+                    <InputButtons resetForm={resetFormValues}/>
                 </InputField>
             </GridItem>
             <GridItem switchRows>

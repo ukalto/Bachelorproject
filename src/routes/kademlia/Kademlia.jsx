@@ -2,24 +2,31 @@ import React, {useState} from 'react';
 import {
     FieldGrid,
     Field,
-    getScenario,
     Headline,
     InputField, marginsInput, InfoBox
 } from '../../components/MainComponentsCSS';
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
 import {MDBCol, MDBInput, MDBRow} from "mdb-react-ui-kit";
+import {getScenario} from "../../components/Helper.jsx";
+
 
 const Kademlia = () => {
-    const [formValue, setFormValue] = useState({
+    const initialFormValues = {
         key: '',
         bitidentifier: '',
-        nodesamount: '16',
+        nodesamount: '',
         startnode: '',
-    });
+    };
+
+    const [formValue, setFormValue] = useState(initialFormValues);
 
     const onChange = (e) => {
         setFormValue({...formValue, [e.target.name]: e.target.value});
+    };
+
+    const resetFormValues = () => {
+        setFormValue(initialFormValues);
     };
 
     return (
@@ -32,9 +39,9 @@ const Kademlia = () => {
                             value={formValue.startnode}
                             name='startnode'
                             onChange={onChange}
-                            id='validationCustom04'
                             required
                             label='Start Node'
+                            type={"number"}
                         />
                     </MDBCol>
                     <MDBCol md="6">
@@ -42,9 +49,9 @@ const Kademlia = () => {
                             value={formValue.bitidentifier}
                             name='bitidentifier'
                             onChange={onChange}
-                            id='validationCustom02'
                             required
                             label='Bit Identifier'
+                            type={"number"}
                         />
                     </MDBCol>
                 </MDBRow>
@@ -54,9 +61,9 @@ const Kademlia = () => {
                             value={formValue.key}
                             name='key'
                             onChange={onChange}
-                            id='validationCustom01'
                             required
                             label='Key'
+                            type={"number"}
                         />
                     </MDBCol>
                     <MDBCol md="6">
@@ -64,13 +71,13 @@ const Kademlia = () => {
                             value={formValue.nodesamount}
                             name='nodesamount'
                             onChange={onChange}
-                            id='validationCustom03'
                             required
                             label='Amount of Nodes'
+                            type={"number"}
                         />
                     </MDBCol>
                 </MDBRow>
-                <InputButtons/>
+                <InputButtons resetForm={resetFormValues}/>
             </InputField>
             <Scenario scenario={getScenario("Kademlia", "scenario")}/>
             <Field>

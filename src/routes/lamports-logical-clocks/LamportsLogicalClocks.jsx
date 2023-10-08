@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
     FieldGrid,
     Field,
-    getScenario,
     Headline,
     InputField, marginsInput, InfoBox, RangeBox
 } from '../../components/MainComponentsCSS';
@@ -11,6 +10,8 @@ import InputButtons from "../../components/InputButtons";
 import {MDBCol, MDBRow} from "mdb-react-ui-kit";
 import RangeSlider from "../../components/RangeSlider";
 import LamportsLogicalClocksAlgorithm from "./LamportsLogicalClocksAlgorithm";
+import {getScenario} from "../../components/Helper.jsx";
+
 
 const LamportsLogicalClocks = () => {
     const [processorAmount, setProcessorAmount] = useState(3);
@@ -18,6 +19,11 @@ const LamportsLogicalClocks = () => {
     // const [messages, setMessages] = useState({'': ''});
     // const [processorSelection, setProcessorSelection] = useState('');
     // const [processorSequence, setProcessorSequence] = useState({'': ''});
+
+    const resetFormValues = () => {
+        setProcessorAmount(3);
+        setRowAmount(9);
+    };
 
     return (
         <FieldGrid>
@@ -37,7 +43,7 @@ const LamportsLogicalClocks = () => {
                         </RangeBox>
                     </MDBCol>
                 </MDBRow>
-                <InputButtons/>
+                <InputButtons resetForm={resetFormValues}/>
             </InputField>
             <Scenario scenario={getScenario("LamportsLogicalClocks", "scenario")}/>
             <Field>
