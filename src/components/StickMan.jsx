@@ -44,7 +44,7 @@ function StickMan({ character }) {
         context.font = "36px Arial";
         context.fillStyle = "white";
         context.textAlign = "center";
-        context.fillText(character, 100, 67.5);
+        context.fillText(character, 100, 65);
     }, [character]);
 
     return (

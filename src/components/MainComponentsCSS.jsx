@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import data from '../assets/data.json'
 
 export const FieldGrid = styled.div`
   display: grid;
@@ -19,7 +18,7 @@ export const GridItem = styled.div`
 `;
 
 export const Headline = styled.h6`
-    font-size: 40px;
+  font-size: 40px;
 `;
 
 export const Field = styled.div`
@@ -67,19 +66,10 @@ export const RangeBox = styled.div`
   color: var(---tertiary);
   padding: 10px;
   font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
-
-
-export function getScenario(details, type) {
-    const systemDetails = data.data.find(item => item.name === details);
-    if (systemDetails) {
-        const scenarioItem = systemDetails.details.find(item => item.type === type);
-        if (scenarioItem) {
-            return scenarioItem.content;
-        }
-    }
-    return "";
-}
 
 export const marginsInput = {
     marginBottom: '10px',
@@ -105,3 +95,24 @@ export const InfoBox = styled.div`
     font-size: 28px;
   }
 `;
+
+export const StyledStickManAndArrowContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ArrowContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const StickManContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+

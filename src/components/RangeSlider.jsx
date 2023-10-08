@@ -20,6 +20,7 @@ const RangeSlider = ({text, value, min, max, onChange}) => {
                         max={max}
                         value={value}
                         onChange={handleSliderChange}
+                        className="align-content-center"
                     />
                 </MDBCol>
             </MDBRow>
