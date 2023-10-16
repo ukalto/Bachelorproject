@@ -10,6 +10,7 @@ import InputButtons from "../../components/InputButtons";
 import {MDBCol, MDBRow} from "mdb-react-ui-kit";
 import {getScenario} from "../../components/Helper.jsx";
 import RangeSlider from "../../components/RangeSlider.jsx";
+import GreedySheet from "./GreedySheet.jsx";
 
 const Greedy = () => {
     const [rowsAmount, setRowsAmount] = useState(3);
@@ -43,6 +44,7 @@ const Greedy = () => {
             <Scenario scenario={getScenario("Greedy", "scenario")}/>
             <Field>
                 <Headline>Algorithm</Headline>
+                <GreedySheet rowsAmount={rowsAmount} columnsAmount={columnsAmount}/>
             </Field>
             <Field>
                 <Headline>Benchmarks</Headline>
