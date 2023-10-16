@@ -32,11 +32,11 @@ const VectorBlock = ({vectorsAmount, disabled}) => {
         <BlockContainer>
             {blockArray.map((row, rowIndex) => (
                 <div key={rowIndex}>
-                    {row.map((_, colIndex) => (
+                    {row.map((cell, colIndex) => (
                         <InputWrapper key={colIndex} isLast={colIndex === vectorsAmount - 1}>
                             <StyledInput
                                 type="text"
-                                value={blockArray[rowIndex][colIndex]}
+                                value={cell}
                                 min={0}
                                 max={94}
                                 disabled={disabled} // Pass the disabled prop
