@@ -3,7 +3,7 @@ import {
     FieldGrid,
     Field,
     Headline,
-    InputField, marginsInput, InfoBox, RangeBox
+    InputField, marginsInput, InfoBox, RangeBox, GridItem
 } from '../../components/MainComponentsCSS';
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
@@ -21,17 +21,21 @@ const Berkeley = () => {
 
     return (
         <FieldGrid>
-            <InputField>
-                <Headline>Inputs</Headline>
-                <MDBRow tag="form" className='g-3' style={marginsInput}>
-                    <RangeBox>
-                        <RangeSlider text={"Servers"} min={2} max={5} value={serverAmount}
-                                     onChange={setServerAmount}/>
-                    </RangeBox>
-                </MDBRow>
-                <InputButtons resetForm={resetFormValues}/>
-            </InputField>
-            <Scenario scenario={getScenario("Berkeley", "scenario")}/>
+            <GridItem>
+                <InputField>
+                    <Headline>Inputs</Headline>
+                    <MDBRow tag="form" className='g-3' style={marginsInput}>
+                        <RangeBox>
+                            <RangeSlider text={"Servers"} min={2} max={5} value={serverAmount}
+                                         onChange={setServerAmount}/>
+                        </RangeBox>
+                    </MDBRow>
+                    <InputButtons resetForm={resetFormValues}/>
+                </InputField>
+            </GridItem>
+            <GridItem switchRows>
+                <Scenario scenario={getScenario("Berkeley", "scenario")}/>
+            </GridItem>
             <Field>
                 <Headline>Algorithm</Headline>
             </Field>
