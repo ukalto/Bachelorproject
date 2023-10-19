@@ -1,16 +1,24 @@
 import React from 'react';
 import styled from "styled-components";
 
-const InputButtons = ({ resetForm = () => {} }) => {
+const InputButtons = ({resetForm = () => {}, setExampleData = () => {}, solveAlgorithm = () => {}}) => {
     const handleResetClick = () => {
         resetForm();
+    };
+
+    const handleExampleClick = () => {
+        setExampleData();
+    };
+
+    const handleSolveClick = () => {
+        solveAlgorithm();
     };
 
     return (
         <ButtonContainer>
             <Button borderColor="var(---error)" onClick={handleResetClick}>Reset</Button>
-            <Button borderColor="var(---secondary)">Example</Button>
-            <Button borderColor="var(---fifth)">Create</Button>
+            <Button borderColor="var(---secondary)" onClick={handleExampleClick}>Example</Button>
+            <Button borderColor="var(---fifth)" onClick={handleSolveClick}>Solve</Button>
         </ButtonContainer>
     );
 };

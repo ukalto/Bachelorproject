@@ -23,6 +23,8 @@ export const Headline = styled.h6`
 
 export const Field = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
   padding: 20px;
   background-color: var(---primary);
   border-radius: 10px;
@@ -70,6 +72,32 @@ export const RangeBox = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+export const ResultBox = styled.div`
+  width: 50%;
+  background-color: var(---fourth);
+  border: 2px solid var(---fifth);
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  align-items: center;
+`;
+
+export const ResultHeadline = styled.a`
+  font-size: 18px;
+  font-weight: bold;
+  color: var(---tertiary);
+`;
+
+export const ResultText = styled.a`
+  font-size: 16px;
+  font-weight: normal;
+  color: #555;
+`;
+
 
 export const marginsInput = {
     marginBottom: '10px',
