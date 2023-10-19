@@ -75,6 +75,7 @@ export const RangeBox = styled.div`
 
 export const ResultBox = styled.div`
   width: 50%;
+  align-self: center;
   background-color: var(---fourth);
   border: 2px solid var(---fifth);
   border-radius: 10px;
@@ -82,8 +83,11 @@ export const ResultBox = styled.div`
   padding: 20px;
   display: flex;
   flex-direction: column;
-  align-self: center;
+  justify-content: center;
   align-items: center;
+  @media (max-width: 768px) {
+    width: 90%;
+  }
 `;
 
 export const ResultHeadline = styled.a`

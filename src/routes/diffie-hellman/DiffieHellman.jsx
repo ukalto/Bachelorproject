@@ -6,7 +6,7 @@ import {
     InputField,
     marginsInput,
     InfoBox, StyledStickManAndArrowContainer, StickManContainer, ArrowContainer, GridItem,
-} from '../../components/MainComponentsCSS';
+} from '../../components/GlobalComponents.jsx';
 import {Scenario} from '../../components/Scenario';
 import InputButtons from '../../components/InputButtons';
 import {MDBCol, MDBInput, MDBRow} from 'mdb-react-ui-kit';

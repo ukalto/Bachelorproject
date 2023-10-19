@@ -5,7 +5,7 @@ import {
     Headline,
     InputField,
     marginsInput, RangeBox, InfoBox, GridItem
-} from '../../components/MainComponentsCSS';
+} from '../../components/GlobalComponents.jsx';
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
 import {MDBCol, MDBRow} from "mdb-react-ui-kit";

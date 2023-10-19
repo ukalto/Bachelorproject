@@ -7,7 +7,7 @@ import {
     marginsInput,
     InfoBox,
     RangeBox, ResultBox, GridItem, ResultText, ResultHeadline,
-} from '../../components/MainComponentsCSS';
+} from '../../components/GlobalComponents.jsx';
 import {Scenario} from '../../components/Scenario';
 import InputButtons from '../../components/InputButtons';
 import {MDBCol, MDBRow} from 'mdb-react-ui-kit';
@@ -109,7 +109,6 @@ const Greedy = () => {
         return true;
     };
 
-
     return (
         <FieldGrid>
             <GridItem>
@@ -157,7 +156,7 @@ const Greedy = () => {
                         <ResultHeadline>Result</ResultHeadline>
                         {Object.keys(result).map((key) => (
                             <ResultText key={key}>
-                                {key.replace("_"," ")} : <b>{result[key]}</b>
+                                {key.replace("_", " ")} : <b>{result[key]}</b>
                             </ResultText>
                         ))}
                     </ResultBox>
