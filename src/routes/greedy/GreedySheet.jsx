@@ -1,22 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import styled from "styled-components";
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
 
-const GreedySheet = ({ rowsAmount, columnsAmount }) => {
-    const [sheet, setSheet] = useState([]);
+const GreedySheet = ({rowsAmount, columnsAmount, sheetData, updateSheetData, setShowResult}) => {
+    const [sheet, setSheet] = useState(sheetData);
 
     useEffect(() => {
-        // Create a 2D array for the sheet with all elements initialized to 0
-        const newSheet = Array.from({ length: rowsAmount }, () =>
-            Array(columnsAmount).fill(0)
-        );
-        setSheet(newSheet);
-    }, [rowsAmount, columnsAmount]);
+        setSheet(sheetData);
+    }, [sheetData]);
 
-    const handleInputChange = (rowIndex, columnIndex, value) => {
-        const newSheet = [...sheet];
-        newSheet[rowIndex][columnIndex] = parseInt(value, 10);
-        setSheet(newSheet);
+    const handleChange = (rowIndex, columnIndex, value) => {
+        if ((Number(value) >= 0 && Number(value) <= 99999)) {
+            const newSheet = [...sheet];
+            newSheet[rowIndex][columnIndex] = parseInt(value, 10);
+            setSheet(newSheet);
+            setShowResult(false);
+        }
     };
+
+    useEffect(() => {
+        updateSheetData(rowsAmount, columnsAmount);
+    }, [rowsAmount, columnsAmount]);
 
     return (
         <SheetContainer>
@@ -24,27 +27,20 @@ const GreedySheet = ({ rowsAmount, columnsAmount }) => {
                 <div key={rowIndex}>
                     {rowIndex === 0 ? (
                         <First>
-                            <StyledInputMain
-                                value="Latency for a client to reach a Location"
-                                disabled
-                                rows={2}
-                            />
-                            <StyledInput
-                                value={`Client ${rowIndex + 1}`}
+                            <StyledInputMain disabled/>
+                            <StyledInputText
+                                value={`Latency ${rowIndex + 1}`}
                                 disabled
                             />
                         </First>
                     ) : (
-                        <StyledInput
-                            value={`Client ${rowIndex + 1}`}
-                            disabled
-                        />
+                        <StyledInputText value={`Latency ${rowIndex + 1}`} disabled/>
                     )}
                     {row.map((cell, columnIndex) => (
                         <div key={columnIndex}>
                             {rowIndex === 0 ? (
-                                <StyledInput
-                                    value={`L ${columnIndex + 1}`}
+                                <StyledInputText
+                                    value={`Client ${columnIndex + 1}`}
                                     disabled
                                 />
                             ) : null}
@@ -52,10 +48,10 @@ const GreedySheet = ({ rowsAmount, columnsAmount }) => {
                                 isLastColumn={columnIndex === columnsAmount}
                                 isLastRow={rowIndex === rowsAmount}
                                 type="number"
-                                max={1000}
+                                max={10000}  // Set the maximum value to 10000
                                 value={cell}
                                 onChange={(e) =>
-                                    handleInputChange(rowIndex, columnIndex, e.target.value)
+                                    handleChange(rowIndex, columnIndex, e.target.value)
                                 }
                             />
                         </div>
@@ -84,6 +80,10 @@ const StyledInput = styled.input`
   &:focus {
     outline: 1px solid var(---tertiary);
   }
+
+  @media (max-width: 1350px) {
+    width: 70px;
+  }
 `;
 
 const First = styled.div`
@@ -93,12 +93,26 @@ const First = styled.div`
   align-items: center;
 `;
 
-const StyledInputMain = styled.textarea`
+const StyledInputText = styled.input`
   width: 120px;
   height: 50px;
   border: 1px solid var(---tertiary);
-  text-align: center;
-  font-size: 12px;
-  resize: none;
   margin: 1px;
+  text-align: center;
+  background-color: var(---fourth);
+
+  @media (max-width: 1350px) {
+    width: 70px;
+  }
+`;
+
+const StyledInputMain = styled.input`
+  width: 120px;
+  height: 50px;
+  margin: 1px;
+  border: none;
+  background-color: var(---primary);
+  @media (max-width: 1350px) {
+    width: 70px;
+  }
 `;
