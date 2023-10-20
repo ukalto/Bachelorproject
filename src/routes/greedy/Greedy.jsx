@@ -6,7 +6,11 @@ import {
     InputField,
     marginsInput,
     InfoBox,
-    RangeBox, ResultBox, GridItem, ResultText, ResultHeadline,
+    RangeBox,
+    ResultBox,
+    GridItem,
+    ResultText,
+    ResultHeadline,
 } from '../../components/GlobalComponents.jsx';
 import {Scenario} from '../../components/Scenario';
 import InputButtons from '../../components/InputButtons';
@@ -18,7 +22,6 @@ import data from '../../assets/data.json';
 import {GreedySolver} from "./GreedySolver.js";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-
 
 const Greedy = () => {
     const [rowsAmount, setRowsAmount] = useState(3);
@@ -36,6 +39,11 @@ const Greedy = () => {
         return {rows, columns, values};
     });
 
+    const [checkedState, setCheckedState] = useState([
+        [false, 'green'],
+        [false, 'blue'],
+        [false, 'red']
+    ]);
 
     const resetFormValues = () => {
         const newSheet = Array.from({length: 3}, () => Array(3).fill(0));
@@ -43,7 +51,12 @@ const Greedy = () => {
         setRowsAmount(3);
         setColumnsAmount(3);
         setShowResult(false);
+        resetCheckedState();
     };
+
+    const resetCheckedState = () => {
+        setCheckedState(checkedState.map(entry => [false, entry[1]]));
+    }
 
     const updateSheetData = (newRowsAmount, newColumnsAmount) => {
         const newSheet = Array.from({length: newColumnsAmount}, () =>
@@ -75,8 +88,8 @@ const Greedy = () => {
         setColumnsAmount(example.columns);
         setSheetData(newSheet);
         setShowResult(false);
+        resetCheckedState();
     };
-
 
     const handleSolveAlgorithm = () => {
         if (validateSheet()) {
@@ -84,6 +97,7 @@ const Greedy = () => {
             const solveResult = solver.solveSheetData();
             setResult(solveResult);
             setShowResult(true);
+            resetCheckedState();
         } else {
             toast.error('Every field has to be filled in!', {
                 position: toast.POSITION.BOTTOM_CENTER,
@@ -107,6 +121,12 @@ const Greedy = () => {
             }
         }
         return true;
+    };
+
+    const handleCheckBoxChange = (index) => {
+        const updatedCheckedState = [...checkedState];
+        updatedCheckedState[index][0] = !updatedCheckedState[index][0];
+        setCheckedState(updatedCheckedState);
     };
 
     return (
@@ -154,10 +174,21 @@ const Greedy = () => {
                 {showResult && (
                     <ResultBox>
                         <ResultHeadline>Result</ResultHeadline>
-                        {Object.keys(result).map((key) => (
-                            <ResultText key={key}>
-                                {key.replace("_", " ")} : <b>{result[key]}</b>
-                            </ResultText>
+                        {Object.keys(result).map((key, index) => (
+                            <div key={key}>
+                                <input
+                                    type="checkbox"
+                                    style={{
+                                        marginRight: "5px",
+                                        accentColor: checkedState[index][1],
+                                    }}
+                                    checked={checkedState[index][0]}
+                                    onChange={() => handleCheckBoxChange(index)}
+                                />
+                                <ResultText>
+                                    {key.replace("_", " ")} : <b>{result[key]}</b>
+                                </ResultText>
+                            </div>
                         ))}
                     </ResultBox>
                 )}
@@ -167,6 +198,9 @@ const Greedy = () => {
                     sheetData={sheetData}
                     updateSheetData={updateSheetData}
                     setShowResult={setShowResult}
+                    checkedState={checkedState}
+                    resetCheckedState={resetCheckedState}
+                result={result}
                 />
             </Field>
             <Field>

@@ -94,12 +94,21 @@ export const ResultHeadline = styled.a`
   font-size: 18px;
   font-weight: bold;
   color: var(---tertiary);
+  &:hover{
+    color: var(---tertiary);
+    cursor: default;
+  }
 `;
 
 export const ResultText = styled.a`
   font-size: 16px;
   font-weight: normal;
   color: #555;
+
+  &:hover {
+    color: #555;
+    cursor: default;
+  }
 `;
 
 
