@@ -40,9 +40,9 @@ const Greedy = () => {
     });
 
     const [checkedState, setCheckedState] = useState([
-        [false, 'green'],
-        [false, 'blue'],
-        [false, 'red']
+        [false, '#72DE6B'],
+        [false, '#6B8ADE'],
+        [false, '#AD2020']
     ]);
 
     const resetFormValues = () => {
