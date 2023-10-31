@@ -7,44 +7,56 @@ function StickMan({ character }) {
         const canvas = canvasRef.current;
         const context = canvas.getContext("2d");
 
-        context.lineWidth = 5;
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+
+        // Scale factors for responsive design
+        const scaleX = canvasWidth / 200; // The original canvas width
+        const scaleY = canvasHeight / 300; // The original canvas height
+
+        // Scale the canvas
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+
+        context.lineWidth = 5 * scaleX;
 
         // Arms
         context.beginPath();
-        context.strokeStyle = "pink";
-        context.moveTo(100, 120);
-        context.lineTo(60, 180);
-        context.moveTo(100, 120);
-        context.lineTo(140, 180);
+        context.strokeStyle = "black";
+        context.moveTo(100 * scaleX, 120 * scaleY);
+        context.lineTo(60 * scaleX, 180 * scaleY);
+        context.moveTo(100 * scaleX, 120 * scaleY);
+        context.lineTo(140 * scaleX, 180 * scaleY);
         context.stroke();
 
         // Legs
         context.beginPath();
-        context.strokeStyle = "brown";
-        context.moveTo(100, 205);
-        context.lineTo(60, 320);
-        context.moveTo(100, 205);
-        context.lineTo(140, 320);
+        context.strokeStyle = "black";
+        context.moveTo(100 * scaleX, 205 * scaleY);
+        context.lineTo(60 * scaleX, 320 * scaleY);
+        context.moveTo(100 * scaleX, 205 * scaleY);
+        context.lineTo(140 * scaleX, 320 * scaleY);
         context.stroke();
 
         // Body
         context.beginPath();
-        context.moveTo(100, 210);
-        context.lineTo(100, 100);
-        context.strokeStyle = "navy";
+        context.moveTo(100 * scaleX, 210 * scaleY);
+        context.lineTo(100 * scaleX, 92 * scaleY);
+        context.strokeStyle = "black";
         context.stroke();
 
         // Head
         context.beginPath();
-        context.fillStyle = "#0000ff";
-        context.arc(100, 50, 50, 0, Math.PI * 2, true);
-        context.fill();
+        context.strokeStyle = "black"; // Set the outline color of the head
+        context.arc(100 * scaleX, 50 * scaleY, 45 * scaleY, 0, Math.PI * 2, true);
+        context.stroke();
 
         // Insert character in the center of the head
-        context.font = "36px Arial";
-        context.fillStyle = "white";
+        const fontSize = Math.min(canvasWidth / 4, canvasHeight / 8) * scaleX; // Adjust font size based on canvas size
+        context.font = `${fontSize}px Arial`;
+        context.fillStyle = "black"; // Set the character text color to black
         context.textAlign = "center";
-        context.fillText(character, 100, 65);
+        context.fillText(character, 100 * scaleX, 65 * scaleY); // Adjust the character text position
     }, [character]);
 
     return (
@@ -53,6 +65,7 @@ function StickMan({ character }) {
             ref={canvasRef}
             width={200}
             height={300}
+            style={{ width: "100%", height: "100%" }}
         />
     );
 }

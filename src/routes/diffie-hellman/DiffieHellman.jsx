@@ -5,14 +5,18 @@ import {
     Headline,
     InputField,
     marginsInput,
-    InfoBox, StyledStickManAndArrowContainer, StickManContainer, ArrowContainer, GridItem,
+    InfoBox, StyledStickManAndArrowContainer, StickManContainer, GridItem, ResultBox, ResultHeadline, ResultText,
 } from '../../components/GlobalComponents.jsx';
 import {Scenario} from '../../components/Scenario';
 import InputButtons from '../../components/InputButtons';
-import {MDBCol, MDBInput, MDBRow} from 'mdb-react-ui-kit';
+import {MDBCol, MDBInput, MDBRow, MDBValidation} from 'mdb-react-ui-kit';
 import StickMan from '../../components/StickMan';
-import Arrow from '../../components/Arrow.jsx';
-import {getScenario} from "../../components/Helper.jsx";
+import {getScenario} from "../../components/GlobalFunctions.jsx";
+import data from "../../assets/data.json";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import {DiffieHellmanSolver} from "./DiffieHellmanSolver.js";
+import {TransferAnimation} from "../../components/TransferAnimation.jsx";
 
 const DiffieHellman = () => {
     const initialFormValues = {
@@ -23,13 +27,71 @@ const DiffieHellman = () => {
     };
 
     const [formValue, setFormValue] = useState(initialFormValues);
+    const [showResult, setShowResult] = useState(false);
+    const [result, setResult] = useState(null);
 
     const onChange = (e) => {
         setFormValue({...formValue, [e.target.name]: e.target.value});
+        setShowResult(false);
     };
 
     const resetFormValues = () => {
         setFormValue(initialFormValues);
+        setShowResult(false);
+    };
+
+    const [example] = useState(() => {
+        const exampleData = data.data.find(item => item.name === 'DiffieHellman');
+        const {values} = exampleData.details.find(item => item.type === 'example');
+        return {values};
+    });
+
+    const setExampleData = () => {
+        setFormValue({...formValue, ...example.values});
+        setShowResult(false);
+    };
+
+    const handleSolveAlgorithm = () => {
+        if (validateSheet()) {
+            const solver = new DiffieHellmanSolver(
+                formValue.modulo,
+                formValue.base_value,
+                formValue.person_a,
+                formValue.person_b,
+            );
+            const solveResult = solver.solve();
+            setResult(solveResult);
+            setShowResult(true);
+        } else {
+            toast.error('Every field has to be filled in!', {
+                position: toast.POSITION.BOTTOM_CENTER,
+                closeOnClick: true,
+                autoClose: 4000,
+                hideProgressBar: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+            });
+        }
+    };
+
+    const validateSheet = () => {
+        let isValid = true;
+
+        const positiveIntegerRegex = /^[0-9]\d*$/;
+
+        const updatedFormValue = {...formValue};
+
+        for (const key in updatedFormValue) {
+            if (updatedFormValue.hasOwnProperty(key)) {
+                if (!positiveIntegerRegex.test(updatedFormValue[key])) {
+                    isValid = false;
+                }
+            }
+        }
+
+        return isValid;
     };
 
     return (
@@ -37,51 +99,54 @@ const DiffieHellman = () => {
             <GridItem>
                 <InputField>
                     <Headline>Inputs</Headline>
-                    <MDBRow tag="form" className="g-3" style={marginsInput}>
-                        <MDBCol md="6">
-                            <MDBInput
-                                value={formValue.person_a}
-                                name="person_a"
-                                onChange={onChange}
-                                required
-                                label="Person A"
-                                type={"number"}
-                            />
-                        </MDBCol>
-                        <MDBCol md="6">
-                            <MDBInput
-                                value={formValue.person_b}
-                                name="person_b"
-                                onChange={onChange}
-                                required
-                                label="Person B"
-                                type={"number"}
-                            />
-                        </MDBCol>
-                    </MDBRow>
-                    <MDBRow tag="form" className="g-3" style={marginsInput}>
-                        <MDBCol md="6">
-                            <MDBInput
-                                value={formValue.base_value}
-                                name="base_value"
-                                onChange={onChange}
-                                required
-                                label="Base Value"
-                                type={"number"}
-                            />
-                        </MDBCol>
-                        <MDBCol md="6">
-                            <MDBInput
-                                value={formValue.modulo}
-                                name="modulo"
-                                onChange={onChange}
-                                required
-                                label="Modulo"
-                                type={"number"}
-                            />
-                        </MDBCol>
-                    </MDBRow>
-                    <InputButtons resetForm={resetFormValues}/>
+                    <MDBValidation>
+                        <MDBRow tag="form" className="g-3" style={marginsInput}>
+                            <MDBCol md="6">
+                                <MDBInput
+                                    value={formValue.person_a}
+                                    name="person_a"
+                                    onChange={onChange}
+                                    required
+                                    label="Person A"
+                                    type={"number"}
+                                />
+                            </MDBCol>
+                            <MDBCol md="6">
+                                <MDBInput
+                                    value={formValue.person_b}
+                                    name="person_b"
+                                    onChange={onChange}
+                                    required
+                                    label="Person B"
+                                    type={"number"}
+                                />
+                            </MDBCol>
+                        </MDBRow>
+                        <MDBRow tag="form" className="g-3" style={marginsInput}>
+                            <MDBCol md="6">
+                                <MDBInput
+                                    value={formValue.base_value}
+                                    name="base_value"
+                                    onChange={onChange}
+                                    required
+                                    label="Base Value"
+                                    type={"number"}
+                                />
+                            </MDBCol>
+                            <MDBCol md="6">
+                                <MDBInput
+                                    value={formValue.modulo}
+                                    name="modulo"
+                                    onChange={onChange}
+                                    required
+                                    label="Modulo"
+                                    type={"number"}
+                                />
+                            </MDBCol>
+                        </MDBRow>
+                        <InputButtons resetForm={resetFormValues} setExampleData={setExampleData}
+                                      solveAlgorithm={handleSolveAlgorithm}/>
+                    </MDBValidation>
                 </InputField>
             </GridItem>
             <GridItem switchRows>
@@ -89,15 +154,19 @@ const DiffieHellman = () => {
             </GridItem>
             <Field>
                 <Headline>Algorithm</Headline>
+                {showResult && (
+                    <ResultBox>
+                        <ResultHeadline>Result</ResultHeadline>
+                        <ResultText>
+                            Secret Key : <b>{result}</b>
+                        </ResultText>
+                    </ResultBox>
+                )}
                 <StyledStickManAndArrowContainer>
                     <StickManContainer>
                         <StickMan character={'A'}/>
                     </StickManContainer>
-                    <ArrowContainer>
-                        <Arrow isRight={true} width={100}/>
-                        <div style={{margin: '40px 0'}}/>
-                        <Arrow isRight={false} width={100}/>
-                    </ArrowContainer>
+                    <TransferAnimation/>
                     <StickManContainer>
                         <StickMan character={'B'}/>
                     </StickManContainer>
@@ -107,6 +176,7 @@ const DiffieHellman = () => {
                 <Headline>Benchmarks</Headline>
                 <InfoBox>Coming Soon</InfoBox>
             </Field>
+            <ToastContainer/>
         </FieldGrid>
     );
 };

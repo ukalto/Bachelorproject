@@ -9,8 +9,7 @@
         },
         {
           "type": "example",
-          "values": [
-          ]
+          "values": {}
         }
       ]
     },
@@ -19,12 +18,11 @@
       "details": [
         {
           "type": "scenario",
-          "content": "Think of Berkeley as the place where a lot of really smart people came up with a set of rules and tools for building computer systems. Many modern computer operating systems, like MacOS, are like students who learned from Berkeley's \"textbook\" on how to work well."
+          "content": "Think of Berkeley as the place where a lot of really smart people came up with a set of rules and tools for building computer systems. Many modern computer operating systems, like MacOS, are like students who learned from Berkeley's 'textbook' on how to work well."
         },
         {
           "type": "example",
-          "values": [
-          ]
+          "values": {}
         }
       ]
     },
@@ -37,8 +35,16 @@
         },
         {
           "type": "example",
-          "values": [
-          ]
+          "values": {
+            "public_key_a": 7,
+            "private_key_a": 3,
+            "modules_a": 33,
+            "public_key_b": 3,
+            "private_key_b": 11,
+            "modules_b": 15,
+            "message": 3,
+            "hash_function": 5
+          }
         }
       ]
     },
@@ -51,8 +57,12 @@
         },
         {
           "type": "example",
-          "values": [
-          ]
+          "values": {
+            "modulo": 29,
+            "base_value": 3,
+            "person_a": 3,
+            "person_b": 2
+          }
         }
       ]
     },
@@ -61,26 +71,14 @@
       "details": [
         {
           "type": "scenario",
-          "content": "Think of it like a delivery service trying to put its warehouses in the best locations to serve customers quickly. They use a strategy where they place warehouses in areas with the most orders, so they can deliver packages faster to more people."
+          "content": "Think of it like a delivery service trying to put its warehouses in the best locations to serve customers quickly. They use a strategy where they place warehouses in areas with the most orders so they can deliver packages faster to more people."
         },
         {
           "type": "example",
           "values": [
-            [
-              1,
-              10,
-              10
-            ],
-            [
-              10,
-              5,
-              3
-            ],
-            [
-              10,
-              6,
-              5
-            ]
+            [1, 10, 10],
+            [10, 5, 3],
+            [10, 6, 5]
           ],
           "rows": 3,
           "columns": 3
@@ -96,8 +94,7 @@
         },
         {
           "type": "example",
-          "values": [
-          ]
+          "values": {}
         }
       ]
     },
@@ -106,12 +103,11 @@
       "details": [
         {
           "type": "scenario",
-          "content": "Think of it as a way to put time stamps on events, even if you have no synchronized clocks. It's like putting notes on events in a story so you can understand the order in which they happened."
+          "content": "Think of it as a way to put timestamps on events, even if you have no synchronized clocks. It's like putting notes on events in a story so you can understand the order in which they happened."
         },
         {
           "type": "example",
-          "values": [
-          ]
+          "values": {}
         }
       ]
     },
@@ -124,8 +120,7 @@
         },
         {
           "type": "example",
-          "values": [
-          ]
+          "values": {}
         }
       ]
     }

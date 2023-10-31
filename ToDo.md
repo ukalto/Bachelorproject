@@ -19,8 +19,8 @@
 - [ ] Algorithms
   - [ ] Chord-System
   - [ ] Berkeley
-  - [ ] Diffie Hellman
-  - [ ] Crypto-System
+  - [X] Diffie Hellman
+  - [X] Crypto-System
   - [X] Greedy
   - [ ] Kademlia
   - [ ] LamportsLogicClocks

@@ -7,7 +7,7 @@ export const FieldGrid = styled.div`
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    grid-template-rows: 0.5fr 0.5fr 1fr 1fr;
+    grid-template-rows: 1fr;
   }
 `;
 
@@ -23,6 +23,7 @@ export const Headline = styled.h6`
 
 export const Field = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -41,11 +42,13 @@ export const Field = styled.div`
 export const FieldText = styled.div`
   font-size: 16px;
   margin: 0;
+  height: 100%;
   text-align: justify;
 `;
 
 export const InputField = styled.div`
   width: 100%;
+  height: 100%;
   padding: 20px;
   display: flex;
   flex-wrap: wrap;
@@ -140,13 +143,6 @@ export const InfoBox = styled.div`
 export const StyledStickManAndArrowContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const ArrowContainer = styled.div`
-  display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
 `;
