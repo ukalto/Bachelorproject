@@ -30,12 +30,10 @@ export class GreedySolver {
                 return sum < min[1] ? [key, sum] : min;
             }, [0, Number.MAX_SAFE_INTEGER]);
 
-        const result = {
+        return {
             First_Server: `Latency ${first_server[0]}`,
             Second_Server: `Latency ${second_server[0]}`,
             Total_Latency: second_server[1],
         };
-
-        return result;
     }
 }

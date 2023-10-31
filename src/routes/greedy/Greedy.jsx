@@ -15,7 +15,7 @@ import {
 import {Scenario} from '../../components/Scenario';
 import InputButtons from '../../components/InputButtons';
 import {MDBCol, MDBRow} from 'mdb-react-ui-kit';
-import {getScenario} from '../../components/Helper.jsx';
+import {getScenario} from '../../components/GlobalFunctions.jsx';
 import RangeSlider from '../../components/RangeSlider.jsx';
 import GreedySheet from './GreedySheet.jsx';
 import data from '../../assets/data.json';

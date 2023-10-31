@@ -68,7 +68,6 @@ const GreedySheet = ({
                 color: 'var(---tertiary)',
             };
         }
-        ;
     };
 
     const findSmallestIndices = (array) => {
@@ -183,6 +182,7 @@ const StyledInputText = styled.input`
   border: 1px solid var(---tertiary);
   margin: 1px;
   text-align: center;
+  background-color: var(---fourth);
 
   @media (max-width: 1350px) {
     width: 70px;
