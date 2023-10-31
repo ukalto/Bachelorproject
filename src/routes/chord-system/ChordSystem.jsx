@@ -11,15 +11,15 @@ import {
     MDBRow,
     MDBCol
 } from 'mdb-react-ui-kit';
-import {getScenario} from "../../components/Helper.jsx";
+import {getScenario} from "../../components/GlobalFunctions.jsx";
 
 
 const ChordSystem = () => {
     const initialFormValues = {
         key: '',
-        bitidentifier: '',
-        nodesamount: '',
-        startnode: '',
+        bit_identifier: '',
+        nodes_amount: '',
+        start_node: '',
     };
 
     const [formValue, setFormValue] = useState(initialFormValues);

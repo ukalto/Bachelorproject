@@ -10,7 +10,7 @@ import InputButtons from "../../components/InputButtons";
 import {MDBCol, MDBRow} from "mdb-react-ui-kit";
 import RangeSlider from "../../components/RangeSlider";
 import LamportsLogicalClocksAlgorithm from "./LamportsLogicalClocksAlgorithm";
-import {getScenario} from "../../components/Helper.jsx";
+import {getScenario} from "../../components/GlobalFunctions.jsx";
 
 
 const LamportsLogicalClocks = () => {

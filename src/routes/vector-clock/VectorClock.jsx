@@ -11,7 +11,7 @@ import InputButtons from "../../components/InputButtons";
 import {MDBCol, MDBRow} from "mdb-react-ui-kit";
 import RangeSlider from "../../components/RangeSlider";
 import VectorClockAlgorithm from "./VectorClockAlgorithm";
-import {getScenario} from "../../components/Helper.jsx";
+import {getScenario} from "../../components/GlobalFunctions.jsx";
 
 const VectorClock = () => {
     const [vectorsAmount, setVectorsAmount] = useState(3);

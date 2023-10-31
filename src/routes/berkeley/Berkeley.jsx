@@ -8,15 +8,15 @@ import {
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
 import {MDBRow} from "mdb-react-ui-kit";
-import {getScenario} from "../../components/Helper.jsx";
+import {getScenario} from "../../components/GlobalFunctions.jsx";
 import RangeSlider from "../../components/RangeSlider.jsx";
-
+import styled from "styled-components";
 
 const Berkeley = () => {
-    const [serverAmount, setServerAmount] = useState(3);
+    const [serverAmount, setServerAmount] = useState(4); // Change the serverAmount value as needed
 
     const resetFormValues = () => {
-        setServerAmount(3);
+        setServerAmount(4); // Reset the serverAmount as needed
     };
 
     return (
@@ -36,9 +36,14 @@ const Berkeley = () => {
             <GridItem switchRows>
                 <Scenario scenario={getScenario("Berkeley", "scenario")}/>
             </GridItem>
-            <Field>
+            <StyledField>
                 <Headline>Algorithm</Headline>
-            </Field>
+                    <TimeInputsWrapper serverAmount={serverAmount}>
+                        {Array.from({length: serverAmount}).map((_, index) => (
+                            <TimeInput key={index} type="time" required/>
+                        ))}
+                    </TimeInputsWrapper>
+            </StyledField>
             <Field>
                 <Headline>Benchmarks</Headline>
                 <InfoBox>Coming Soon</InfoBox>
@@ -48,3 +53,48 @@ const Berkeley = () => {
 };
 
 export default Berkeley;
+
+
+const StyledField = styled(Field)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const TimeInputsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+
+  > * {
+    position: absolute;
+    width: 80px;
+    font-size: 16px;
+  }
+
+  ${(props) => {
+    const angles = [];
+    for (let i = 0; i < props.serverAmount; i++) {
+      const angle = (2 * Math.PI * i) / props.serverAmount;
+      angles.push(angle);
+    }
+
+    return angles.map((angle, index) => {
+      const top = `${Math.sin(angle) * 100}px`; // Adjust the radius as needed
+      const left = `${Math.cos(angle) * 150}px`; // Adjust the radius as needed
+
+      return `
+        > :nth-child(${index + 1}) {
+          top: ${top};
+          left: ${left};
+        }
+      `;
+    });
+  }}
+`;
+
+const TimeInput = styled.input`
+  position: absolute;
+`;
+

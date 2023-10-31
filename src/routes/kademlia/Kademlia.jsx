@@ -8,7 +8,7 @@ import {
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
 import {MDBCol, MDBInput, MDBRow} from "mdb-react-ui-kit";
-import {getScenario} from "../../components/Helper.jsx";
+import {getScenario} from "../../components/GlobalFunctions.jsx";
 
 
 const Kademlia = () => {
