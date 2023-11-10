@@ -40,14 +40,11 @@ const DiffieHellman = () => {
         setShowResult(false);
     };
 
-    const [example] = useState(() => {
-        const exampleData = data.data.find(item => item.name === 'DiffieHellman');
-        const {values} = exampleData.details.find(item => item.type === 'example');
-        return {values};
-    });
-
     const setExampleData = () => {
-        setFormValue({...formValue, ...example.values});
+        const exampleData = data.data.find((item) => item.name === 'DiffieHellman');
+        const {values} = exampleData.details.find((item) => item.type === 'example');
+
+        setFormValue({...formValue, ...values});
         setShowResult(false);
     };
 
