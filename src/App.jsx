@@ -9,6 +9,7 @@ import DiffieHellman from "./routes/diffie-hellman/DiffieHellman";
 import CryptoSystem from "./routes/crypto-system/CryptoSystem";
 import Greedy from "./routes/greedy/Greedy";
 import Layout from "./components/Layout";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
     return (

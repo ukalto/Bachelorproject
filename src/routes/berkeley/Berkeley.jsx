@@ -7,7 +7,7 @@ import {
     marginsInput,
     InfoBox,
     RangeBox,
-    GridItem,
+    GridItem, ResultBox, ResultHeadline, ResultText,
 } from '../../components/GlobalComponents.jsx';
 import {Scenario} from '../../components/Scenario';
 import InputButtons from '../../components/InputButtons';
@@ -16,22 +16,29 @@ import {getScenario} from '../../components/GlobalFunctions.jsx';
 import RangeSlider from '../../components/RangeSlider.jsx';
 import data from "../../assets/data.json";
 import styled from "styled-components";
+import {toast, ToastContainer} from "react-toastify";
+import {BerkeleySolver} from "./BerkeleySolver.js";
 
 const Berkeley = () => {
     const [serverAmount, setServerAmount] = useState(4);
     const [serverTimes, setServerTimes] = useState(Array(serverAmount).fill(null));
-    const [selectedTimeDaemon, setSelectedTimeDaemon] = useState(1);
+    const [selectedTimeDaemon, setSelectedTimeDaemon] = useState(0);
+    const [showResult, setShowResult] = useState(false);
+    const [resultText, setResultText] = useState(null);
+    const [currentResult, setCurrentResult] = useState(1);
 
     const onChange = (e, index) => {
         const newServerTimes = [...serverTimes];
         newServerTimes[index] = e.target.value;
         setServerTimes(newServerTimes);
+        setShowResult(false);
     }
 
     const resetFormValues = () => {
         setServerAmount(4);
         setSelectedTimeDaemon(0);
         setServerTimes(Array(4).fill(null));
+        setShowResult(false);
     };
 
     const setExampleData = () => {
@@ -41,6 +48,7 @@ const Berkeley = () => {
         setServerTimes([...values]);
         setSelectedTimeDaemon(0);
         setServerAmount(exampleServerAmount);
+        setShowResult(false);
     };
 
     const handleServerAmountChange = (newServerAmount) => {
@@ -51,10 +59,54 @@ const Berkeley = () => {
         }
 
         setServerAmount(newServerAmount);
+        setShowResult(false);
     };
 
     const handleTimeDaemonSelect = (index) => {
         setSelectedTimeDaemon(index);
+        setShowResult(false);
+    };
+
+    const handleSolveAlgorithm = () => {
+        if (!serverTimes.some(entry => entry === null)) {
+            const solver = new BerkeleySolver(serverTimes, selectedTimeDaemon);
+            const solveResult = solver.solve();
+            setShowResult(true);
+            const textLines = [];
+            const roundOne = [];
+            for (let i = 0; i < serverAmount; i++) {
+                roundOne.push(`From: ${solveResult[0][i].from} To: ${solveResult[0][i].to} | Time-sent: ${solveResult[0][i].time_sent}`);
+            }
+            const roundTwo = [];
+
+            for (let i = 0; i < serverAmount; i++) {
+                roundTwo.push(`From: ${solveResult[1][i].from} To: ${solveResult[1][i].to} | Time-difference: ${solveResult[1][i].time_adjust}`);
+            }
+            const roundThree = [];
+            roundThree.push(`General Time: ${solveResult[2][0].time_sent}`);
+            for (let i = 0; i < serverAmount; i++) {
+                roundThree.push(`From: ${solveResult[2][i].from} To: ${solveResult[2][i].to} | Time-adjustment: ${solveResult[2][i].time_adjust}`);
+            }
+            textLines.push(roundOne);
+            textLines.push(roundTwo);
+            textLines.push(roundThree);
+            setResultText(textLines);
+        } else {
+            toast.error('Every field has to be filled in!', {
+                position: toast.POSITION.BOTTOM_CENTER,
+                closeOnClick: true,
+                autoClose: 4000,
+                hideProgressBar: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+            });
+        }
+    };
+
+    const showCertainResult = (index) => {
+        setCurrentResult(index);
     };
 
     return (
@@ -88,7 +140,8 @@ const Berkeley = () => {
                             </DropdownContainer>
                         </MDBCol>
                     </MDBRow>
-                    <InputButtons resetForm={resetFormValues} setExampleData={setExampleData}/>
+                    <InputButtons resetForm={resetFormValues} setExampleData={setExampleData}
+                                  solveAlgorithm={handleSolveAlgorithm}/>
                 </InputField>
             </GridItem>
             <GridItem switchRows>
@@ -96,9 +149,32 @@ const Berkeley = () => {
             </GridItem>
             <Field>
                 <Headline>Algorithm</Headline>
+                {showResult && (
+                    <ResultBox>
+                        <ResultHeadline>Result</ResultHeadline>
+                        <ResultText>
+                            {resultText[currentResult - 1].map((line, index) => (
+                                <p>{line}</p>
+                            ))}
+                        </ResultText>
+                        <div>
+                            {[1, 2, 3].map((index) => (
+                                <ResultButton
+                                    key={index}
+                                    index={index}
+                                    currentResult={currentResult}
+                                    onClick={() => showCertainResult(index)}
+                                >
+                                    {index}
+                                </ResultButton>
+                            ))}
+                        </div>
+                    </ResultBox>
+                )}
                 <TimeInputsContainer serverAmount={serverAmount}>
                     {serverTimes.map((time, index) => (
                         <TimeInputContainer
+                            key={index}
                             index={index + 1}
                             serverAmount={serverTimes.length}>
                             <TimeInput isSelected={selectedTimeDaemon == index}> {index + 1} <input
@@ -116,6 +192,7 @@ const Berkeley = () => {
                 <Headline>Benchmarks</Headline>
                 <InfoBox>Coming Soon</InfoBox>
             </Field>
+            <ToastContainer/>
         </FieldGrid>
     );
 };
@@ -124,7 +201,7 @@ export default Berkeley;
 
 const TimeInputsContainer = styled.div`
   position: relative;
-  height: ${props => 120 + 40 * props.serverAmount}px;
+  height: ${props => 120 + 60 * props.serverAmount}px;
   margin: 0 auto;
 `;
 
@@ -180,3 +257,19 @@ const SelectContainer = styled.select`
   width: 30%;
 `;
 
+const ResultButton = styled.button`
+  padding: 0 4px;
+  width: 30px;
+  margin: 4px;
+  border: 2px solid ${props => (props.index === props.currentResult ? 'var(---tertiary)' : 'var(---fifth)')};
+  border-radius: 10px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  background-color: ${props => (props.index === props.currentResult ? 'var(---secondary)' : 'none')};
+  color: ${props => (props.index === props.currentResult ? 'var(---primary)' : 'none')};
+
+  &:hover {
+    background-color: var(---secondary);
+    border-color: var(---tertiary);
+    color: var(---primary);
+  }
+`;

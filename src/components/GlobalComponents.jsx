@@ -88,6 +88,11 @@ export const ResultBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  p {
+    text-align: center;
+  }
+
   @media (max-width: 768px) {
     width: 90%;
   }
