@@ -9,7 +9,21 @@
         },
         {
           "type": "example",
-          "values": {}
+          "selectedNodes": [
+            1,
+            4,
+            9,
+            11,
+            14,
+            18,
+            20,
+            21,
+            28
+          ],
+          "key": 12,
+          "nodesAmount": 32,
+          "bitIdentifier": 5,
+          "startNode": 28
         }
       ]
     },

@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const RangeSlider = ({text, value, min, max, onChange}) => {
     const handleSliderChange = (e) => {
-        onChange(parseFloat(e.target.value));
+        onChange(parseInt(e.target.value));
     };
 
     return (

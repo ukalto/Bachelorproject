@@ -31,14 +31,14 @@ const Berkeley = () => {
         const newServerTimes = [...serverTimes];
         newServerTimes[index] = e.target.value;
         setServerTimes(newServerTimes);
-        setShowResult(false);
+        reset()
     }
 
     const resetFormValues = () => {
         setServerAmount(4);
         setSelectedTimeDaemon(0);
         setServerTimes(Array(4).fill(null));
-        setShowResult(false);
+        reset()
     };
 
     const setExampleData = () => {
@@ -48,7 +48,7 @@ const Berkeley = () => {
         setServerTimes([...values]);
         setSelectedTimeDaemon(0);
         setServerAmount(exampleServerAmount);
-        setShowResult(false);
+        reset()
     };
 
     const handleServerAmountChange = (newServerAmount) => {
@@ -59,11 +59,16 @@ const Berkeley = () => {
         }
 
         setServerAmount(newServerAmount);
-        setShowResult(false);
+        reset()
     };
 
     const handleTimeDaemonSelect = (index) => {
         setSelectedTimeDaemon(index);
+        reset()
+    };
+
+    const reset = () => {
+        setCurrentResult(1);
         setShowResult(false);
     };
 
