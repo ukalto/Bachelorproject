@@ -17,7 +17,6 @@ import StickMan from "../../components/StickMan";
 import {getScenario} from "../../components/GlobalFunctions.jsx";
 import data from "../../assets/data.json";
 import {toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import {TransferAnimation} from "../../components/TransferAnimation.jsx";
 import {CryptoSystemSolver} from "./CryptoSystemSolver.js";
 

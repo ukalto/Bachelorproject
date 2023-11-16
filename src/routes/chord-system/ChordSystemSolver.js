@@ -5,11 +5,12 @@ export class ChordSystemSolver {
         this.startNode = startNode;
         this.key = key;
         this.selectedNodes = selectedNodes;
-        this.path = [startNode];
+        this.path = [parseInt(startNode)];
         this.entitiesDict = {};
         this.selectedNodes.forEach((node) => {
             this.entitiesDict[node] = [];
         });
+        this.selectedFingerTableEntry = {};
     }
 
     findSucc(node) {
@@ -21,8 +22,8 @@ export class ChordSystemSolver {
         let curr = [];
         for (let i = 0; i < list.length; i++) {
             const dist = (this.nodesAmount - list[i] + this.key) % this.nodesAmount;
-            if (!curr.length || curr[1] > dist) {
-                curr = [list[i], dist];
+            if (!curr.length || curr[0][1] >= dist) {
+                curr = [[list[i], dist], [this.path[this.path.length - 1], i]];
             }
         }
         return curr;
@@ -39,21 +40,22 @@ export class ChordSystemSolver {
     }
 
     findPath() {
-        if (this.key && this.startNode) {
-            let closest = [];
+        let closest = [];
+        for (let i = 0; i < Object.keys(this.entitiesDict).length; i++) {
+            try {
+                const closestNode = this.findClosest(this.entitiesDict[this.path[i]]);
+                const temp = closestNode[0];
+                const index = closestNode[1];
 
-            for (let i = 0; i < Object.keys(this.entitiesDict).length; i++) {
-                try {
-                    const temp = this.findClosest(this.entitiesDict[this.path[i]]);
-
-                    if (!closest.length || closest[1] > temp[1]) {
-                        closest = temp;
-                        this.path.push(closest[0]);
-                    }
-                } catch (error) {
-                    this.path.push(this.entitiesDict[this.path[this.path.length - 1]][0]);
-                    break;
+                if (!closest.length || closest[1] > temp[1]) {
+                    closest = temp;
+                    this.selectedFingerTableEntry[index[0]] = index[1];
+                    this.path.push(closest[0]);
                 }
+            } catch (error) {
+                this.selectedFingerTableEntry[this.path[this.path.length - 1]] = 0;
+                this.path.push(this.entitiesDict[this.path[this.path.length - 1]][0]);
+                break;
             }
         }
     }
@@ -63,7 +65,8 @@ export class ChordSystemSolver {
         this.findPath();
         return ({
             path: this.path,
-            tables: this.entitiesDict
+            tables: this.entitiesDict,
+            selectedFingerTableEntries: this.selectedFingerTableEntry
         });
     }
 }
