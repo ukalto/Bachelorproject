@@ -7,7 +7,7 @@ import {
     marginsInput,
     InfoBox,
     RangeBox,
-    GridItem, ResultBox, ResultHeadline, ResultText,
+    GridItem,
 } from '../../components/GlobalComponents.jsx';
 import {Scenario} from '../../components/Scenario';
 import InputButtons from '../../components/InputButtons';
@@ -18,6 +18,7 @@ import data from "../../assets/data.json";
 import styled from "styled-components";
 import {toast, ToastContainer} from "react-toastify";
 import {BerkeleySolver} from "./BerkeleySolver.js";
+import Xarrow from 'react-xarrows';
 
 const Berkeley = () => {
     const [serverAmount, setServerAmount] = useState(4);
@@ -26,6 +27,7 @@ const Berkeley = () => {
     const [showResult, setShowResult] = useState(false);
     const [resultText, setResultText] = useState(null);
     const [currentResult, setCurrentResult] = useState(1);
+    const [finalTimes, setFinalTimes] = useState(null);
 
     const onChange = (e, index) => {
         const newServerTimes = [...serverTimes];
@@ -58,6 +60,10 @@ const Berkeley = () => {
             setServerTimes(serverTimes.slice(0, newServerAmount));
         }
 
+        if (selectedTimeDaemon >= newServerAmount) {
+            setSelectedTimeDaemon(0);
+        }
+
         setServerAmount(newServerAmount);
         reset()
     };
@@ -80,21 +86,22 @@ const Berkeley = () => {
             const textLines = [];
             const roundOne = [];
             for (let i = 0; i < serverAmount; i++) {
-                roundOne.push(`From: ${solveResult[0][i].from} To: ${solveResult[0][i].to} | Time-sent: ${solveResult[0][i].time_sent}`);
+                roundOne.push([solveResult[0][i].from, solveResult[0][i].to, solveResult[0][i].time_sent]);
             }
             const roundTwo = [];
-
             for (let i = 0; i < serverAmount; i++) {
-                roundTwo.push(`From: ${solveResult[1][i].from} To: ${solveResult[1][i].to} | Time-difference: ${solveResult[1][i].time_adjust}`);
+                roundTwo.push([solveResult[1][i].from, solveResult[1][i].to, solveResult[1][i].time_adjust]);
             }
             const roundThree = [];
-            roundThree.push(`General Time: ${solveResult[2][0].time_sent}`);
+            const tempFinalTimes = [];
             for (let i = 0; i < serverAmount; i++) {
-                roundThree.push(`From: ${solveResult[2][i].from} To: ${solveResult[2][i].to} | Time-adjustment: ${solveResult[2][i].time_adjust}`);
+                roundThree.push([solveResult[2][i].from, solveResult[2][i].to, solveResult[2][i].time_adjust]);
+                tempFinalTimes.push(solveResult[2][i].time_sent);
             }
             textLines.push(roundOne);
             textLines.push(roundTwo);
             textLines.push(roundThree);
+            setFinalTimes(tempFinalTimes);
             setResultText(textLines);
         } else {
             toast.error('Every field has to be filled in!', {
@@ -110,8 +117,24 @@ const Berkeley = () => {
         }
     };
 
+    const arrowLeft = (number) => {
+        switch (serverAmount) {
+            case 2:
+                return number === 0;
+            case 4:
+                return number === 1;
+            case 5:
+                return number === 1 || number === 2;
+            case 6:
+                return number === 1 || number === 2 || number === 3;
+            case 3:
+            default:
+                return false;
+        }
+    }
+
     const showCertainResult = (index) => {
-        setCurrentResult(index);
+        setCurrentResult(parseInt(index));
     };
 
     return (
@@ -154,44 +177,116 @@ const Berkeley = () => {
             </GridItem>
             <Field>
                 <Headline>Algorithm</Headline>
-                {showResult && (
-                    <ResultBox>
-                        <ResultHeadline>Result</ResultHeadline>
-                        <ResultText>
-                            {resultText[currentResult - 1].map((line, index) => (
-                                <p>{line}</p>
-                            ))}
-                        </ResultText>
-                        <div>
-                            {[1, 2, 3].map((index) => (
-                                <ResultButton
-                                    key={index}
-                                    index={index}
-                                    currentResult={currentResult}
-                                    onClick={() => showCertainResult(index)}
-                                >
-                                    {index}
-                                </ResultButton>
-                            ))}
-                        </div>
-                    </ResultBox>
-                )}
                 <TimeInputsContainer serverAmount={serverAmount}>
                     {serverTimes.map((time, index) => (
                         <TimeInputContainer
                             key={index}
                             index={index + 1}
-                            serverAmount={serverTimes.length}>
-                            <TimeInput isSelected={selectedTimeDaemon == index}> {index + 1} <input
-                                key={index}
-                                type="time"
-                                value={time || ''}
-                                onChange={(e) => onChange(e, index)}
-                            />
+                            serverAmount={serverTimes.length}
+                            id={`Time${index}`}>
+                            <TimeInput isSelected={parseInt(selectedTimeDaemon) === index} showResult={showResult}
+                                       currentResult={currentResult}>
+                                {index + 1}
+                                {showResult && currentResult === 3 ? (
+                                    <input
+                                        type="time"
+                                        value={finalTimes[index]}
+                                        onChange={(e) => onChange(e, index)}
+                                    />
+                                ) : (
+                                    <input
+                                        key={index}
+                                        type="time"
+                                        value={time || ''}
+                                        onChange={(e) => onChange(e, index)}
+                                    />
+                                )}
                             </TimeInput>
                         </TimeInputContainer>
                     ))}
+                    {showResult && (currentResult === 1 || currentResult === 2 || currentResult === 3) && (
+                        <React.Fragment>
+                            {resultText.map((round, roundIndex) => (
+                                <React.Fragment key={roundIndex}>
+                                    {round.map((result, index) => (
+                                        <React.Fragment key={index}>
+                                            {index !== parseInt(selectedTimeDaemon) ? (
+                                                <Xarrow
+                                                    divContainerStyle={{
+                                                        color: 'var(---tertiary)',
+                                                        fontWeight: 'bold',
+                                                    }}
+                                                    key={index}
+                                                    headSize={5}
+                                                    color={'darkgray'}
+                                                    showHead={true}
+                                                    start={`Time${resultText[currentResult - 1][index][0]}`}
+                                                    end={`Time${resultText[currentResult - 1][index][1]}`}
+                                                    labels={resultText[currentResult - 1][index][2]}
+                                                />
+                                            ) : (
+                                                !arrowLeft(index) ? (
+                                                    <Xarrow
+                                                        divContainerStyle={{
+                                                            color: 'var(---tertiary)',
+                                                            fontWeight: 'bold',
+                                                        }}
+                                                        key={`timedaemon-${index}`}
+                                                        headSize={6}
+                                                        showHead={true}
+                                                        path={"grid"}
+                                                        color={'darkgray'}
+                                                        startAnchor={"right"}
+                                                        endAnchor={"right"}
+                                                        _cpx1Offset={120}
+                                                        _cpx2Offset={40}
+                                                        start={`Time${selectedTimeDaemon}`}
+                                                        end={`Time${selectedTimeDaemon}`}
+                                                        labels={resultText[currentResult - 1][0][2]}
+                                                    />
+                                                ) : (
+                                                    <Xarrow
+                                                        divContainerStyle={{
+                                                            color: 'var(---tertiary)',
+                                                            fontWeight: 'bold',
+                                                        }}
+                                                        key={`timedaemon-${index}`}
+                                                        headSize={6}
+                                                        showHead={false}
+                                                        showTail={true}
+                                                        path={"grid"}
+                                                        color={'darkgray'}
+                                                        startAnchor={"left"}
+                                                        endAnchor={"left"}
+                                                        _cpx1Offset={-120}
+                                                        _cpx2Offset={-40}
+                                                        start={`Time${selectedTimeDaemon}`}
+                                                        end={`Time${selectedTimeDaemon}`}
+                                                        labels={resultText[currentResult - 1][0][2]}
+                                                    />
+                                                )
+                                            )}
+                                        </React.Fragment>
+                                    ))}
+                                </React.Fragment>
+                            ))}
+                        </React.Fragment>
+                    )}
                 </TimeInputsContainer>
+                {showResult && (
+                    <ResultOptionsContainer>
+                        {[0, 1, 2, 3].map((index) => (
+                            <ResultButton
+                                key={index}
+                                index={index}
+                                currentResult={currentResult}
+                                onClick={() => showCertainResult(index)}
+                            >
+                                {index}
+                            </ResultButton>
+                        ))}
+                    </ResultOptionsContainer>
+                )}
             </Field>
             <Field>
                 <Headline>Benchmarks</Headline>
@@ -199,7 +294,8 @@ const Berkeley = () => {
             </Field>
             <ToastContainer/>
         </FieldGrid>
-    );
+    )
+        ;
 };
 
 export default Berkeley;
@@ -218,7 +314,7 @@ const TimeInputContainer = styled.div`
   margin: -25px 0 0 -25px;
   transform: ${
           props => {
-            const radius = 120;
+            const radius = 30 + 35 * props.serverAmount;
             const angle = (2 * Math.PI * props.index) / props.serverAmount;
 
             const x = Math.cos(angle) * radius;
@@ -240,6 +336,7 @@ const TimeInput = styled.div`
 
   input {
     margin-left: 5px;
+    pointer-events: ${(props) => ((props.showResult && props.currentResult >= 1) ? 'none' : 'pointer')};
   }
 `;
 
@@ -277,4 +374,9 @@ const ResultButton = styled.button`
     border-color: var(---tertiary);
     color: var(---primary);
   }
+`;
+
+const ResultOptionsContainer = styled.div`
+  align-self: center;
+  margin-top: 30px;
 `;
