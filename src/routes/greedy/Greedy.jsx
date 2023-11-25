@@ -5,12 +5,11 @@ import {
     Headline,
     InputField,
     marginsInput,
-    InfoBox,
     RangeBox,
     ResultBox,
     GridItem,
     ResultText,
-    ResultHeadline,
+    ResultHeadline, FieldGridFirst,
 } from '../../components/GlobalComponents.jsx';
 import {Scenario} from '../../components/Scenario';
 import InputButtons from '../../components/InputButtons';
@@ -73,6 +72,7 @@ const Greedy = () => {
         setRowsAmount(newRowsAmount);
         setColumnsAmount(newColumnsAmount);
         setShowResult(false);
+        resetCheckedState();
     };
 
     const setExampleData = () => {
@@ -131,44 +131,46 @@ const Greedy = () => {
 
     return (
         <FieldGrid>
-            <GridItem>
-                <InputField>
-                    <Headline>Inputs</Headline>
-                    <MDBRow tag="form" className="g-3" style={marginsInput}>
-                        <MDBCol md="6">
-                            <RangeBox>
-                                <RangeSlider
-                                    text={'Rows'}
-                                    min={2}
-                                    max={7}
-                                    value={rowsAmount}
-                                    onChange={(newRowsAmount) =>
-                                        updateSheetData(newRowsAmount, columnsAmount)
-                                    }
-                                />
-                            </RangeBox>
-                        </MDBCol>
-                        <MDBCol md="6">
-                            <RangeBox>
-                                <RangeSlider
-                                    text={'Columns'}
-                                    min={2}
-                                    max={7}
-                                    value={columnsAmount}
-                                    onChange={(newColumnsAmount) =>
-                                        updateSheetData(rowsAmount, newColumnsAmount)
-                                    }
-                                />
-                            </RangeBox>
-                        </MDBCol>
-                    </MDBRow>
-                    <InputButtons resetForm={resetFormValues} setExampleData={setExampleData}
-                                  solveAlgorithm={handleSolveAlgorithm}/>
-                </InputField>
-            </GridItem>
-            <GridItem switchRows>
-                <Scenario scenario={getScenario('Greedy', 'scenario')}/>
-            </GridItem>
+            <FieldGridFirst>
+                <GridItem>
+                    <InputField>
+                        <Headline>Inputs</Headline>
+                        <MDBRow tag="form" className="g-3" style={marginsInput}>
+                            <MDBCol md="6">
+                                <RangeBox>
+                                    <RangeSlider
+                                        text={'Rows'}
+                                        min={2}
+                                        max={7}
+                                        value={rowsAmount}
+                                        onChange={(newRowsAmount) =>
+                                            updateSheetData(newRowsAmount, columnsAmount)
+                                        }
+                                    />
+                                </RangeBox>
+                            </MDBCol>
+                            <MDBCol md="6">
+                                <RangeBox>
+                                    <RangeSlider
+                                        text={'Columns'}
+                                        min={2}
+                                        max={7}
+                                        value={columnsAmount}
+                                        onChange={(newColumnsAmount) =>
+                                            updateSheetData(rowsAmount, newColumnsAmount)
+                                        }
+                                    />
+                                </RangeBox>
+                            </MDBCol>
+                        </MDBRow>
+                        <InputButtons resetForm={resetFormValues} setExampleData={setExampleData}
+                                      solveAlgorithm={handleSolveAlgorithm}/>
+                    </InputField>
+                </GridItem>
+                <GridItem switchRows>
+                    <Scenario scenario={getScenario('Greedy', 'scenario')}/>
+                </GridItem>
+            </FieldGridFirst>
             <Field>
                 <Headline>Algorithm</Headline>
                 {showResult && (
@@ -200,12 +202,8 @@ const Greedy = () => {
                     setShowResult={setShowResult}
                     checkedState={checkedState}
                     resetCheckedState={resetCheckedState}
-                result={result}
+                    result={result}
                 />
-            </Field>
-            <Field>
-                <Headline>Benchmarks</Headline>
-                <InfoBox>Not Available</InfoBox>
             </Field>
             <ToastContainer/>
         </FieldGrid>

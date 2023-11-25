@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
-const VectorBlock = ({vectorsAmount, disabled}) => {
+const VectorBlock = ({vectorsAmount, disabled, activeEditMode}) => {
     const [blockArray, setBlockArray] = useState(
         new Array(vectorsAmount).fill('').map(() => new Array(vectorsAmount).fill(0))
     );
@@ -40,6 +40,8 @@ const VectorBlock = ({vectorsAmount, disabled}) => {
                                 min={0}
                                 max={94}
                                 disabled={disabled} // Pass the disabled prop
+                                activeEditMode={activeEditMode}
+                                index={rowIndex}
                                 isLast={colIndex === vectorsAmount - 1}
                                 onChange={(e) => handleInputChange(rowIndex, colIndex, e.target.value)}
                             />
@@ -72,7 +74,29 @@ const StyledInput = styled.input`
   border-bottom: ${({isLast}) => (isLast ? '1px' : '0')} solid var(---tertiary);
   text-align: center;
 
+  background: ${({
+                   activeEditMode,
+                   index
+                 }) => (!activeEditMode || index !== 0 ? 'var(---fourth)' : 'var(---primary)')};;
+
   &:focus {
     outline: none;
+  }
+
+  cursor: ${({
+               activeEditMode,
+               index
+             }) => {
+    if (index === 0 && activeEditMode) {
+      return 'text';
+    } else if (!activeEditMode) {
+      return 'pointer';
+    } else {
+      return 'default';
+    }
+  }};
+
+  &:hover {
+    background: ${({activeEditMode}) => (activeEditMode ? "default" : "var(---secondary)")};
   }
 `;

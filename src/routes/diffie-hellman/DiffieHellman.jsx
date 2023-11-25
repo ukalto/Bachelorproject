@@ -5,7 +5,13 @@ import {
     Headline,
     InputField,
     marginsInput,
-    InfoBox, StyledStickManAndArrowContainer, StickManContainer, GridItem, ResultBox, ResultHeadline, ResultText,
+    StyledStickManAndArrowContainer,
+    StickManContainer,
+    GridItem,
+    ResultBox,
+    ResultHeadline,
+    ResultText,
+    FieldGridFirst,
 } from '../../components/GlobalComponents.jsx';
 import {Scenario} from '../../components/Scenario';
 import InputButtons from '../../components/InputButtons';
@@ -92,62 +98,64 @@ const DiffieHellman = () => {
 
     return (
         <FieldGrid>
-            <GridItem>
-                <InputField>
-                    <Headline>Inputs</Headline>
-                    <MDBValidation>
-                        <MDBRow tag="form" className="g-3" style={marginsInput}>
-                            <MDBCol md="6">
-                                <MDBInput
-                                    value={formValue.person_a}
-                                    name="person_a"
-                                    onChange={onChange}
-                                    required
-                                    label="Person A"
-                                    type={"number"}
-                                />
-                            </MDBCol>
-                            <MDBCol md="6">
-                                <MDBInput
-                                    value={formValue.person_b}
-                                    name="person_b"
-                                    onChange={onChange}
-                                    required
-                                    label="Person B"
-                                    type={"number"}
-                                />
-                            </MDBCol>
-                        </MDBRow>
-                        <MDBRow tag="form" className="g-3" style={marginsInput}>
-                            <MDBCol md="6">
-                                <MDBInput
-                                    value={formValue.base_value}
-                                    name="base_value"
-                                    onChange={onChange}
-                                    required
-                                    label="Base Value"
-                                    type={"number"}
-                                />
-                            </MDBCol>
-                            <MDBCol md="6">
-                                <MDBInput
-                                    value={formValue.modulo}
-                                    name="modulo"
-                                    onChange={onChange}
-                                    required
-                                    label="Modulo"
-                                    type={"number"}
-                                />
-                            </MDBCol>
-                        </MDBRow>
-                        <InputButtons resetForm={resetFormValues} setExampleData={setExampleData}
-                                      solveAlgorithm={handleSolveAlgorithm}/>
-                    </MDBValidation>
-                </InputField>
-            </GridItem>
-            <GridItem switchRows>
-                <Scenario scenario={getScenario('DiffieHellman', 'scenario')}/>
-            </GridItem>
+            <FieldGridFirst>
+                <GridItem>
+                    <InputField>
+                        <Headline>Inputs</Headline>
+                        <MDBValidation>
+                            <MDBRow tag="form" className="g-3" style={marginsInput}>
+                                <MDBCol md="6">
+                                    <MDBInput
+                                        value={formValue.person_a}
+                                        name="person_a"
+                                        onChange={onChange}
+                                        required
+                                        label="Person A"
+                                        type={"number"}
+                                    />
+                                </MDBCol>
+                                <MDBCol md="6">
+                                    <MDBInput
+                                        value={formValue.person_b}
+                                        name="person_b"
+                                        onChange={onChange}
+                                        required
+                                        label="Person B"
+                                        type={"number"}
+                                    />
+                                </MDBCol>
+                            </MDBRow>
+                            <MDBRow tag="form" className="g-3" style={marginsInput}>
+                                <MDBCol md="6">
+                                    <MDBInput
+                                        value={formValue.base_value}
+                                        name="base_value"
+                                        onChange={onChange}
+                                        required
+                                        label="Base Value"
+                                        type={"number"}
+                                    />
+                                </MDBCol>
+                                <MDBCol md="6">
+                                    <MDBInput
+                                        value={formValue.modulo}
+                                        name="modulo"
+                                        onChange={onChange}
+                                        required
+                                        label="Modulo"
+                                        type={"number"}
+                                    />
+                                </MDBCol>
+                            </MDBRow>
+                            <InputButtons resetForm={resetFormValues} setExampleData={setExampleData}
+                                          solveAlgorithm={handleSolveAlgorithm}/>
+                        </MDBValidation>
+                    </InputField>
+                </GridItem>
+                <GridItem switchRows>
+                    <Scenario scenario={getScenario('DiffieHellman', 'scenario')}/>
+                </GridItem>
+            </FieldGridFirst>
             <Field>
                 <Headline>Algorithm</Headline>
                 {showResult && (
@@ -167,10 +175,6 @@ const DiffieHellman = () => {
                         <StickMan character={'B'}/>
                     </StickManContainer>
                 </StyledStickManAndArrowContainer>
-            </Field>
-            <Field>
-                <Headline>Benchmarks</Headline>
-                <InfoBox>Coming Soon</InfoBox>
             </Field>
             <ToastContainer/>
         </FieldGrid>

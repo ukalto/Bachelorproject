@@ -3,7 +3,7 @@ import VectorBlock from "./VectorBlock";
 import styled from "styled-components";
 import Arrow from "../../components/Arrow.jsx";
 
-const VectorClockAlgorithm = ({timeSteps, vectorsAmount}) => {
+const VectorClockAlgorithm = ({timeSteps, vectorsAmount, activeEditMode}) => {
     const marginPercentage = 20 / timeSteps;
 
     return (
@@ -11,7 +11,7 @@ const VectorClockAlgorithm = ({timeSteps, vectorsAmount}) => {
             <VectorBlockContainer>
                 {Array.from({length: timeSteps}, (_, index) => (
                     <MarginWrapper key={index} marginPercentage={marginPercentage}>
-                        <VectorBlock vectorsAmount={vectorsAmount} disabled={index !== 0}/>
+                        <VectorBlock vectorsAmount={vectorsAmount} disabled={index !== 0 || !activeEditMode} activeEditMode={activeEditMode}/>
                         <TextWrapper>t{index}</TextWrapper>
                     </MarginWrapper>
                 ))}

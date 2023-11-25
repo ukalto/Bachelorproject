@@ -4,11 +4,10 @@ import {
     Field,
     Headline,
     InputField,
-    InfoBox,
     StyledStickManAndArrowContainer,
     StickManContainer,
     GridItem,
-    marginsInput, ResultBox, ResultHeadline, ResultText,
+    marginsInput, ResultBox, ResultHeadline, ResultText, FieldGridFirst,
 } from '../../components/GlobalComponents.jsx';
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
@@ -48,9 +47,9 @@ const CryptoSystem = () => {
 
     const setExampleData = () => {
         const exampleData = data.data.find((item) => item.name === 'CryptoSystem');
-        const { values } = exampleData.details.find((item) => item.type === 'example');
+        const {values} = exampleData.details.find((item) => item.type === 'example');
 
-        setFormValue({ ...formValue, ...values });
+        setFormValue({...formValue, ...values});
         setShowResult(false);
     };
 
@@ -103,98 +102,100 @@ const CryptoSystem = () => {
 
     return (
         <FieldGrid>
-            <GridItem>
-                <InputField>
-                    <Headline>Inputs</Headline>
-                    <MDBValidation className='row g-3' style={marginsInput}>
-                        <MDBCol md={4}>
-                            <MDBInput
-                                value={formValue.public_key_a}
-                                name='public_key_a'
-                                onChange={onChange}
-                                required
-                                type="number"
-                                label='Public Key A'
-                            />
-                        </MDBCol>
-                        <MDBCol md={4}>
-                            <MDBInput
-                                value={formValue.private_key_a}
-                                name='private_key_a'
-                                onChange={onChange}
-                                required
-                                label='Private Key A'
-                                type="number"
-                            />
-                        </MDBCol>
-                        <MDBCol md={4}>
-                            <MDBInput
-                                value={formValue.modules_a}
-                                name='modules_a'
-                                onChange={onChange}
-                                required
-                                label='Modules A'
-                                type="number"
-                            />
-                        </MDBCol>
-                        <MDBCol md={4}>
-                            <MDBInput
-                                value={formValue.public_key_b}
-                                name='public_key_b'
-                                onChange={onChange}
-                                required
-                                label='Public Key B'
-                                type="number"
-                            />
-                        </MDBCol>
-                        <MDBCol md={4}>
-                            <MDBInput
-                                value={formValue.private_key_b}
-                                name='private_key_b'
-                                onChange={onChange}
-                                required
-                                label='Private Key B'
-                                type="number"
-                            />
-                        </MDBCol>
-                        <MDBCol md={4}>
-                            <MDBInput
-                                value={formValue.modules_b}
-                                name='modules_b'
-                                onChange={onChange}
-                                required
-                                label='Modules B'
-                                type="number"
-                            />
-                        </MDBCol>
-                        <MDBCol md={6}>
-                            <MDBInput
-                                value={formValue.message}
-                                name='message'
-                                onChange={onChange}
-                                required
-                                label='Message'
-                                type="number"
-                            />
-                        </MDBCol>
-                        <MDBCol md={6}>
-                            <MDBInput
-                                value={formValue.hash_function}
-                                name='hash_function'
-                                onChange={onChange}
-                                required
-                                label='Hash Function'
-                                type="number"
-                            />
-                        </MDBCol>
-                        <InputButtons resetForm={resetFormValues} setExampleData={setExampleData}
-                                      solveAlgorithm={handleSolveAlgorithm}/>
-                    </MDBValidation>
-                </InputField>
-            </GridItem>
-            <GridItem switchRows>
-                <Scenario scenario={getScenario("CryptoSystem", "scenario")}/>
-            </GridItem>
+            <FieldGridFirst>
+                <GridItem>
+                    <InputField>
+                        <Headline>Inputs</Headline>
+                        <MDBValidation className='row g-3' style={marginsInput}>
+                            <MDBCol md={4}>
+                                <MDBInput
+                                    value={formValue.public_key_a}
+                                    name='public_key_a'
+                                    onChange={onChange}
+                                    required
+                                    type="number"
+                                    label='Public Key A'
+                                />
+                            </MDBCol>
+                            <MDBCol md={4}>
+                                <MDBInput
+                                    value={formValue.private_key_a}
+                                    name='private_key_a'
+                                    onChange={onChange}
+                                    required
+                                    label='Private Key A'
+                                    type="number"
+                                />
+                            </MDBCol>
+                            <MDBCol md={4}>
+                                <MDBInput
+                                    value={formValue.modules_a}
+                                    name='modules_a'
+                                    onChange={onChange}
+                                    required
+                                    label='Modules A'
+                                    type="number"
+                                />
+                            </MDBCol>
+                            <MDBCol md={4}>
+                                <MDBInput
+                                    value={formValue.public_key_b}
+                                    name='public_key_b'
+                                    onChange={onChange}
+                                    required
+                                    label='Public Key B'
+                                    type="number"
+                                />
+                            </MDBCol>
+                            <MDBCol md={4}>
+                                <MDBInput
+                                    value={formValue.private_key_b}
+                                    name='private_key_b'
+                                    onChange={onChange}
+                                    required
+                                    label='Private Key B'
+                                    type="number"
+                                />
+                            </MDBCol>
+                            <MDBCol md={4}>
+                                <MDBInput
+                                    value={formValue.modules_b}
+                                    name='modules_b'
+                                    onChange={onChange}
+                                    required
+                                    label='Modules B'
+                                    type="number"
+                                />
+                            </MDBCol>
+                            <MDBCol md={6}>
+                                <MDBInput
+                                    value={formValue.message}
+                                    name='message'
+                                    onChange={onChange}
+                                    required
+                                    label='Message'
+                                    type="number"
+                                />
+                            </MDBCol>
+                            <MDBCol md={6}>
+                                <MDBInput
+                                    value={formValue.hash_function}
+                                    name='hash_function'
+                                    onChange={onChange}
+                                    required
+                                    label='Hash Function'
+                                    type="number"
+                                />
+                            </MDBCol>
+                            <InputButtons resetForm={resetFormValues} setExampleData={setExampleData}
+                                          solveAlgorithm={handleSolveAlgorithm}/>
+                        </MDBValidation>
+                    </InputField>
+                </GridItem>
+                <GridItem switchRows>
+                    <Scenario scenario={getScenario("CryptoSystem", "scenario")}/>
+                </GridItem>
+            </FieldGridFirst>
             <Field>
                 <Headline>Algorithm</Headline>
                 {showResult && (
@@ -217,10 +218,6 @@ const CryptoSystem = () => {
                         <StickMan character={'B'}/>
                     </StickManContainer>
                 </StyledStickManAndArrowContainer>
-            </Field>
-            <Field>
-                <Headline>Benchmarks</Headline>
-                <InfoBox>Coming Soon</InfoBox>
             </Field>
             <ToastContainer/>
         </FieldGrid>

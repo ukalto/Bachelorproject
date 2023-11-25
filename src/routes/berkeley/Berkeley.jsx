@@ -5,9 +5,8 @@ import {
     Headline,
     InputField,
     marginsInput,
-    InfoBox,
     RangeBox,
-    GridItem,
+    GridItem, FieldGridFirst,
 } from '../../components/GlobalComponents.jsx';
 import {Scenario} from '../../components/Scenario';
 import InputButtons from '../../components/InputButtons';
@@ -139,42 +138,44 @@ const Berkeley = () => {
 
     return (
         <FieldGrid>
-            <GridItem>
-                <InputField>
-                    <Headline>Inputs</Headline>
-                    <MDBRow tag="form" className="g-3" style={marginsInput}>
-                        <MDBCol md={8}>
-                            <RangeBox>
-                                <RangeSlider
-                                    text={'Servers'}
-                                    min={2}
-                                    max={6}
-                                    value={serverAmount}
-                                    onChange={handleServerAmountChange}
-                                />
-                            </RangeBox>
-                        </MDBCol>
-                        <MDBCol md={4}>
-                            <DropdownContainer>
-                                Time Daemon:
-                                <SelectContainer onChange={(e) => handleTimeDaemonSelect(e.target.value)}
-                                                 value={selectedTimeDaemon}>
-                                    {serverTimes.map((value, index) => (
-                                        <option key={index} value={index}>
-                                            {index + 1} - {value}
-                                        </option>
-                                    ))}
-                                </SelectContainer>
-                            </DropdownContainer>
-                        </MDBCol>
-                    </MDBRow>
-                    <InputButtons resetForm={resetFormValues} setExampleData={setExampleData}
-                                  solveAlgorithm={handleSolveAlgorithm}/>
-                </InputField>
-            </GridItem>
-            <GridItem switchRows>
-                <Scenario scenario={getScenario('Berkeley', 'scenario')}/>
-            </GridItem>
+            <FieldGridFirst>
+                <GridItem>
+                    <InputField>
+                        <Headline>Inputs</Headline>
+                        <MDBRow tag="form" className="g-3" style={marginsInput}>
+                            <MDBCol md={8}>
+                                <RangeBox>
+                                    <RangeSlider
+                                        text={'Servers'}
+                                        min={2}
+                                        max={6}
+                                        value={serverAmount}
+                                        onChange={handleServerAmountChange}
+                                    />
+                                </RangeBox>
+                            </MDBCol>
+                            <MDBCol md={4}>
+                                <DropdownContainer>
+                                    Time Daemon:
+                                    <SelectContainer onChange={(e) => handleTimeDaemonSelect(e.target.value)}
+                                                     value={selectedTimeDaemon}>
+                                        {serverTimes.map((value, index) => (
+                                            <option key={index} value={index}>
+                                                {index + 1} - {value}
+                                            </option>
+                                        ))}
+                                    </SelectContainer>
+                                </DropdownContainer>
+                            </MDBCol>
+                        </MDBRow>
+                        <InputButtons resetForm={resetFormValues} setExampleData={setExampleData}
+                                      solveAlgorithm={handleSolveAlgorithm}/>
+                    </InputField>
+                </GridItem>
+                <GridItem switchRows>
+                    <Scenario scenario={getScenario('Berkeley', 'scenario')}/>
+                </GridItem>
+            </FieldGridFirst>
             <Field>
                 <Headline>Algorithm</Headline>
                 <TimeInputsContainer serverAmount={serverAmount}>
@@ -288,14 +289,9 @@ const Berkeley = () => {
                     </ResultOptionsContainer>
                 )}
             </Field>
-            <Field>
-                <Headline>Benchmarks</Headline>
-                <InfoBox>Coming Soon</InfoBox>
-            </Field>
             <ToastContainer/>
         </FieldGrid>
-    )
-        ;
+    );
 };
 
 export default Berkeley;

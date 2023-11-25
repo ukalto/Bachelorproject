@@ -1,4 +1,4 @@
-# ToDo
+[# ToDo
 - [X] create NavBar
 - [X] add all possible routes
 - [X] create HomePage
@@ -18,11 +18,12 @@
 - [X] Input Fields
 - [ ] Algorithms
   - [X] Chord-System
-  - [ ] Berkeley
+  - [X] Berkeley
   - [X] Diffie Hellman
   - [X] Crypto-System
   - [X] Greedy
   - [ ] Kademlia
   - [ ] LamportsLogicClocks
-  - [ ] Vector Clock
-- [ ] Benchmarks
+  - [ ] Vector Clocks
+
+## Responsive

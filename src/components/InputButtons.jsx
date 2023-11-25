@@ -1,26 +1,34 @@
 import React from 'react';
 import styled from "styled-components";
 
-const InputButtons = ({resetForm = () => {}, setExampleData = () => {}, solveAlgorithm = () => {}}) => {
-    const handleResetClick = () => {
-        resetForm();
-    };
+const InputButtons = ({ resetForm = () => { }, setExampleData = () => { }, solveAlgorithm = null, activeEditMode = null, setActiveEditMode = null}) => {
 
-    const handleExampleClick = () => {
-        setExampleData();
-    };
+  const handleResetClick = () => {
+    resetForm();
+  };
 
-    const handleSolveClick = () => {
-        solveAlgorithm();
-    };
+  const handleExampleClick = () => {
+    setExampleData();
+  };
 
-    return (
-        <ButtonContainer>
-            <Button borderColor="var(---error)" onClick={handleResetClick}>Reset</Button>
-            <Button borderColor="var(---secondary)" onClick={handleExampleClick}>Example</Button>
-            <Button borderColor="var(---fifth)" onClick={handleSolveClick}>Solve</Button>
-        </ButtonContainer>
-    );
+  const handleSolveClick = () => {
+    solveAlgorithm && solveAlgorithm();
+  };
+
+  const activateEditModeClick = () => {
+    setActiveEditMode(!activeEditMode);
+  }
+
+  return (
+    <ButtonContainer>
+      <ButtonContainer>
+        <Button borderColor="var(---error)" onClick={handleResetClick}>Reset</Button>
+        <Button borderColor="var(---secondary)" onClick={handleExampleClick}>Example</Button>
+        {solveAlgorithm && <Button borderColor="var(---fifth)" onClick={handleSolveClick}>Solve</Button>}
+        {setActiveEditMode && <Button borderColor="var(---fifth)" onClick={activateEditModeClick}>{activeEditMode ? 'Edit: On' : 'Edit: Off'}</Button>}
+      </ButtonContainer>
+    </ButtonContainer>
+  );
 };
 
 export default InputButtons;
@@ -35,7 +43,7 @@ const Button = styled.button`
   padding: 10px 20px;
   background-color: var(---primary);
   border-radius: 5px;
-  border: 2px solid ${({borderColor}) => borderColor || 'var(---secondary)'};
+  border: 2px solid ${({ borderColor }) => borderColor || 'var(---secondary)'};
   color: var(---tertiary);
   cursor: pointer;
   font-weight: bold;

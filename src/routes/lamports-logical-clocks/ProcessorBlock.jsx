@@ -1,31 +1,26 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
-const ProcessorBlock = ({rowAmount}) => {
+const ProcessorBlock = ({rowAmount, activeEditMode}) => {
     const [blockArray, setBlockArray] = useState([]);
 
     useEffect(() => {
-        // Update the number of rows while preserving the value in the second field
         const newBlockArray = [];
         if (blockArray.length === 0) {
-            // Initialize the array when it's empty
-            newBlockArray.push(0); // First entry
-            newBlockArray.push(1); // Second entry (preserving its value)
+            newBlockArray.push(0);
+            newBlockArray.push(1);
             for (let i = 2; i < rowAmount; i++) {
-                // Calculate the subsequent values based on the second number (newBlockArray[1])
                 newBlockArray.push(newBlockArray[1] * i);
             }
         } else {
-            // Preserve the value in the second field and update the number of rows
-            newBlockArray.push(blockArray[0]); // Preserve the first entry
-            newBlockArray.push(blockArray[1]); // Preserve the second entry
+            newBlockArray.push(blockArray[0]);
+            newBlockArray.push(blockArray[1]);
             for (let i = 2; i < rowAmount; i++) {
-                // Calculate the subsequent values based on the second number (newBlockArray[1])
                 newBlockArray.push(newBlockArray[1] * i);
             }
         }
         setBlockArray(newBlockArray);
-    }, [blockArray, rowAmount]);
+    }, [rowAmount]);
 
     const handleInputChange = (index, newValue) => {
         if (newValue === '') {
@@ -53,14 +48,13 @@ const ProcessorBlock = ({rowAmount}) => {
                 <InputWrapper key={index} isLast={index === rowAmount - 1}>
                     <StyledInput
                         type="text"
+                        activeEditMode={activeEditMode}
                         value={value}
+                        index={index}
                         min={0}
                         isLast={index === rowAmount - 1}
                         onChange={(e) => handleInputChange(index, e.target.value)}
-                        disabled={index !== 1}
-                        style={{
-                            background: index !== 1 ? 'var(---fourth)' : 'var(---primary)',
-                        }}
+                        disabled={!activeEditMode || index !== 1}
                     />
                 </InputWrapper>
             ))}
@@ -89,7 +83,29 @@ const StyledInput = styled.input`
   border-bottom: ${({isLast}) => (isLast ? '1px' : '0')} solid var(---tertiary);
   text-align: center;
 
+  background: ${({
+                   activeEditMode,
+                   index
+                 }) => (!activeEditMode || index !== 1 ? 'var(---fourth)' : 'var(---primary)')};;
+
   &:focus {
     outline: none;
+  }
+
+  cursor: ${({
+               activeEditMode,
+               index
+             }) => {
+    if (index === 1 && activeEditMode) {
+      return 'text';
+    } else if (!activeEditMode) {
+      return 'pointer';
+    } else {
+      return 'default';
+    }
+  }};
+
+  &:hover {
+    background: ${({activeEditMode}) => (activeEditMode ? "default" : "var(---secondary)")};
   }
 `;

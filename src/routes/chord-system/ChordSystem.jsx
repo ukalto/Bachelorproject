@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
 import {
     Field,
-    FieldGrid,
+    FieldGrid, FieldGridFirst,
     GridItem,
     Headline,
-    InfoBox,
     InputField,
     marginsInput,
     RangeBox,
@@ -42,9 +41,14 @@ const ChordSystem = () => {
     };
 
     const activateNode = (index) => {
-        const newSelectedNodes = [...selectedNodes, index];
-        const sortedSelectedNodes = newSelectedNodes.sort((a, b) => a - b);
-        setSelectedNodes(sortedSelectedNodes);
+        if (!selectedNodes.includes(index)) {
+            const newSelectedNodes = [...selectedNodes, index];
+            const sortedSelectedNodes = newSelectedNodes.sort((a, b) => a - b);
+            setSelectedNodes(sortedSelectedNodes);
+        } else {
+            const newSelectedNodes = [...selectedNodes].filter((node) => node !== index);
+            setSelectedNodes(newSelectedNodes);
+        }
         reset();
     };
 
@@ -135,76 +139,78 @@ const ChordSystem = () => {
 
     return (
         <FieldGrid>
-            <GridItem>
-                <InputField>
-                    <Headline>Inputs</Headline>
-                    <MDBRow className="g-3" style={marginsInput}>
-                        <MDBCol md="4">
-                            <DropdownContainer>
-                                Start Node:
-                                <SelectContainer
-                                    onChange={(e) => handleStartNodeSelect(e.target.value)}
-                                    value={startNode}
-                                >
-                                    <option value="" disabled defaultValue hidden>
-                                        Node i
-                                    </option>
-                                    {selectedNodes.map((value, index) => (
-                                        <option key={index} value={value}>
-                                            Node {value}
+            <FieldGridFirst>
+                <GridItem>
+                    <InputField>
+                        <Headline>Inputs</Headline>
+                        <MDBRow className="g-3" style={marginsInput}>
+                            <MDBCol md="4">
+                                <DropdownContainer>
+                                    Start Node:
+                                    <SelectContainer
+                                        onChange={(e) => handleStartNodeSelect(e.target.value)}
+                                        value={startNode}
+                                    >
+                                        <option value="" disabled defaultValue hidden>
+                                            Node i
                                         </option>
-                                    ))}
-                                </SelectContainer>
-                            </DropdownContainer>
-                        </MDBCol>
-                        <MDBCol md="8">
-                            <RangeBox>
-                                <RangeSlider
-                                    text={'Bit-Identifier'}
-                                    name="bitIdentifier"
-                                    min={2}
-                                    max={5}
-                                    value={bitIdentifier}
-                                    onChange={setBitIdentifier}
+                                        {selectedNodes.map((value, index) => (
+                                            <option key={index} value={value}>
+                                                Node {value}
+                                            </option>
+                                        ))}
+                                    </SelectContainer>
+                                </DropdownContainer>
+                            </MDBCol>
+                            <MDBCol md="8">
+                                <RangeBox>
+                                    <RangeSlider
+                                        text={'Bit-Identifier'}
+                                        name="bitIdentifier"
+                                        min={2}
+                                        max={5}
+                                        value={bitIdentifier}
+                                        onChange={setBitIdentifier}
+                                    />
+                                </RangeBox>
+                            </MDBCol>
+                        </MDBRow>
+                        <MDBRow className="g-3" style={marginsInput}>
+                            <MDBCol md="2">
+                                <MDBInput
+                                    style={{height: '50px'}}
+                                    value={key}
+                                    name="key"
+                                    onChange={(e) => handleKeyChange(e.target.value)}
+                                    required
+                                    label="Key"
+                                    type="number"
                                 />
-                            </RangeBox>
-                        </MDBCol>
-                    </MDBRow>
-                    <MDBRow className="g-3" style={marginsInput}>
-                        <MDBCol md="2">
-                            <MDBInput
-                                style={{height: '50px'}}
-                                value={key}
-                                name="key"
-                                onChange={(e) => handleKeyChange(e.target.value)}
-                                required
-                                label="Key"
-                                type="number"
-                            />
-                        </MDBCol>
-                        <MDBCol md="10">
-                            <RangeBox>
-                                <RangeSlider
-                                    text={'Nodes'}
-                                    name="nodesAmount"
-                                    min={12}
-                                    max={32}
-                                    value={nodesAmount}
-                                    onChange={handleNodesAmountChange}
-                                />
-                            </RangeBox>
-                        </MDBCol>
-                    </MDBRow>
-                    <InputButtons
-                        resetForm={resetFormValues}
-                        setExampleData={setExampleData}
-                        solveAlgorithm={handleSolveAlgorithm}
-                    />
-                </InputField>
-            </GridItem>
-            <GridItem switchRows>
-                <Scenario scenario={getScenario('ChordSystem', 'scenario')}/>
-            </GridItem>
+                            </MDBCol>
+                            <MDBCol md="10">
+                                <RangeBox>
+                                    <RangeSlider
+                                        text={'Nodes'}
+                                        name="nodesAmount"
+                                        min={12}
+                                        max={32}
+                                        value={nodesAmount}
+                                        onChange={handleNodesAmountChange}
+                                    />
+                                </RangeBox>
+                            </MDBCol>
+                        </MDBRow>
+                        <InputButtons
+                            resetForm={resetFormValues}
+                            setExampleData={setExampleData}
+                            solveAlgorithm={handleSolveAlgorithm}
+                        />
+                    </InputField>
+                </GridItem>
+                <GridItem switchRows>
+                    <Scenario scenario={getScenario('ChordSystem', 'scenario')}/>
+                </GridItem>
+            </FieldGridFirst>
             <Field>
                 <Headline>Algorithm</Headline>
                 <NodeWrapper serverAmount={nodesAmount} showResult={showResult} resultPath={resultPath.length}>
@@ -284,10 +290,6 @@ const ChordSystem = () => {
                     )}
                 </NodeWrapper>
             </Field>
-            <Field>
-                <Headline>Benchmarks</Headline>
-                <InfoBox>Coming Soon</InfoBox>
-            </Field>
             <ToastContainer/>
         </FieldGrid>
     );
@@ -324,9 +326,9 @@ const Node = styled.button`
   transition: background-color 0.3s ease, border-color 0.3s ease;
 
   &:hover {
-    background-color: var(---secondary);
+    background-color: ${props => props.selectedNodes.includes(props.index) ? 'var(---primary)' : 'var(---secondary)'};
     border-color: var(---tertiary);
-    color: var(---primary);
+    color: ${props => props.selectedNodes.includes(props.index) ? 'var(---tertiary)' : 'var(---primary)'};
   }
 
   background-color: ${props => props.resultPath.includes(props.index) ? 'var(---fifth)'
