@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import ProcessorBlock from './ProcessorBlock';
 
-const LamportsLogicalClocksAlgorithm = ({ processorAmount, rowAmount, activeEditMode }) => {
+const LamportsLogicalClocksAlgorithm = ({ processorAmount, rowAmount, startValues, activeEditMode }) => {
     const marginPercentage = 20 / processorAmount;
 
     return (

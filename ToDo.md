@@ -1,4 +1,4 @@
-[# ToDo
+# ToDo
 - [X] create NavBar
 - [X] add all possible routes
 - [X] create HomePage
