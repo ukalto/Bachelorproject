@@ -2,15 +2,20 @@ import React from 'react';
 import styled from 'styled-components';
 import ProcessorBlock from './ProcessorBlock';
 
-const LamportsLogicalClocksAlgorithm = ({ processorAmount, rowAmount, startValues, activeEditMode }) => {
-    const marginPercentage = 20 / processorAmount;
+const LamportsLogicalClocksAlgorithm = ({columns, activeEditMode, handleInputChange}) => {
+    const marginPercentage = 20 / columns.length;
 
     return (
         <BlockContainer>
-            {Array.from({ length: processorAmount }, (_, index) => (
+            {columns.map((column, index) => (
                 <MarginWrapper key={index} marginPercentage={marginPercentage}>
                     <TextWrapper>P{index + 1}</TextWrapper>
-                    <ProcessorBlock rowAmount={rowAmount} activeEditMode={activeEditMode} />
+                    <ProcessorBlock
+                        column={column}
+                        columnIdx={index}
+                        activeEditMode={activeEditMode}
+                        handleInputChange={handleInputChange}
+                    />
                 </MarginWrapper>
             ))}
         </BlockContainer>
@@ -30,8 +35,8 @@ const MarginWrapper = styled.div`
   flex: 1;
   align-items: center;
   justify-content: center;
-  margin-left: ${({ marginPercentage }) => marginPercentage}%;
-  margin-right: ${({ marginPercentage }) => marginPercentage}%;
+  margin-left: ${({marginPercentage}) => marginPercentage}%;
+  margin-right: ${({marginPercentage}) => marginPercentage}%;
   box-sizing: border-box;
   position: relative;
   display: flex;

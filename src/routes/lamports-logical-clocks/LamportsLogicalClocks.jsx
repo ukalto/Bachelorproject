@@ -1,9 +1,13 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-    FieldGrid,
     Field,
+    FieldGrid,
+    FieldGridFirst,
+    GridItem,
     Headline,
-    InputField, marginsInput, RangeBox, GridItem, FieldGridFirst
+    InputField,
+    marginsInput,
+    RangeBox
 } from '../../components/GlobalComponents.jsx';
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
@@ -18,26 +22,64 @@ const LamportsLogicalClocks = () => {
     const [processorAmount, setProcessorAmount] = useState(3);
     const [rowAmount, setRowAmount] = useState(9);
     const [activeEditMode, setActiveEditMode] = useState(true);
-    const [startValues, setStartValues] = useState([1, 1, 1]);
-    const [columns, setColumns] = useState([[0, 1, 2, 3, 4, 5, 6, 7, 8], [0, 1, 2, 3, 4, 5, 6, 7, 8], [0, 1, 2, 3, 4, 5, 6, 7, 8]]);
+    const [columns, setColumns] = useState(Array.from({length: 3}, () => Array.from({length: 9}, (_, i) => i)));
     const [example] = useState(() => {
         const exampleData = data.data.find(item => item.name === 'LamportsLogicalClocks');
         const {processors, rows, values} = exampleData.details.find(item => item.type === 'example');
         return {processors, rows, values};
     });
 
-    const resetFormValues = () => {
-        setProcessorAmount(3);
-        setRowAmount(9);
+    useEffect(() => {
+        setColumns(prevColumns => {
+            return Array.from({length: processorAmount}, (_, i) => {
+                const existingColumn = prevColumns[i];
+                return Array.from({length: rowAmount}, (_, j) => (existingColumn && existingColumn[j] !== undefined ? existingColumn[j] : j));
+            });
+        });
+    }, [processorAmount, rowAmount]);
+
+    const setRowAmountAndAdjustColumns = (newRowAmount) => {
+        setRowAmount(newRowAmount);
     };
 
-    const setExampleData = async () => {
-        setRowAmount(example.rows);
-        setProcessorAmount(example.processors);
-        setStartValues(example.values);
+    const setProcessorAmountAndAdjustColumns = (newProcessorAmount) => {
+        setProcessorAmount(newProcessorAmount);
+    };
+
+    const setExampleData = () => {
+        setProcessorAmountAndAdjustColumns(example.processors);
+        setRowAmountAndAdjustColumns(example.rows);
         example.values.forEach((value, index) => {
-            columns[index][1] = value;
-        })
+            handleInputChange(index, 1, value);
+        });
+    };
+
+    const resetFormValues = () => {
+        setProcessorAmountAndAdjustColumns(3);
+        setRowAmountAndAdjustColumns(9);
+        example.values.forEach((value, index) => {
+            handleInputChange(index, 1, 1);
+        });
+    };
+
+    const handleInputChange = (columnIndex, index, newValue) => {
+        if (newValue === '') {
+            const newColumns = [...columns];
+            newColumns[columnIndex][index] = '';
+            setColumns(newColumns);
+        } else {
+            const parsedValue = parseInt(newValue, 10);
+
+            if (!isNaN(parsedValue) && parsedValue >= 1 && parsedValue <= 10) {
+                const newColumns = [...columns];
+                newColumns[columnIndex][index] = parsedValue;
+
+                for (let i = 2; i < newColumns[columnIndex].length; i++) {
+                    newColumns[columnIndex][i] = newColumns[columnIndex][1] * i;
+                }
+                setColumns(newColumns);
+            }
+        }
     };
 
     return (
@@ -50,13 +92,13 @@ const LamportsLogicalClocks = () => {
                             <MDBCol md="6">
                                 <RangeBox>
                                     <RangeSlider text={"Processors"} min={2} max={5} value={processorAmount}
-                                                 onChange={setProcessorAmount}/>
+                                                 onChange={setProcessorAmountAndAdjustColumns}/>
                                 </RangeBox>
                             </MDBCol>
                             <MDBCol md="6">
                                 <RangeBox>
                                     <RangeSlider text={"Rows"} min={6} max={12} value={rowAmount}
-                                                 onChange={setRowAmount}/>
+                                                 onChange={setRowAmountAndAdjustColumns}/>
                                 </RangeBox>
                             </MDBCol>
                         </MDBRow>
@@ -71,9 +113,13 @@ const LamportsLogicalClocks = () => {
             </FieldGridFirst>
             <Field>
                 <Headline>Algorithm</Headline>
-                <LamportsLogicalClocksAlgorithm processorAmount={processorAmount} rowAmount={rowAmount}
-                                                startValues={startValues}
-                                                activeEditMode={activeEditMode}/>
+                <LamportsLogicalClocksAlgorithm
+                    processorAmount={processorAmount}
+                    rowAmount={rowAmount}
+                    columns={columns}
+                    activeEditMode={activeEditMode}
+                    handleInputChange={handleInputChange}
+                />
             </Field>
         </FieldGrid>
     );

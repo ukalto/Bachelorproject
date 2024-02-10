@@ -1,59 +1,20 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-const ProcessorBlock = ({rowAmount, activeEditMode}) => {
-    const [blockArray, setBlockArray] = useState([]);
-
-    useEffect(() => {
-        const newBlockArray = [];
-        if (blockArray.length === 0) {
-            newBlockArray.push(0);
-            newBlockArray.push(1);
-            for (let i = 2; i < rowAmount; i++) {
-                newBlockArray.push(newBlockArray[1] * i);
-            }
-        } else {
-            newBlockArray.push(blockArray[0]);
-            newBlockArray.push(blockArray[1]);
-            for (let i = 2; i < rowAmount; i++) {
-                newBlockArray.push(newBlockArray[1] * i);
-            }
-        }
-        setBlockArray(newBlockArray);
-    }, [rowAmount]);
-
-    const handleInputChange = (index, newValue) => {
-        if (newValue === '') {
-            const newBlockArray = [...blockArray];
-            newBlockArray[index] = '';
-            setBlockArray(newBlockArray);
-        } else {
-            const parsedValue = parseInt(newValue, 10);
-
-            if (!isNaN(parsedValue) && parsedValue >= 1 && parsedValue <= 10) {
-                const newBlockArray = [...blockArray];
-                newBlockArray[index] = parsedValue;
-
-                for (let i = 2; i < newBlockArray.length; i++) {
-                    newBlockArray[i] = newBlockArray[1] * i;
-                }
-                setBlockArray(newBlockArray);
-            }
-        }
-    };
+const ProcessorBlock = ({column, columnIdx, activeEditMode, handleInputChange}) => {
 
     return (
         <BlockContainer>
-            {blockArray.map((value, index) => (
-                <InputWrapper key={index} isLast={index === rowAmount - 1}>
+            {column.map((value, index) => (
+                <InputWrapper key={index} isLast={index === column.length - 1}>
                     <StyledInput
                         type="text"
                         activeEditMode={activeEditMode}
                         value={value}
                         index={index}
                         min={0}
-                        isLast={index === rowAmount - 1}
-                        onChange={(e) => handleInputChange(index, e.target.value)}
+                        isLast={index === column.length - 1}
+                        onChange={(e) => handleInputChange(columnIdx, index, e.target.value)}
                         disabled={!activeEditMode || index !== 1}
                     />
                 </InputWrapper>
@@ -61,7 +22,6 @@ const ProcessorBlock = ({rowAmount, activeEditMode}) => {
         </BlockContainer>
     );
 };
-
 export default ProcessorBlock;
 
 const BlockContainer = styled.div`
