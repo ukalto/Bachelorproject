@@ -39,25 +39,17 @@ const LamportsLogicalClocks = () => {
         });
     }, [processorAmount, rowAmount]);
 
-    const setRowAmountAndAdjustColumns = (newRowAmount) => {
-        setRowAmount(newRowAmount);
-    };
-
-    const setProcessorAmountAndAdjustColumns = (newProcessorAmount) => {
-        setProcessorAmount(newProcessorAmount);
-    };
-
     const setExampleData = () => {
-        setProcessorAmountAndAdjustColumns(example.processors);
-        setRowAmountAndAdjustColumns(example.rows);
+        setProcessorAmount(example.processors);
+        setRowAmount(example.rows);
         example.values.forEach((value, index) => {
             handleInputChange(index, 1, value);
         });
     };
 
     const resetFormValues = () => {
-        setProcessorAmountAndAdjustColumns(3);
-        setRowAmountAndAdjustColumns(9);
+        setProcessorAmount(3);
+        setRowAmount(9);
         example.values.forEach((value, index) => {
             handleInputChange(index, 1, 1);
         });
@@ -94,13 +86,13 @@ const LamportsLogicalClocks = () => {
                             <MDBCol md="6">
                                 <RangeBox>
                                     <RangeSlider text={"Processors"} min={2} max={5} value={processorAmount}
-                                                 onChange={setProcessorAmountAndAdjustColumns}/>
+                                                 onChange={setProcessorAmount}/>
                                 </RangeBox>
                             </MDBCol>
                             <MDBCol md="6">
                                 <RangeBox>
                                     <RangeSlider text={"Rows"} min={6} max={12} value={rowAmount}
-                                                 onChange={setRowAmountAndAdjustColumns}/>
+                                                 onChange={setRowAmount}/>
                                 </RangeBox>
                             </MDBCol>
                         </MDBRow>
