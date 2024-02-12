@@ -22,7 +22,7 @@ const LamportsLogicalClocks = () => {
     const [processorAmount, setProcessorAmount] = useState(3);
     const [rowAmount, setRowAmount] = useState(9);
     const [activeEditMode, setActiveEditMode] = useState(true);
-    const [columns, setColumns] = useState(Array.from({length: 3}, () => Array.from({length: 9}, (_, i) => i)));
+    const [processors, setProcessors] = useState(Array.from({length: processorAmount}, () => Array.from({length: rowAmount}, (_, i) => i)));
     const [example] = useState(() => {
         const exampleData = data.data.find(item => item.name === 'LamportsLogicalClocks');
         const {processors, rows, values} = exampleData.details.find(item => item.type === 'example');
@@ -30,10 +30,11 @@ const LamportsLogicalClocks = () => {
     });
 
     useEffect(() => {
-        setColumns(prevColumns => {
+        setProcessors(prevColumns => {
             return Array.from({length: processorAmount}, (_, i) => {
                 const existingColumn = prevColumns[i];
-                return Array.from({length: rowAmount}, (_, j) => (existingColumn && existingColumn[j] !== undefined ? existingColumn[j] : j));
+                const newNumber = existingColumn?.[1] || 1;
+                return Array.from({length: rowAmount}, (_, j) => (existingColumn && existingColumn[j] !== undefined ? existingColumn[j] : j * newNumber));
             });
         });
     }, [processorAmount, rowAmount]);
@@ -63,21 +64,22 @@ const LamportsLogicalClocks = () => {
     };
 
     const handleInputChange = (columnIndex, index, newValue) => {
+        console.log(columnIndex, index, newValue);
         if (newValue === '') {
-            const newColumns = [...columns];
+            const newColumns = [...processors];
             newColumns[columnIndex][index] = '';
-            setColumns(newColumns);
+            setProcessors(newColumns);
         } else {
             const parsedValue = parseInt(newValue, 10);
 
             if (!isNaN(parsedValue) && parsedValue >= 1 && parsedValue <= 10) {
-                const newColumns = [...columns];
+                const newColumns = [...processors];
                 newColumns[columnIndex][index] = parsedValue;
 
                 for (let i = 2; i < newColumns[columnIndex].length; i++) {
                     newColumns[columnIndex][i] = newColumns[columnIndex][1] * i;
                 }
-                setColumns(newColumns);
+                setProcessors(newColumns);
             }
         }
     };
@@ -114,9 +116,7 @@ const LamportsLogicalClocks = () => {
             <Field>
                 <Headline>Algorithm</Headline>
                 <LamportsLogicalClocksAlgorithm
-                    processorAmount={processorAmount}
-                    rowAmount={rowAmount}
-                    columns={columns}
+                    processors={processors}
                     activeEditMode={activeEditMode}
                     handleInputChange={handleInputChange}
                 />

@@ -1,20 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const ProcessorBlock = ({column, columnIdx, activeEditMode, handleInputChange}) => {
+const ProcessorBlock = ({processor, processorIdx, activeEditMode, handleInputChange}) => {
 
     return (
         <BlockContainer>
-            {column.map((value, index) => (
-                <InputWrapper key={index} isLast={index === column.length - 1}>
+            {processor.map((value, index) => (
+                <InputWrapper key={index} isLast={index === processor.length - 1}>
                     <StyledInput
                         type="text"
                         activeEditMode={activeEditMode}
                         value={value}
                         index={index}
                         min={0}
-                        isLast={index === column.length - 1}
-                        onChange={(e) => handleInputChange(columnIdx, index, e.target.value)}
+                        isLast={index === processor.length - 1}
+                        onChange={(e) => handleInputChange(processorIdx, index, e.target.value)}
                         disabled={!activeEditMode || index !== 1}
                     />
                 </InputWrapper>

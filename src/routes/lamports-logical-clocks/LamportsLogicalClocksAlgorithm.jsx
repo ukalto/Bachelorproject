@@ -2,17 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 import ProcessorBlock from './ProcessorBlock';
 
-const LamportsLogicalClocksAlgorithm = ({columns, activeEditMode, handleInputChange}) => {
-    const marginPercentage = 20 / columns.length;
+const LamportsLogicalClocksAlgorithm = ({processors, activeEditMode, handleInputChange}) => {
+    const marginPercentage = 20 / processors.length;
 
     return (
         <BlockContainer>
-            {columns.map((column, index) => (
+            {processors.map((processor, index) => (
                 <MarginWrapper key={index} marginPercentage={marginPercentage}>
                     <TextWrapper>P{index + 1}</TextWrapper>
                     <ProcessorBlock
-                        column={column}
-                        columnIdx={index}
+                        processor={processor}
+                        processorIdx={index}
                         activeEditMode={activeEditMode}
                         handleInputChange={handleInputChange}
                     />
