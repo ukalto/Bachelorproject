@@ -157,7 +157,9 @@
         },
         {
           "type": "example",
-          "values": {}
+          "messages": {},
+          "vectors": 3,
+          "time_steps": 4
         }
       ]
     }

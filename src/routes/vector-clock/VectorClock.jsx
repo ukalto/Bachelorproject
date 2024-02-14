@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     FieldGrid,
     Field,
@@ -12,18 +12,47 @@ import {MDBCol, MDBRow} from "mdb-react-ui-kit";
 import RangeSlider from "../../components/RangeSlider";
 import VectorClockAlgorithm from "./VectorClockAlgorithm";
 import {getScenario} from "../../components/GlobalFunctions.jsx";
+import data from "../../assets/data.json";
 
 const VectorClock = () => {
     const [vectorsAmount, setVectorsAmount] = useState(3);
     const [timeSteps, setTimeSteps] = useState(4);
     const [activeEditMode, setActiveEditMode] = useState(true);
-    // const [messages, setMessages] = useState({'': ''});
-    // const [vectorSelection, setVectorSelection] = useState('');
-    // const [vectorStartValues, setVectorStartValues] = useState({'': [0, 0, 0]});
+    const [vectors, setVectors] = useState(Array.from({length: vectorsAmount}, () => Array.from({length: timeSteps}, () => Array(vectorsAmount).fill(0))));
+    const [example] = useState(() => {
+        const exampleData = data.data.find(item => item.name === 'VectorClock');
+        const {vectors, vectorsAmount, timeSteps} = exampleData.details.find(item => item.type === 'example');
+        return {vectors, vectorsAmount, timeSteps};
+    });
+
+    useEffect(() => {
+        setVectors(prevVectors => {
+            return Array.from({length: vectorsAmount}, (_, i) => {
+                const existingVector = prevVectors[i];
+                return Array.from({length: timeSteps}, (_, j) => {
+                    if (existingVector && existingVector[j] !== undefined) {
+                        if (existingVector[j].length > vectorsAmount) {
+                            return existingVector[j].slice(0, vectorsAmount);
+                        } else {
+                            return existingVector[j].concat(Array(vectorsAmount - existingVector[j].length).fill(0));
+                        }
+                    } else {
+                        return Array(vectorsAmount).fill(0);
+                    }
+                });
+            });
+        });
+    }, [timeSteps, vectorsAmount]);
+
+    const setExampleData = () => {
+        setVectorsAmount(example.vectorsAmount);
+        setTimeSteps(example.timeSteps);
+    };
 
     const resetFormValues = () => {
         setVectorsAmount(3);
         setTimeSteps(4);
+        setVectors(Array.from({length: vectorsAmount}, () => Array.from({length: timeSteps}, () => Array(vectorsAmount).fill(0))));
     };
 
     return (
@@ -46,8 +75,11 @@ const VectorClock = () => {
                                 </RangeBox>
                             </MDBCol>
                         </MDBRow>
-                        <InputButtons resetForm={resetFormValues} activeEditMode={activeEditMode}
-                                      setActiveEditMode={setActiveEditMode}/>
+                        <InputButtons
+                            resetForm={resetFormValues}
+                            setExampleData={setExampleData}
+                            activeEditMode={activeEditMode}
+                            setActiveEditMode={setActiveEditMode}/>
                     </InputField>
                 </GridItem>
                 <GridItem switchRows>
@@ -56,8 +88,11 @@ const VectorClock = () => {
             </FieldGridFirst>
             <Field>
                 <Headline>Algorithm</Headline>
-                <VectorClockAlgorithm timeSteps={timeSteps} vectorsAmount={vectorsAmount}
-                                      activeEditMode={activeEditMode}/>
+                <VectorClockAlgorithm
+                    timeSteps={timeSteps}
+                    vectorsAmount={vectorsAmount}
+                    vectors={vectors}
+                    activeEditMode={activeEditMode}/>
             </Field>
         </FieldGrid>
     );
