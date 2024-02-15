@@ -1,48 +1,36 @@
-import React, {useEffect, useState} from 'react';
-import VectorBlock from "./VectorBlock";
+import React from 'react';
 import styled from "styled-components";
-import Arrow from "../../components/Arrow.jsx";
+import VectorBlock from "./VectorBlock.jsx";
 
-const VectorClockAlgorithm = ({timeSteps, vectorsAmount, vectors, activeEditMode, handleInputChange}) => {
+const VectorClockAlgorithm = ({
+                                  timeSteps,
+                                  vectorsAmount,
+                                  vectorRow,
+                                  activeEditMode,
+                                  vectorIndex,
+                                  handleInputChange
+                              }) => {
     const marginPercentage = 20 / timeSteps;
-
-    const [vectorColumn, setVectorColumn] = useState(Array.from({length: vectors[0].length}, () => []));
-
-    useEffect(() => {
-        let newVectorColumn = Array.from({length: vectors[0].length}, () => []);
-        for (let i = 0; i < vectors[0].length; i++) {
-            for (let j = 0; j < vectors.length; j++) {
-                try {
-                    newVectorColumn[i].push(vectors[j][i]);
-                } catch (e) {
-                }
-            }
-        }
-        setVectorColumn(newVectorColumn);
-    }, [vectors]);
-
-    // console.log(vectorColumn)
 
     return (
         <BlockContainer>
             <VectorBlockContainer>
-                {vectorColumn.map((vector, index) => (
+                {vectorRow.map((vector, index) => (
                     <MarginWrapper key={index} marginPercentage={marginPercentage}>
                         <VectorBlock
                             disabledCheck={index !== 0}
                             vectorsAmount={vectorsAmount}
                             vector={vector}
+                            vectorIndex={vectorIndex}
                             activeEditMode={activeEditMode}
                             handleInputChange={handleInputChange}
                         />
-                        <TextWrapper>t{index}</TextWrapper>
+                        {vectorIndex === vectorsAmount - 1 && (
+                            <TextWrapper>t{index}</TextWrapper>
+                        )}
                     </MarginWrapper>
                 ))}
             </VectorBlockContainer>
-            <Timeline>
-                <Arrow isRight={true} width={90}/>
-                <CenteredText>Zeit/Time</CenteredText>
-            </Timeline>
         </BlockContainer>
     );
 };
@@ -76,14 +64,4 @@ const TextWrapper = styled.div`
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
-`;
-
-const CenteredText = styled.div`
-    font-weight: bold;
-    text-align: center;
-`;
-
-const Timeline = styled.div`
-  padding-top: 30px;
-  width: 100%;
 `;

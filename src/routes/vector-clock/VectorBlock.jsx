@@ -1,28 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const VectorBlock = ({disabledCheck, vectorsAmount, vector, activeEditMode, handleInputChange, index}) => {
+const VectorBlock = ({disabledCheck, vectorsAmount, vector, vectorIndex, activeEditMode, handleInputChange}) => {
 
     return (
         <BlockContainer>
-            {vector.map((row, rowIndex) => (
-                <div key={rowIndex}>
-                    {row.map((cell, colIndex) => (
-                        <InputWrapper key={colIndex} isLast={colIndex === vectorsAmount - 1}>
-                            <StyledInput
-                                type="text"
-                                value={cell}
-                                min={0}
-                                max={94}
-                                disabled={disabledCheck || !activeEditMode}
-                                activeEditMode={activeEditMode}
-                                disabledCheck={disabledCheck}
-                                isLast={colIndex === vectorsAmount - 1}
-                                onChange={(e) => handleInputChange(rowIndex-((vector.length-1)-2), rowIndex, colIndex, e.target.value)}
-                            />
-                        </InputWrapper>
-                    ))}
-                </div>
+            {vector.map((cell, cellIdx) => (
+                <InputWrapper key={cellIdx} isLast={cellIdx === vectorsAmount - 1}>
+                    <StyledInput
+                        type="text"
+                        value={cell}
+                        min={0}
+                        max={94}
+                        disabled={disabledCheck || !activeEditMode}
+                        activeEditMode={activeEditMode}
+                        disabledCheck={disabledCheck}
+                        isLast={cellIdx === vectorsAmount - 1}
+                        onChange={(e) => handleInputChange(vectorIndex, cellIdx, e.target.value)}
+                    />
+                </InputWrapper>
             ))}
         </BlockContainer>
     );

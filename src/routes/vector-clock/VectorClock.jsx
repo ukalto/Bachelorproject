@@ -10,9 +10,11 @@ import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
 import {MDBCol, MDBRow} from "mdb-react-ui-kit";
 import RangeSlider from "../../components/RangeSlider";
-import VectorClockAlgorithm from "./VectorClockAlgorithm";
 import {getScenario} from "../../components/GlobalFunctions.jsx";
 import data from "../../assets/data.json";
+import Arrow from "../../components/Arrow.jsx";
+import styled from "styled-components";
+import VectorClockAlgorithm from "./VectorClockAlgorithm.jsx";
 
 const VectorClock = () => {
     const [vectorsAmount, setVectorsAmount] = useState(3);
@@ -55,13 +57,11 @@ const VectorClock = () => {
         setVectors(Array.from({length: vectorsAmount}, () => Array.from({length: timeSteps}, () => Array(vectorsAmount).fill(0))));
     };
 
-    const handleInputChange = (vectorIndex, colIndex, rowIndex, newValue) => {
+    const handleInputChange = (vectorIndex, cellIndex, newValue) => {
         let updatedVectors = [...vectors];
-        updatedVectors[vectorIndex][colIndex][rowIndex] = newValue;
+        updatedVectors[vectorIndex][0][cellIndex] = newValue;
         setVectors(updatedVectors);
     };
-
-    console.log( vectors)
 
     return (
         <FieldGrid>
@@ -96,16 +96,35 @@ const VectorClock = () => {
             </FieldGridFirst>
             <Field>
                 <Headline>Algorithm</Headline>
-                <VectorClockAlgorithm
-                    timeSteps={timeSteps}
-                    vectorsAmount={vectorsAmount}
-                    vectors={vectors}
-                    activeEditMode={activeEditMode}
-                    handleInputChange={handleInputChange}/>
+                {vectors.map((vectorRow, vectorIndex) => (
+                    <React.Fragment>
+                        <VectorClockAlgorithm
+                            timeSteps={timeSteps}
+                            vectorsAmount={vectorsAmount}
+                            vectorRow={vectorRow}
+                            activeEditMode={activeEditMode}
+                            vectorIndex={vectorIndex}
+                            handleInputChange={handleInputChange}/>
+                    </React.Fragment>
+                ))};
+                <Timeline>
+                    <Arrow isRight={true} width={90}/>
+                    <CenteredText>Zeit/Time</CenteredText>
+                </Timeline>
             </Field>
         </FieldGrid>
     );
 };
 
 export default VectorClock;
+
+const CenteredText = styled.div`
+    font-weight: bold;
+    text-align: center;
+`;
+
+const Timeline = styled.div`
+    padding-top: 30px;
+    width: 100%;
+`;
 
