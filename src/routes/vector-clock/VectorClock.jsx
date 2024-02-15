@@ -55,6 +55,14 @@ const VectorClock = () => {
         setVectors(Array.from({length: vectorsAmount}, () => Array.from({length: timeSteps}, () => Array(vectorsAmount).fill(0))));
     };
 
+    const handleInputChange = (vectorIndex, colIndex, rowIndex, newValue) => {
+        let updatedVectors = [...vectors];
+        updatedVectors[vectorIndex][colIndex][rowIndex] = newValue;
+        setVectors(updatedVectors);
+    };
+
+    console.log( vectors)
+
     return (
         <FieldGrid>
             <FieldGridFirst>
@@ -92,7 +100,8 @@ const VectorClock = () => {
                     timeSteps={timeSteps}
                     vectorsAmount={vectorsAmount}
                     vectors={vectors}
-                    activeEditMode={activeEditMode}/>
+                    activeEditMode={activeEditMode}
+                    handleInputChange={handleInputChange}/>
             </Field>
         </FieldGrid>
     );

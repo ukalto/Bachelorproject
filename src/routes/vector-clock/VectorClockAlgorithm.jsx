@@ -3,7 +3,7 @@ import VectorBlock from "./VectorBlock";
 import styled from "styled-components";
 import Arrow from "../../components/Arrow.jsx";
 
-const VectorClockAlgorithm = ({timeSteps, vectorsAmount, vectors, activeEditMode}) => {
+const VectorClockAlgorithm = ({timeSteps, vectorsAmount, vectors, activeEditMode, handleInputChange}) => {
     const marginPercentage = 20 / timeSteps;
 
     const [vectorColumn, setVectorColumn] = useState(Array.from({length: vectors[0].length}, () => []));
@@ -21,6 +21,7 @@ const VectorClockAlgorithm = ({timeSteps, vectorsAmount, vectors, activeEditMode
         setVectorColumn(newVectorColumn);
     }, [vectors]);
 
+    // console.log(vectorColumn)
 
     return (
         <BlockContainer>
@@ -32,6 +33,7 @@ const VectorClockAlgorithm = ({timeSteps, vectorsAmount, vectors, activeEditMode
                             vectorsAmount={vectorsAmount}
                             vector={vector}
                             activeEditMode={activeEditMode}
+                            handleInputChange={handleInputChange}
                         />
                         <TextWrapper>t{index}</TextWrapper>
                     </MarginWrapper>

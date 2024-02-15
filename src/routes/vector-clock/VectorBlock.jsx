@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const VectorBlock = ({disabledCheck, vectorsAmount, vector, activeEditMode}) => {
+const VectorBlock = ({disabledCheck, vectorsAmount, vector, activeEditMode, handleInputChange, index}) => {
 
     return (
         <BlockContainer>
@@ -18,7 +18,7 @@ const VectorBlock = ({disabledCheck, vectorsAmount, vector, activeEditMode}) => 
                                 activeEditMode={activeEditMode}
                                 disabledCheck={disabledCheck}
                                 isLast={colIndex === vectorsAmount - 1}
-                                // onChange={(e) => handleInputChange(rowIndex, colIndex, e.target.value)}
+                                onChange={(e) => handleInputChange(rowIndex-((vector.length-1)-2), rowIndex, colIndex, e.target.value)}
                             />
                         </InputWrapper>
                     ))}
