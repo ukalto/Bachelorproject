@@ -24,8 +24,8 @@ const InputButtons = ({ resetForm = () => { }, setExampleData = () => { }, solve
       <ButtonContainer>
         <Button borderColor="var(---error)" onClick={handleResetClick}>Reset</Button>
         <Button borderColor="var(---secondary)" onClick={handleExampleClick}>Example</Button>
-        {solveAlgorithm && <Button borderColor="var(---fifth)" onClick={handleSolveClick}>Solve</Button>}
         {setActiveEditMode && <Button borderColor="var(---fifth)" onClick={activateEditModeClick}>{activeEditMode ? 'Edit: On' : 'Edit: Off'}</Button>}
+        {solveAlgorithm && <Button borderColor="var(---fifth)" onClick={handleSolveClick}>Solve</Button>}
       </ButtonContainer>
     </ButtonContainer>
   );

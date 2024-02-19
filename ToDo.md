@@ -23,7 +23,7 @@
   - [X] Crypto-System
   - [X] Greedy
   - [ ] Kademlia
-  - [ ] LamportsLogicClocks
+  - [X] LamportsLogicClocks
   - [ ] Vector Clocks
 
 ## Responsive

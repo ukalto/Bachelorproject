@@ -9,7 +9,8 @@ const ProcessorBlock = ({
                             activeEditMode,
                             handleInputChange,
                             arrows,
-                            handleInputFieldClick
+                            handleInputFieldClick,
+                            deleteXArrow
                         }) => {
 
     return (
@@ -27,6 +28,7 @@ const ProcessorBlock = ({
                         onClick={() => handleInputFieldClick(`${processorIdx}+${index}`, processorIdx, index)}
                         onChange={(e) => handleInputChange(processorIdx, index, e.target.value)}
                         readOnly={!activeEditMode || index !== 1}
+                        disabled={index === 0}
                     />
                 </InputWrapper>
             ))}
@@ -36,7 +38,9 @@ const ProcessorBlock = ({
                         divContainerStyle={{
                             color: 'var(---tertiary)',
                             fontWeight: 'bold',
+                            cursor: 'not-allowed',
                         }}
+                        divContainerProps={{onClick: () => deleteXArrow(value[0][0], value[1][0])}}
                         gridBreak={"50%"}
                         animateDrawing={true}
                         curveness={0}
@@ -47,7 +51,6 @@ const ProcessorBlock = ({
                         start={`${value[0][0]}`}
                         end={`${value[1][0]}`}
                         labels={`e${index + 1}`}
-
                     />
                 )
             ))}
@@ -80,24 +83,24 @@ const StyledInput = styled.input`
                        index
                    }) => (!activeEditMode || index !== 1 ? 'var(---fourth)' : 'var(---primary)')};;
 
-    &:focus {
-        outline: none;
-    }
-
     cursor: ${({
                    activeEditMode,
                    index
                }) => {
         if (index === 1 && activeEditMode) {
             return 'text';
-        } else if (!activeEditMode) {
+        } else if (!activeEditMode && index !== 0) {
             return 'pointer';
         } else {
             return 'default';
         }
     }};
 
+    &:focus {
+        outline: none;
+    }
+
     &:hover {
-        background: ${({activeEditMode}) => (activeEditMode ? "default" : "var(---secondary)")};
+        background: ${({activeEditMode, index}) => (activeEditMode || index === 0 ? "default" : "var(---secondary)")};
     }
 `;

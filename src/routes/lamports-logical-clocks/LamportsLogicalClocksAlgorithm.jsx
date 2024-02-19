@@ -3,8 +3,12 @@ import styled from 'styled-components';
 import ProcessorBlock from './ProcessorBlock';
 
 const LamportsLogicalClocksAlgorithm = ({
-                                            processors, activeEditMode, handleInputChange, arrows,
-                                            handleInputFieldClick
+                                            processors,
+                                            activeEditMode,
+                                            handleInputChange,
+                                            arrows,
+                                            handleInputFieldClick,
+                                            deleteXArrow
                                         }) => {
     const marginPercentage = 20 / processors.length;
 
@@ -20,6 +24,7 @@ const LamportsLogicalClocksAlgorithm = ({
                         handleInputChange={handleInputChange}
                         arrows={arrows}
                         handleInputFieldClick={handleInputFieldClick}
+                        deleteXArrow={deleteXArrow}
                     />
                 </MarginWrapper>
             ))}

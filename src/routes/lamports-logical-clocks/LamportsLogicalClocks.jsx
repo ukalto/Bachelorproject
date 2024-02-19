@@ -17,6 +17,7 @@ import LamportsLogicalClocksAlgorithm from "./LamportsLogicalClocksAlgorithm";
 import {getScenario} from "../../components/GlobalFunctions.jsx";
 import data from "../../assets/data.json";
 import {toast, ToastContainer} from "react-toastify";
+import {LamportsLogicalClocksSolver} from "./LamportsLogicalClocksSolver.js";
 
 
 const LamportsLogicalClocks = () => {
@@ -61,6 +62,13 @@ const LamportsLogicalClocks = () => {
             setArrows([]);
         };
 
+        const changeActiveEditMode = (newActiveEditMode) => {
+            if (newActiveEditMode) {
+                initializeProcessors();
+            }
+            setActiveEditMode(newActiveEditMode);
+        }
+
         const handleInputChange = (columnIndex, index, newValue) => {
             if (newValue === '') {
                 const newColumns = [...processors];
@@ -79,13 +87,14 @@ const LamportsLogicalClocks = () => {
                     setProcessors(newColumns);
                 }
             }
+            initializeProcessors();
         };
 
         const handleInputFieldClick = async (id, processorIdx, blockIdx) => {
             if (!activeEditMode) {
                 if (arrows.some(arrow => arrow[0][0] === id)) {
                     toast.error('You can\'t select a Block twice!', {
-                        position: toast.POSITION.BOTTOM_CENTER,
+                        position: toast.POSITION.TOP_RIGHT,
                         closeOnClick: true,
                         autoClose: 4000,
                         hideProgressBar: false,
@@ -96,7 +105,7 @@ const LamportsLogicalClocks = () => {
                     });
                 } else if (arrows.some(arrow => arrow[1] && arrow[1][0] === id)) {
                     toast.error('You can\'t select a Block twice, select another!', {
-                        position: toast.POSITION.BOTTOM_CENTER,
+                        position: toast.POSITION.TOP_RIGHT,
                         closeOnClick: true,
                         autoClose: 4000,
                         hideProgressBar: false,
@@ -113,7 +122,7 @@ const LamportsLogicalClocks = () => {
                         let lastArrow = arrows[numArrows][0];
                         if (Math.abs(lastArrow[1] - processorIdx) !== 1) {
                             toast.error('You can only select a direct neighbor. Please select again.', {
-                                position: toast.POSITION.BOTTOM_CENTER,
+                                position: toast.POSITION.TOP_RIGHT,
                                 closeOnClick: true,
                                 autoClose: 4000,
                                 hideProgressBar: false,
@@ -124,7 +133,7 @@ const LamportsLogicalClocks = () => {
                             });
                         } else if (lastArrow[2] === blockIdx) {
                             toast.error('You can only select a higher or lower field. Please select again.', {
-                                position: toast.POSITION.BOTTOM_CENTER,
+                                position: toast.POSITION.TOP_RIGHT,
                                 closeOnClick: true,
                                 autoClose: 4000,
                                 hideProgressBar: false,
@@ -144,6 +153,51 @@ const LamportsLogicalClocks = () => {
                     }
                 }
             }
+        };
+
+        const deleteXArrow = (firstId, secondId) => {
+            const updatedArrows = arrows.filter(arrowGroup =>
+                !(
+                    arrowGroup[0][0] === firstId &&
+                    arrowGroup[1] &&
+                    arrowGroup[1][0] === secondId
+                )
+            );
+            setArrows(updatedArrows);
+            initializeProcessors();
+        };
+
+        const handleSolveAlgorithm = () => {
+            if (!activeEditMode) {
+                initializeProcessors();
+                const solver = new LamportsLogicalClocksSolver(arrows, processors);
+                const solveResult = solver.solve();
+                setProcessors([...solveResult]);
+            } else {
+                toast.error('You can only solve when Edit-Mode is Off!', {
+                    position: toast.POSITION.TOP_RIGHT,
+                    closeOnClick: true,
+                    autoClose: 4000,
+                    hideProgressBar: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'colored',
+                });
+            }
+        }
+
+        const initializeProcessors = () => {
+            const updatedProcessors = processors.map(processor => {
+                return processor.map((value, j) => {
+                    if (j !== 0) {
+                        return processor[1] * j;
+                    } else {
+                        return value;
+                    }
+                });
+            });
+            setProcessors(updatedProcessors);
         };
 
         return (
@@ -178,7 +232,8 @@ const LamportsLogicalClocks = () => {
                                 resetForm={resetFormValues}
                                 setExampleData={setExampleData}
                                 activeEditMode={activeEditMode}
-                                setActiveEditMode={setActiveEditMode}/>
+                                setActiveEditMode={changeActiveEditMode}
+                                solveAlgorithm={handleSolveAlgorithm}/>
                         </InputField>
                     </GridItem>
                     <GridItem switchRows>
@@ -193,6 +248,7 @@ const LamportsLogicalClocks = () => {
                         handleInputChange={handleInputChange}
                         arrows={arrows}
                         handleInputFieldClick={handleInputFieldClick}
+                        deleteXArrow={deleteXArrow}
                     />
                 </Field>
                 <ToastContainer/>
