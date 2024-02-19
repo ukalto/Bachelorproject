@@ -26,11 +26,11 @@ const LamportsLogicalClocks = () => {
         const [processors, setProcessors] = useState(Array.from({length: processorAmount}, () => Array.from({length: rowAmount}, (_, i) => i)));
         const [example] = useState(() => {
             const exampleData = data.data.find(item => item.name === 'LamportsLogicalClocks');
-            const {processors, rows, values} = exampleData.details.find(item => item.type === 'example');
-            return {processors, rows, values};
+            const {processors, rows, values, arrows} = exampleData.details.find(item => item.type === 'example');
+            return {processors, rows, values, arrows};
         });
         const [clickedInput, setClickedInput] = useState(0);
-        const [arrows, setArrows] = useState([[['0+1', 0, 1], ['1+2', 1, 2]], [['1+5', 1, 5], ['2+6', 2, 6]]]);
+        const [arrows, setArrows] = useState([]);
         const numArrows = arrows.length - 1;
 
         useEffect(() => {
@@ -49,7 +49,7 @@ const LamportsLogicalClocks = () => {
             example.values.forEach((value, index) => {
                 handleInputChange(index, 1, value);
             });
-            setArrows([]);
+            setArrows(example.arrows);
         };
 
         const resetFormValues = () => {

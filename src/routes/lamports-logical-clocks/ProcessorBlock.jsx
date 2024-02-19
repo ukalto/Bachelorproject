@@ -26,7 +26,7 @@ const ProcessorBlock = ({
                         isLast={index === processor.length - 1}
                         onClick={() => handleInputFieldClick(`${processorIdx}+${index}`, processorIdx, index)}
                         onChange={(e) => handleInputChange(processorIdx, index, e.target.value)}
-                        // disabled={!activeEditMode || index !== 1}
+                        readOnly={!activeEditMode || index !== 1}
                     />
                 </InputWrapper>
             ))}
@@ -47,7 +47,7 @@ const ProcessorBlock = ({
                         start={`${value[0][0]}`}
                         end={`${value[1][0]}`}
                         labels={`e${index + 1}`}
-                        click
+
                     />
                 )
             ))}
