@@ -15,17 +15,18 @@ import data from "../../assets/data.json";
 import Arrow from "../../components/Arrow.jsx";
 import styled from "styled-components";
 import VectorClockAlgorithm from "./VectorClockAlgorithm.jsx";
+import {toast, ToastContainer} from "react-toastify";
 
 const VectorClock = () => {
     const [vectorsAmount, setVectorsAmount] = useState(3);
     const [timeSteps, setTimeSteps] = useState(4);
-    const [activeEditMode, setActiveEditMode] = useState(true);
     const [vectors, setVectors] = useState(Array.from({length: vectorsAmount}, () => Array.from({length: timeSteps}, () => Array(vectorsAmount).fill(0))));
     const [example] = useState(() => {
         const exampleData = data.data.find(item => item.name === 'VectorClock');
         const {vectors, vectorsAmount, timeSteps} = exampleData.details.find(item => item.type === 'example');
         return {vectors, vectorsAmount, timeSteps};
     });
+    const [arrows, setArrows] = useState([]);
 
     useEffect(() => {
         setVectors(prevVectors => {
@@ -55,13 +56,49 @@ const VectorClock = () => {
         setVectorsAmount(3);
         setTimeSteps(4);
         setVectors(Array.from({length: vectorsAmount}, () => Array.from({length: timeSteps}, () => Array(vectorsAmount).fill(0))));
+        setArrows([]);
     };
 
     const handleInputChange = (vectorIndex, cellIndex, newValue) => {
-        let updatedVectors = [...vectors];
-        updatedVectors[vectorIndex][0][cellIndex] = newValue;
-        setVectors(updatedVectors);
+        if (newValue !== '') {
+            const parsedValue = parseInt(newValue, 10);
+
+            if (!isNaN(parsedValue) && parsedValue >= 1 && parsedValue <= 99) {
+                setVectors(prevVectors =>
+                    prevVectors.map((vector, idx) =>
+                        idx === vectorIndex
+                            ? vector.map(time => time.map((cell, idx) => idx === cellIndex ? parsedValue : cell))
+                            : vector
+                    )
+                );
+                setArrows([]);
+            }
+        } else {
+            const updatedVectors = [...vectors];
+            updatedVectors[vectorIndex][0][cellIndex] = '';
+            setVectors(updatedVectors);
+        }
     };
+
+    const handleInputFieldClick = async (id, vectorIndex, timeIndex, cellIdx) => {
+
+    };
+
+    const handleSolveAlgorithm = () => {
+        console.log(vectors)
+        if (vectors.some(vector => vector.some(timeSteps => timeSteps.includes('')))) {
+            toast.error('You must fill out every input field!', {
+                position: toast.POSITION.BOTTOM_CENTER,
+                closeOnClick: true,
+                autoClose: 4000,
+                hideProgressBar: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+            });
+        }
+    }
 
     return (
         <FieldGrid>
@@ -86,8 +123,7 @@ const VectorClock = () => {
                         <InputButtons
                             resetForm={resetFormValues}
                             setExampleData={setExampleData}
-                            activeEditMode={activeEditMode}
-                            setActiveEditMode={setActiveEditMode}/>
+                            solveAlgorithm={handleSolveAlgorithm}/>
                     </InputField>
                 </GridItem>
                 <GridItem switchRows>
@@ -97,21 +133,21 @@ const VectorClock = () => {
             <Field>
                 <Headline>Algorithm</Headline>
                 {vectors.map((vectorRow, vectorIndex) => (
-                    <React.Fragment>
-                        <VectorClockAlgorithm
-                            timeSteps={timeSteps}
-                            vectorsAmount={vectorsAmount}
-                            vectorRow={vectorRow}
-                            activeEditMode={activeEditMode}
-                            vectorIndex={vectorIndex}
-                            handleInputChange={handleInputChange}/>
-                    </React.Fragment>
+                    <VectorClockAlgorithm
+                        key={vectorIndex}
+                        timeSteps={timeSteps}
+                        vectorsAmount={vectorsAmount}
+                        vectorRow={vectorRow}
+                        vectorIndex={vectorIndex}
+                        handleInputChange={handleInputChange}
+                        handleInputFieldClick={handleInputFieldClick}/>
                 ))};
                 <Timeline>
                     <Arrow isRight={true} width={90}/>
                     <CenteredText>Zeit/Time</CenteredText>
                 </Timeline>
             </Field>
+            <ToastContainer/>
         </FieldGrid>
     );
 };

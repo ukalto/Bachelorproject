@@ -1,22 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const VectorBlock = ({disabledCheck, vectorsAmount, vector, vectorIndex, activeEditMode, handleInputChange}) => {
+const VectorBlock = ({readOnlyCheck, vectorsAmount, vector, vectorIndex, timeIndex, handleInputChange, handleInputFieldClick}) => {
 
     return (
         <BlockContainer>
             {vector.map((cell, cellIdx) => (
                 <InputWrapper key={cellIdx} isLast={cellIdx === vectorsAmount - 1}>
                     <StyledInput
-                        type="text"
+                        type="number"
+                        id={`${vectorIndex}-${timeIndex}-${cellIdx}`}
                         value={cell}
                         min={0}
                         max={94}
-                        disabled={disabledCheck || !activeEditMode}
-                        activeEditMode={activeEditMode}
-                        disabledCheck={disabledCheck}
+                        readOnly={readOnlyCheck}
                         isLast={cellIdx === vectorsAmount - 1}
-                        onChange={(e) => handleInputChange(vectorIndex, cellIdx, e.target.value)}
+                        onChange={!readOnlyCheck ? (e) => handleInputChange(vectorIndex, cellIdx, e.target.value) : null}
+                        onClick={readOnlyCheck ? () => handleInputFieldClick(`${vectorIndex}-${timeIndex}-${cellIdx}`, vectorIndex, timeIndex, cellIdx) : null}
                     />
                 </InputWrapper>
             ))}
@@ -46,28 +46,22 @@ const StyledInput = styled.input`
     text-align: center;
 
     background: ${({
-                       activeEditMode,
-                       disabledCheck,
-                   }) => (!activeEditMode || disabledCheck ? 'var(---fourth)' : 'var(---primary)')};;
+                       readOnly,
+                   }) => (readOnly ? 'var(---fourth)' : 'var(---primary)')};
 
     &:focus {
         outline: none;
     }
 
-    cursor: ${({
-                   activeEditMode,
-                   disabledCheck
-               }) => {
-        if (!disabledCheck && activeEditMode) {
+    cursor: ${({readOnly}) => {
+        if (!readOnly) {
             return 'text';
-        } else if (!activeEditMode) {
-            return 'pointer';
         } else {
-            return 'default';
+            return 'pointer';
         }
     }};
 
     &:hover {
-        background: ${({activeEditMode}) => (activeEditMode ? "default" : "var(---secondary)")};
+        background: ${({readOnly}) => (!readOnly ? "default" : "var(---secondary)")};
     }
 `;

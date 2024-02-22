@@ -6,9 +6,9 @@ const VectorClockAlgorithm = ({
                                   timeSteps,
                                   vectorsAmount,
                                   vectorRow,
-                                  activeEditMode,
                                   vectorIndex,
-                                  handleInputChange
+                                  handleInputChange,
+                                  handleInputFieldClick
                               }) => {
     const marginPercentage = 20 / timeSteps;
 
@@ -18,12 +18,13 @@ const VectorClockAlgorithm = ({
                 {vectorRow.map((vector, index) => (
                     <MarginWrapper key={index} marginPercentage={marginPercentage}>
                         <VectorBlock
-                            disabledCheck={index !== 0}
+                            readOnlyCheck={index !== 0}
                             vectorsAmount={vectorsAmount}
                             vector={vector}
                             vectorIndex={vectorIndex}
-                            activeEditMode={activeEditMode}
+                            timeIndex={index}
                             handleInputChange={handleInputChange}
+                            handleInputFieldClick={handleInputFieldClick}
                         />
                         {vectorIndex === vectorsAmount - 1 && (
                             <TextWrapper>t{index}</TextWrapper>
