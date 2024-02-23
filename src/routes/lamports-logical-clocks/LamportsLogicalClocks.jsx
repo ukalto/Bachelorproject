@@ -148,11 +148,16 @@ const LamportsLogicalClocks = () => {
                                 updatedArrow = [[id, processorIdx, blockIdx], lastArrow];
                             }
                             setClickedInput(clickedInput + 1);
-                            setArrows([...arrows.slice(0, numArrows), updatedArrow]);
+                            const updatedArrows = [...arrows.slice(0, numArrows), updatedArrow];
+                            setArrows(sortArrows(updatedArrows));
                         }
                     }
                 }
             }
+        };
+
+        const sortArrows = (arrows) => {
+            return arrows.sort((a, b) => a[1][2] - b[1][2]);
         };
 
         const deleteXArrow = (firstId, secondId) => {
