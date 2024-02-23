@@ -13,7 +13,7 @@ const VectorBlock = ({
                      }) => {
 
     const getIndexOfMapEntry = (vectorIndex, timeIndex, cellIndex) => {
-        let index = 0;
+        let index = 1;
         for (const [, [vi, ti, ci]] of increments) {
             if (vi === vectorIndex && ti === timeIndex && ci === cellIndex) {
                 return index;
@@ -86,5 +86,5 @@ const StyledInput = styled.input`
 
 const IncrementSpan = styled.span`
     position: absolute;
-    right: 35%;
+    right: 30%;
 `;
