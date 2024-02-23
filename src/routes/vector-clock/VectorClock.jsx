@@ -27,6 +27,7 @@ const VectorClock = () => {
         return {vectors, vectorsAmount, timeSteps};
     });
     const [arrows, setArrows] = useState([]);
+    const [increments, setIncrements] = useState(new Map());
 
     useEffect(() => {
         setVectors(prevVectors => {
@@ -81,11 +82,19 @@ const VectorClock = () => {
     };
 
     const handleInputFieldClick = async (id, vectorIndex, timeIndex, cellIdx) => {
-
+        if (!increments.has(id)) {
+            setIncrements(prevIncrements => {
+                const newIncrements = new Map([...prevIncrements, [id, [vectorIndex, timeIndex, cellIdx]]]);
+                return sortMap(newIncrements);
+            });
+        } else {
+            const updatedIncrements = new Map([...increments]);
+            updatedIncrements.delete(id);
+            setIncrements(sortMap(updatedIncrements));
+        }
     };
 
     const handleSolveAlgorithm = () => {
-        console.log(vectors)
         if (vectors.some(vector => vector.some(timeSteps => timeSteps.includes('')))) {
             toast.error('You must fill out every input field!', {
                 position: toast.POSITION.BOTTOM_CENTER,
@@ -99,6 +108,19 @@ const VectorClock = () => {
             });
         }
     }
+
+    const sortMap = (map) => {
+        const sortedEntries = [...map.entries()].sort((a, b) => {
+            const [via, tia, cia] = a[1];
+            const [vib, tib, cib] = b[1];
+
+            if (tia !== tib) return tia - tib;
+            if (via !== vib) return via - vib;
+            return cia - cib;
+        });
+
+        return new Map(sortedEntries);
+    };
 
     return (
         <FieldGrid>
@@ -139,6 +161,7 @@ const VectorClock = () => {
                         vectorsAmount={vectorsAmount}
                         vectorRow={vectorRow}
                         vectorIndex={vectorIndex}
+                        increments={increments}
                         handleInputChange={handleInputChange}
                         handleInputFieldClick={handleInputFieldClick}/>
                 ))};

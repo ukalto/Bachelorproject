@@ -7,6 +7,7 @@ const VectorClockAlgorithm = ({
                                   vectorsAmount,
                                   vectorRow,
                                   vectorIndex,
+                                  increments,
                                   handleInputChange,
                                   handleInputFieldClick
                               }) => {
@@ -23,6 +24,7 @@ const VectorClockAlgorithm = ({
                             vector={vector}
                             vectorIndex={vectorIndex}
                             timeIndex={index}
+                            increments={increments}
                             handleInputChange={handleInputChange}
                             handleInputFieldClick={handleInputFieldClick}
                         />
