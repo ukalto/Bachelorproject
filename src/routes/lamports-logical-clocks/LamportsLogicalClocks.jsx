@@ -14,7 +14,7 @@ import InputButtons from "../../components/InputButtons";
 import {MDBCol, MDBRow} from "mdb-react-ui-kit";
 import RangeSlider from "../../components/RangeSlider";
 import LamportsLogicalClocksAlgorithm from "./LamportsLogicalClocksAlgorithm";
-import {getScenario} from "../../components/GlobalFunctions.jsx";
+import {createToastError, getScenario} from "../../components/GlobalFunctions.jsx";
 import data from "../../assets/data.json";
 import {toast, ToastContainer} from "react-toastify";
 import {LamportsLogicalClocksSolver} from "./LamportsLogicalClocksSolver.js";
@@ -93,61 +93,25 @@ const LamportsLogicalClocks = () => {
         const handleInputFieldClick = async (id, processorIdx, blockIdx) => {
             if (!activeEditMode) {
                 if (arrows.some(arrow => arrow[0][0] === id)) {
-                    toast.error('You can\'t select a Block twice!', {
-                        position: toast.POSITION.TOP_RIGHT,
-                        closeOnClick: true,
-                        autoClose: 4000,
-                        hideProgressBar: false,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: 'colored',
-                    });
+                    createToastError('You can\'t select a Block twice!', toast.POSITION.TOP_RIGHT);
                 } else if (arrows.some(arrow => arrow[1] && arrow[1][0] === id)) {
-                    toast.error('You can\'t select a Block twice, select another!', {
-                        position: toast.POSITION.TOP_RIGHT,
-                        closeOnClick: true,
-                        autoClose: 4000,
-                        hideProgressBar: false,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: 'colored',
-                    });
+                    createToastError('You can\'t select a Block twice, select another!', toast.POSITION.TOP_RIGHT);
                 } else {
                     if (clickedInput % 2 === 0) {
-                        setClickedInput(clickedInput + 1);
+                        setClickedInput(1);
                         setArrows([...arrows, [[id, processorIdx, blockIdx], null]]);
                     } else {
                         let lastArrow = arrows[numArrows][0];
                         if (Math.abs(lastArrow[1] - processorIdx) !== 1) {
-                            toast.error('You can only select a direct neighbor. Please select again.', {
-                                position: toast.POSITION.TOP_RIGHT,
-                                closeOnClick: true,
-                                autoClose: 4000,
-                                hideProgressBar: false,
-                                pauseOnHover: true,
-                                draggable: true,
-                                progress: undefined,
-                                theme: 'colored',
-                            });
+                            createToastError('You can only select a direct neighbor. Please select again.', toast.POSITION.TOP_RIGHT);
                         } else if (lastArrow[2] === blockIdx) {
-                            toast.error('You can only select a higher or lower field. Please select again.', {
-                                position: toast.POSITION.TOP_RIGHT,
-                                closeOnClick: true,
-                                autoClose: 4000,
-                                hideProgressBar: false,
-                                pauseOnHover: true,
-                                draggable: true,
-                                progress: undefined,
-                                theme: 'colored',
-                            });
+                            createToastError('You can only select a higher or lower field. Please select again.', toast.POSITION.TOP_RIGHT);
                         } else {
                             let updatedArrow = [lastArrow, [id, processorIdx, blockIdx]];
                             if (arrows[numArrows][0][2] > blockIdx) {
                                 updatedArrow = [[id, processorIdx, blockIdx], lastArrow];
                             }
-                            setClickedInput(clickedInput + 1);
+                            setClickedInput(0);
                             const updatedArrows = [...arrows.slice(0, numArrows), updatedArrow];
                             setArrows(sortArrows(updatedArrows));
                         }
@@ -179,16 +143,7 @@ const LamportsLogicalClocks = () => {
                 const solveResult = solver.solve();
                 setProcessors([...solveResult]);
             } else {
-                toast.error('You can only solve when Edit-Mode is Off!', {
-                    position: toast.POSITION.TOP_RIGHT,
-                    closeOnClick: true,
-                    autoClose: 4000,
-                    hideProgressBar: false,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: 'colored',
-                });
+                createToastError('You can only solve when Edit-Mode is Off!', toast.POSITION.TOP_RIGHT);
             }
         }
 

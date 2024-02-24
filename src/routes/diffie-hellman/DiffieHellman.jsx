@@ -17,9 +17,9 @@ import {Scenario} from '../../components/Scenario';
 import InputButtons from '../../components/InputButtons';
 import {MDBCol, MDBInput, MDBRow, MDBValidation} from 'mdb-react-ui-kit';
 import StickMan from '../../components/StickMan';
-import {getScenario} from "../../components/GlobalFunctions.jsx";
+import {createToastError, getScenario} from "../../components/GlobalFunctions.jsx";
 import data from "../../assets/data.json";
-import {toast, ToastContainer} from "react-toastify";
+import {ToastContainer} from "react-toastify";
 import {DiffieHellmanSolver} from "./DiffieHellmanSolver.js";
 import {TransferAnimation} from "../../components/TransferAnimation.jsx";
 
@@ -65,16 +65,7 @@ const DiffieHellman = () => {
             setResult(solveResult);
             setShowResult(true);
         } else {
-            toast.error('Every field has to be filled in!', {
-                position: toast.POSITION.BOTTOM_CENTER,
-                closeOnClick: true,
-                autoClose: 4000,
-                hideProgressBar: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'colored',
-            });
+            createToastError('Every field has to be filled in!');
         }
     };
 

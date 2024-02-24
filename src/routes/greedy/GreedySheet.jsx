@@ -5,7 +5,7 @@ const GreedySheet = ({
                          rowsAmount,
                          columnsAmount,
                          sheetData,
-                         updateSheetData,
+                         resizeSheetData,
                          setShowResult,
                          checkedState,
                          resetCheckedState,
@@ -18,23 +18,21 @@ const GreedySheet = ({
     }, [sheetData]);
 
     useEffect(() => {
-        updateSheetData(rowsAmount, columnsAmount);
+        resizeSheetData(rowsAmount, columnsAmount);
     }, [rowsAmount, columnsAmount]);
 
     const handleChange = (rowIndex, columnIndex, value) => {
-        if (Number(value) >= 0 && Number(value) <= 99999) {
-            const newSheet = sheet.map((row, rIndex) =>
-                row.map((cell, cIndex) => {
-                    if (rIndex === rowIndex && cIndex === columnIndex) {
-                        return parseInt(value, 10);
-                    }
-                    return cell;
-                })
-            );
+        if (value === '') {
+            const newSheet = [...sheet];
+            newSheet[rowIndex][columnIndex] = '';
             setSheet(newSheet);
-            setShowResult(false);
-            resetCheckedState();
+        } else if (Number(value) >= 0 && Number(value) <= 99999) {
+            const newSheet = [...sheet];
+            newSheet[rowIndex][columnIndex] = parseInt(value, 10);
+            setSheet(newSheet);
         }
+        setShowResult(false);
+        resetCheckedState();
     };
 
     const handleStyledInputTextStyle = (rowIndex) => {
@@ -147,55 +145,55 @@ const GreedySheet = ({
 export default GreedySheet;
 
 const SheetContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 48px;
+    display: flex;
+    justify-content: center;
+    margin-top: 48px;
 `;
 
 const StyledInput = styled.input`
-  width: 120px;
-  height: 50px;
-  border: 1px solid var(---tertiary);
-  margin: 1px;
-  background-color: var(---primary);
-  text-align: center;
+    width: 120px;
+    height: 50px;
+    border: 1px solid var(---tertiary);
+    margin: 1px;
+    background-color: var(---primary);
+    text-align: center;
 
-  &:focus {
-    outline: 1px solid var(---tertiary);
-  }
+    &:focus {
+        outline: 1px solid var(---tertiary);
+    }
 
-  @media (max-width: 1350px) {
-    width: 70px;
-  }
+    @media (max-width: 1350px) {
+        width: 70px;
+    }
 `;
 
 const First = styled.div`
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
 `;
 
 const StyledInputText = styled.input`
-  width: 120px;
-  height: 50px;
-  border: 1px solid var(---tertiary);
-  margin: 1px;
-  text-align: center;
-  background-color: var(---fourth);
+    width: 120px;
+    height: 50px;
+    border: 1px solid var(---tertiary);
+    margin: 1px;
+    text-align: center;
+    background-color: var(---fourth);
 
-  @media (max-width: 1350px) {
-    width: 70px;
-  }
+    @media (max-width: 1350px) {
+        width: 70px;
+    }
 `;
 
 const StyledInputMain = styled.input`
-  width: 120px;
-  height: 50px;
-  margin: 1px;
-  border: none;
-  background-color: var(---primary);
-  @media (max-width: 1350px) {
-    width: 70px;
-  }
+    width: 120px;
+    height: 50px;
+    margin: 1px;
+    border: none;
+    background-color: var(---primary);
+    @media (max-width: 1350px) {
+        width: 70px;
+    }
 `;

@@ -11,11 +11,11 @@ import {
 import {Scenario} from '../../components/Scenario';
 import InputButtons from '../../components/InputButtons';
 import {MDBCol, MDBRow} from 'mdb-react-ui-kit';
-import {getScenario} from '../../components/GlobalFunctions.jsx';
+import {createToastError, getScenario} from '../../components/GlobalFunctions.jsx';
 import RangeSlider from '../../components/RangeSlider.jsx';
 import data from "../../assets/data.json";
 import styled from "styled-components";
-import {toast, ToastContainer} from "react-toastify";
+import {ToastContainer} from "react-toastify";
 import {BerkeleySolver} from "./BerkeleySolver.js";
 import Xarrow from 'react-xarrows';
 
@@ -103,16 +103,7 @@ const Berkeley = () => {
             setFinalTimes(tempFinalTimes);
             setResultText(textLines);
         } else {
-            toast.error('Every field has to be filled in!', {
-                position: toast.POSITION.BOTTOM_CENTER,
-                closeOnClick: true,
-                autoClose: 4000,
-                hideProgressBar: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'colored',
-            });
+            createToastError('Every field has to be filled in!');
         }
     };
 
@@ -297,82 +288,82 @@ const Berkeley = () => {
 export default Berkeley;
 
 const TimeInputsContainer = styled.div`
-  position: relative;
-  height: ${props => 120 + 60 * props.serverAmount}px;
-  margin: 0 auto;
+    position: relative;
+    height: ${props => 120 + 60 * props.serverAmount}px;
+    margin: 0 auto;
 `;
 
 const TimeInputContainer = styled.div`
-  display: block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: -25px 0 0 -25px;
-  transform: ${
-          props => {
-            const radius = 30 + 35 * props.serverAmount;
-            const angle = (2 * Math.PI * props.index) / props.serverAmount;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -25px 0 0 -25px;
+    transform: ${
+            props => {
+                const radius = 30 + 35 * props.serverAmount;
+                const angle = (2 * Math.PI * props.index) / props.serverAmount;
 
-            const x = Math.cos(angle) * radius;
-            const y = Math.sin(angle) * radius;
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius;
 
-            return `translate(${x}px, ${y}px)`;
-          }
-  };
+                return `translate(${x}px, ${y}px)`;
+            }
+    };
 `;
 
 const TimeInput = styled.div`
-  display: flex;
-  flex-direction: row;
-  border: 2px solid ${(props) => (props.isSelected ? 'red' : 'var(---secondary)')};
-  border-radius: 5px;
-  padding: 5px;
-  align-items: center;
-  font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    border: 2px solid ${(props) => (props.isSelected ? 'red' : 'var(---secondary)')};
+    border-radius: 5px;
+    padding: 5px;
+    align-items: center;
+    font-weight: bold;
 
-  input {
-    margin-left: 5px;
-    pointer-events: ${(props) => ((props.showResult && props.currentResult >= 1) ? 'none' : 'pointer')};
-  }
+    input {
+        margin-left: 5px;
+        pointer-events: ${(props) => ((props.showResult && props.currentResult >= 1) ? 'none' : 'pointer')};
+    }
 `;
 
 
 const DropdownContainer = styled.div`
-  display: flex;
-  border-radius: 10px;
-  border: solid 2px lightgray;
-  color: var(---tertiary);
-  padding: 10px;
-  font-weight: bold;
-  justify-content: space-between;
-  align-items: center;
-  align-self: center;
+    display: flex;
+    border-radius: 10px;
+    border: solid 2px lightgray;
+    color: var(---tertiary);
+    padding: 10px;
+    font-weight: bold;
+    justify-content: space-between;
+    align-items: center;
+    align-self: center;
 `;
 
 const SelectContainer = styled.select`
-  border: solid 2px lightgray;
-  border-radius: 5px;
-  width: 30%;
+    border: solid 2px lightgray;
+    border-radius: 5px;
+    width: 30%;
 `;
 
 const ResultButton = styled.button`
-  padding: 0 4px;
-  width: 30px;
-  margin: 4px;
-  border: 2px solid ${props => (props.index === props.currentResult ? 'var(---tertiary)' : 'var(---fifth)')};
-  border-radius: 10px;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-  background-color: ${props => (props.index === props.currentResult ? 'var(---secondary)' : 'none')};
-  color: ${props => (props.index === props.currentResult ? 'var(---primary)' : 'none')};
+    padding: 0 4px;
+    width: 30px;
+    margin: 4px;
+    border: 2px solid ${props => (props.index === props.currentResult ? 'var(---tertiary)' : 'var(---fifth)')};
+    border-radius: 10px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    background-color: ${props => (props.index === props.currentResult ? 'var(---secondary)' : 'none')};
+    color: ${props => (props.index === props.currentResult ? 'var(---primary)' : 'none')};
 
-  &:hover {
-    background-color: var(---secondary);
-    border-color: var(---tertiary);
-    color: var(---primary);
-  }
+    &:hover {
+        background-color: var(---secondary);
+        border-color: var(---tertiary);
+        color: var(---primary);
+    }
 `;
 
 const ResultOptionsContainer = styled.div`
-  align-self: center;
-  margin-top: 30px;
+    align-self: center;
+    margin-top: 30px;
 `;

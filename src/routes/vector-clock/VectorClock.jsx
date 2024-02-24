@@ -10,12 +10,12 @@ import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
 import {MDBCol, MDBRow} from "mdb-react-ui-kit";
 import RangeSlider from "../../components/RangeSlider";
-import {getScenario} from "../../components/GlobalFunctions.jsx";
+import {createToastError, getScenario} from "../../components/GlobalFunctions.jsx";
 import data from "../../assets/data.json";
 import Arrow from "../../components/Arrow.jsx";
 import styled from "styled-components";
 import VectorClockAlgorithm from "./VectorClockAlgorithm.jsx";
-import {toast, ToastContainer} from "react-toastify";
+import {ToastContainer} from "react-toastify";
 
 const VectorClock = () => {
     const [vectorsAmount, setVectorsAmount] = useState(3);
@@ -27,6 +27,8 @@ const VectorClock = () => {
         return {vectors, vectorsAmount, timeSteps};
     });
     const [arrows, setArrows] = useState([]);
+    const numArrows = arrows.length - 1;
+    const [clickedInput, setClickedInput] = useState(0);
     const [increments, setIncrements] = useState(new Map());
 
     useEffect(() => {
@@ -58,6 +60,7 @@ const VectorClock = () => {
         setTimeSteps(4);
         setVectors(Array.from({length: vectorsAmount}, () => Array.from({length: timeSteps}, () => Array(vectorsAmount).fill(0))));
         setArrows([]);
+        setIncrements(new Map());
     };
 
     const handleInputChange = (vectorIndex, cellIndex, newValue) => {
@@ -81,7 +84,7 @@ const VectorClock = () => {
         }
     };
 
-    const handleInputFieldClick = async (id, vectorIndex, timeIndex, cellIdx) => {
+    const handleInputFieldClickIncrement = async (id, vectorIndex, timeIndex, cellIdx) => {
         if (!increments.has(id)) {
             setIncrements(prevIncrements => {
                 const newIncrements = new Map([...prevIncrements, [id, [vectorIndex, timeIndex, cellIdx]]]);
@@ -94,18 +97,30 @@ const VectorClock = () => {
         }
     };
 
+    const handleInputFieldClickArrow = async (id, vectorIndex, timeIndex, cellIdx) => {
+        if (clickedInput % 2 === 0) {
+            setArrows([...arrows, [[id, vectorIndex, timeIndex, cellIdx], null]]);
+            setClickedInput(clickedInput + 1);
+        } else {
+            let lastArrow = arrows[numArrows][0];
+            if (lastArrow[2] !== timeIndex) {
+                createToastError('You can\'t create an arrow between to fields in different time indexes!');
+            } else if (lastArrow[0] === id) {
+                createToastError('You can\'t select the same field to create an arrow twice!');
+            } else if(lastArrow[1] === vectorIndex){
+                createToastError('You can\'t create an arrow in the same vector!');
+            } else{
+                let updatedArrow = [lastArrow, [id, vectorIndex, timeIndex, cellIdx]];
+                setArrows([...arrows.slice(0, numArrows), updatedArrow]);
+                setClickedInput(clickedInput + 1);
+            }
+        }
+        console.log(arrows)
+    };
+
     const handleSolveAlgorithm = () => {
         if (vectors.some(vector => vector.some(timeSteps => timeSteps.includes('')))) {
-            toast.error('You must fill out every input field!', {
-                position: toast.POSITION.BOTTOM_CENTER,
-                closeOnClick: true,
-                autoClose: 4000,
-                hideProgressBar: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'colored',
-            });
+            createToastError('You must fill out every input field!');
         }
     }
 
@@ -163,7 +178,8 @@ const VectorClock = () => {
                         vectorIndex={vectorIndex}
                         increments={increments}
                         handleInputChange={handleInputChange}
-                        handleInputFieldClick={handleInputFieldClick}/>
+                        handleInputFieldClickIncrement={handleInputFieldClickIncrement}
+                        handleInputFieldClickArrow={handleInputFieldClickArrow}/>
                 ))};
                 <Timeline>
                     <Arrow isRight={true} width={90}/>

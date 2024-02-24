@@ -11,12 +11,12 @@ import {
 import {Scenario} from '../../components/Scenario';
 import InputButtons from '../../components/InputButtons';
 import {MDBCol, MDBInput, MDBRow} from 'mdb-react-ui-kit';
-import {getScenario} from '../../components/GlobalFunctions.jsx';
+import {createToastError, getScenario} from '../../components/GlobalFunctions.jsx';
 import styled from 'styled-components';
 import RangeSlider from '../../components/RangeSlider.jsx';
 import data from '../../assets/data.json';
 import {ChordSystemSolver} from './ChordSystemSolver.js';
-import {toast, ToastContainer} from 'react-toastify';
+import {ToastContainer} from 'react-toastify';
 import Xarrow from 'react-xarrows';
 import LineTo from "react-lineto";
 
@@ -114,16 +114,7 @@ const ChordSystem = () => {
             setSelectedFingerTableEntries(solveResult.selectedFingerTableEntries);
             setShowResult(true);
         } else {
-            toast.error('Every field has to be filled in!', {
-                position: toast.POSITION.BOTTOM_CENTER,
-                closeOnClick: true,
-                autoClose: 4000,
-                hideProgressBar: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'colored',
-            });
+            createToastError('Every field has to be filled in!');
         }
     };
 

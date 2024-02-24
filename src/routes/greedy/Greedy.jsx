@@ -14,12 +14,12 @@ import {
 import {Scenario} from '../../components/Scenario';
 import InputButtons from '../../components/InputButtons';
 import {MDBCol, MDBRow} from 'mdb-react-ui-kit';
-import {getScenario} from '../../components/GlobalFunctions.jsx';
+import {createToastError, getScenario} from '../../components/GlobalFunctions.jsx';
 import RangeSlider from '../../components/RangeSlider.jsx';
 import GreedySheet from './GreedySheet.jsx';
 import data from '../../assets/data.json';
 import {GreedySolver} from "./GreedySolver.js";
-import {toast, ToastContainer} from "react-toastify";
+import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 const Greedy = () => {
@@ -57,7 +57,7 @@ const Greedy = () => {
         setCheckedState(checkedState.map(entry => [false, entry[1]]));
     }
 
-    const updateSheetData = (newRowsAmount, newColumnsAmount) => {
+    const resizeSheetData = (newRowsAmount, newColumnsAmount) => {
         const newSheet = Array.from({length: newColumnsAmount}, () =>
             Array(newRowsAmount).fill(0)
         );
@@ -99,23 +99,14 @@ const Greedy = () => {
             setShowResult(true);
             resetCheckedState();
         } else {
-            toast.error('Every field has to be filled in!', {
-                position: toast.POSITION.BOTTOM_CENTER,
-                closeOnClick: true,
-                autoClose: 4000,
-                hideProgressBar: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'colored',
-            });
+            createToastError('Every field has to be filled in!');
         }
     };
 
     const validateSheet = () => {
         for (let i = 0; i < sheetData.length; i++) {
             for (let j = 0; j < sheetData[i].length; j++) {
-                if (isNaN(sheetData[i][j])) {
+                if (sheetData[i][j] === '') {
                     return false;
                 }
             }
@@ -144,7 +135,7 @@ const Greedy = () => {
                                         max={7}
                                         value={rowsAmount}
                                         onChange={(newRowsAmount) =>
-                                            updateSheetData(newRowsAmount, columnsAmount)
+                                            resizeSheetData(newRowsAmount, columnsAmount)
                                         }
                                     />
                                 </RangeBox>
@@ -157,7 +148,7 @@ const Greedy = () => {
                                         max={7}
                                         value={columnsAmount}
                                         onChange={(newColumnsAmount) =>
-                                            updateSheetData(rowsAmount, newColumnsAmount)
+                                            resizeSheetData(rowsAmount, newColumnsAmount)
                                         }
                                     />
                                 </RangeBox>
@@ -198,7 +189,7 @@ const Greedy = () => {
                     rowsAmount={rowsAmount}
                     columnsAmount={columnsAmount}
                     sheetData={sheetData}
-                    updateSheetData={updateSheetData}
+                    resizeSheetData={resizeSheetData}
                     setShowResult={setShowResult}
                     checkedState={checkedState}
                     resetCheckedState={resetCheckedState}

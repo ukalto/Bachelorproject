@@ -9,7 +9,8 @@ const VectorBlock = ({
                          timeIndex,
                          increments,
                          handleInputChange,
-                         handleInputFieldClick
+                         handleInputFieldClickIncrement,
+                         handleInputFieldClickArrow
                      }) => {
 
     const getIndexOfMapEntry = (vectorIndex, timeIndex, cellIndex) => {
@@ -35,7 +36,7 @@ const VectorBlock = ({
                         isLast={cellIndex === vectorsAmount - 1}
                         isInIncrement={increments.has(`${vectorIndex}-${timeIndex}-${cellIndex}`)}
                         onChange={!readOnlyCheck ? (e) => handleInputChange(vectorIndex, cellIndex, e.target.value) : null}
-                        onClick={readOnlyCheck ? () => handleInputFieldClick(`${vectorIndex}-${timeIndex}-${cellIndex}`, vectorIndex, timeIndex, cellIndex) : null}
+                        onClick={readOnlyCheck ? () => handleInputFieldClickArrow(`${vectorIndex}-${timeIndex}-${cellIndex}`, vectorIndex, timeIndex, cellIndex) : null}
                     />
                     {getIndexOfMapEntry(vectorIndex, timeIndex, cellIndex) !== -1 && (
                         <IncrementSpan>e{getIndexOfMapEntry(vectorIndex, timeIndex, cellIndex)}</IncrementSpan>
