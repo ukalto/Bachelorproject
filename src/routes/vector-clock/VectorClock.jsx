@@ -16,6 +16,7 @@ import Arrow from "../../components/Arrow.jsx";
 import styled from "styled-components";
 import VectorClockAlgorithm from "./VectorClockAlgorithm.jsx";
 import {ToastContainer} from "react-toastify";
+import {VectorClockSolver} from "./VectorClockSolver.js";
 
 const VectorClock = () => {
     const [vectorsAmount, setVectorsAmount] = useState(3);
@@ -23,8 +24,15 @@ const VectorClock = () => {
     const [vectors, setVectors] = useState(Array.from({length: vectorsAmount}, () => Array.from({length: timeSteps}, () => Array(vectorsAmount).fill(0))));
     const [example] = useState(() => {
         const exampleData = data.data.find(item => item.name === 'VectorClock');
-        const {vectors, vectorsAmount, timeSteps} = exampleData.details.find(item => item.type === 'example');
-        return {vectors, vectorsAmount, timeSteps};
+        const {
+            arrows,
+            increments,
+            vectorsAmount,
+            timeSteps
+        } = exampleData.details.find(item => item.type === 'example');
+        return {
+            arrows, increments, vectorsAmount, timeSteps
+        };
     });
     const [arrows, setArrows] = useState([]);
     const numArrows = arrows.length - 1;
@@ -53,6 +61,9 @@ const VectorClock = () => {
     const setExampleData = () => {
         setVectorsAmount(example.vectorsAmount);
         setTimeSteps(example.timeSteps);
+        setVectors(Array.from({length: example.vectorsAmount}, () => Array.from({length: example.timeSteps}, () => Array(example.vectorsAmount).fill(0))));
+        setArrows(example.arrows);
+        setIncrements(new Map(Object.entries(example.increments)));
     };
 
     const resetFormValues = () => {
@@ -75,7 +86,6 @@ const VectorClock = () => {
                             : vector
                     )
                 );
-                setArrows([]);
             }
         } else {
             const updatedVectors = [...vectors];
@@ -88,18 +98,18 @@ const VectorClock = () => {
         if (!increments.has(id)) {
             setIncrements(prevIncrements => {
                 const newIncrements = new Map([...prevIncrements, [id, [vectorIndex, timeIndex, cellIdx]]]);
-                return sortMap(newIncrements);
+                return sortIncrementsMap(newIncrements);
             });
         } else {
             const updatedIncrements = new Map([...increments]);
             updatedIncrements.delete(id);
-            setIncrements(sortMap(updatedIncrements));
+            setIncrements(sortIncrementsMap(updatedIncrements));
         }
     };
 
-    const handleInputFieldClickArrow = async (id, vectorIndex, timeIndex, cellIdx) => {
+    const handleInputFieldClickArrow = async (id, vectorIndex, timeIndex) => {
         if (clickedInput % 2 === 0) {
-            setArrows([...arrows, [[id, vectorIndex, timeIndex, cellIdx], null]]);
+            setArrows([...arrows, [[id, vectorIndex, timeIndex], null]]);
             setClickedInput(clickedInput + 1);
         } else {
             let lastArrow = arrows[numArrows][0];
@@ -107,24 +117,33 @@ const VectorClock = () => {
                 createToastError('You can\'t create an arrow between to fields in different time indexes!');
             } else if (lastArrow[0] === id) {
                 createToastError('You can\'t select the same field to create an arrow twice!');
-            } else if(lastArrow[1] === vectorIndex){
+            } else if (lastArrow[1] === vectorIndex) {
                 createToastError('You can\'t create an arrow in the same vector!');
-            } else{
-                let updatedArrow = [lastArrow, [id, vectorIndex, timeIndex, cellIdx]];
-                setArrows([...arrows.slice(0, numArrows), updatedArrow]);
+            } else {
+                let updatedArrow = [lastArrow, [id, vectorIndex, timeIndex]];
+                updatedArrow = [...arrows.slice(0, numArrows), updatedArrow];
+                setArrows(sortArrowsArray(updatedArrow));
                 setClickedInput(clickedInput + 1);
             }
         }
-        console.log(arrows)
     };
 
-    const handleSolveAlgorithm = () => {
+    const handleSolveAlgorithm = async () => {
         if (vectors.some(vector => vector.some(timeSteps => timeSteps.includes('')))) {
             createToastError('You must fill out every input field!');
+        } else {
+            const copiedVectors = deepCopyVectors();
+            const solver = new VectorClockSolver(copiedVectors, arrows, increments, timeSteps);
+            const solveResult = solver.solve();
+            setVectors([...solveResult]);
         }
     }
 
-    const sortMap = (map) => {
+    const deepCopyVectors = () => {
+        return JSON.parse(JSON.stringify(vectors.map(vector => Array(vectors.length).fill(vector[0]))));
+    };
+
+    const sortIncrementsMap = (map) => {
         const sortedEntries = [...map.entries()].sort((a, b) => {
             const [via, tia, cia] = a[1];
             const [vib, tib, cib] = b[1];
@@ -136,6 +155,31 @@ const VectorClock = () => {
 
         return new Map(sortedEntries);
     };
+
+    const sortArrowsArray = (arrows) => {
+        return [...arrows].sort((a, b) => {
+            const [, vectorIndexA, timeIndexA, cellIndexA] = a[0];
+            const [, vectorIndexB, timeIndexB, cellIndexB] = b[0];
+
+            if (timeIndexA !== timeIndexB) return timeIndexA - timeIndexB;
+
+            if (vectorIndexA !== vectorIndexB) return vectorIndexA - vectorIndexB;
+
+            return cellIndexA - cellIndexB;
+        });
+    };
+
+    const deleteXArrow = (firstId, secondId) => {
+        const updatedArrows = arrows.filter(arrowGroup =>
+            !(
+                arrowGroup[0][0] === firstId &&
+                arrowGroup[1] &&
+                arrowGroup[1][0] === secondId
+            )
+        );
+        setArrows(updatedArrows);
+    };
+
 
     return (
         <FieldGrid>
@@ -177,9 +221,12 @@ const VectorClock = () => {
                         vectorRow={vectorRow}
                         vectorIndex={vectorIndex}
                         increments={increments}
+                        arrows={arrows}
                         handleInputChange={handleInputChange}
                         handleInputFieldClickIncrement={handleInputFieldClickIncrement}
-                        handleInputFieldClickArrow={handleInputFieldClickArrow}/>
+                        handleInputFieldClickArrow={handleInputFieldClickArrow}
+                        deleteXArrow={deleteXArrow}
+                    />
                 ))};
                 <Timeline>
                     <Arrow isRight={true} width={90}/>
