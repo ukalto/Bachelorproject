@@ -10,8 +10,7 @@ const VectorClockAlgorithm = ({
                                   increments,
                                   arrows,
                                   handleInputChange,
-                                  handleInputFieldClickIncrement,
-                                  handleInputFieldClickArrow,
+                                  handleInputFieldClick,
                                   deleteXArrow
                               }) => {
     const marginPercentage = 20 / timeSteps;
@@ -30,8 +29,7 @@ const VectorClockAlgorithm = ({
                             increments={increments}
                             arrows={arrows}
                             handleInputChange={handleInputChange}
-                            handleInputFieldClickIncrement={handleInputFieldClickIncrement}
-                            handleInputFieldClickArrow={handleInputFieldClickArrow}
+                            handleInputFieldClick={handleInputFieldClick}
                             deleteXArrow={deleteXArrow}
                         />
                         {vectorIndex === vectorsAmount - 1 && (

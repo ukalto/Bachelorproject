@@ -18,8 +18,8 @@ export class VectorClockSolver {
         });
 
         increments.forEach((value, key) => {
-            const [, timeIndex, cellIndex] = value;
-            taskList[timeIndex].push(cellIndex);
+            const [vectorIndex, timeIndex] = value;
+            taskList[timeIndex].push(vectorIndex);
         });
         return taskList;
     }

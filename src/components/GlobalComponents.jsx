@@ -28,7 +28,8 @@ export const GridItem = styled.div`
 `;
 
 export const Headline = styled.h6`
-  font-size: 40px;
+    font-size: 40px;
+    display: flex;
 `;
 
 export const Field = styled.div`

@@ -11,14 +11,13 @@ const VectorBlock = ({
                          increments,
                          arrows,
                          handleInputChange,
-                         handleInputFieldClickIncrement,
-                         handleInputFieldClickArrow,
+                         handleInputFieldClick,
                          deleteXArrow
                      }) => {
 
     const getIndexOfMapEntry = (vectorIndex, timeIndex) => {
         let index = 1;
-        for (const [, [vi, ti, ]] of increments) {
+        for (const [, [vi, ti,]] of increments) {
             if (vi === vectorIndex && ti === timeIndex) {
                 return index;
             }
@@ -27,12 +26,23 @@ const VectorBlock = ({
         return -1;
     };
 
+    const isInIncrementCheck = (vectorIndex, timeIndex) => {
+        return Array.from(increments.values()).some(inc => inc[0] === vectorIndex && inc[1] === timeIndex);
+    }
+
+    const isInArrows = (vectorIndex, timeIndex) => {
+        return arrows.some(arrow =>
+            !arrow.includes(null) && arrow.some(points =>
+                points[1] === vectorIndex && points[2] === timeIndex
+        ));
+    }
+
     return (
         <BlockContainer>
             {vector.map((cell, cellIndex) => (
                 <InputWrapper key={cellIndex} isLast={cellIndex === vectorsAmount - 1}>
                     {getIndexOfMapEntry(vectorIndex, timeIndex) !== -1 && vectorIndex === cellIndex && (
-                        <IncrementSpan>e{getIndexOfMapEntry(vectorIndex, timeIndex, cellIndex)}</IncrementSpan>
+                        <IncrementSpan>e{getIndexOfMapEntry(vectorIndex, timeIndex)}</IncrementSpan>
                     )}
                     <StyledInput
                         type="number"
@@ -40,9 +50,10 @@ const VectorBlock = ({
                         value={cell}
                         readOnly={readOnlyCheck}
                         isLast={cellIndex === vectorsAmount - 1}
-                        isInIncrement={increments.has(`${vectorIndex}-${timeIndex}-${cellIndex}`)}
+                        isInIncrement={isInIncrementCheck(vectorIndex, timeIndex)}
+                        isInArrows={isInArrows(vectorIndex, timeIndex)}
                         onChange={!readOnlyCheck ? (e) => handleInputChange(vectorIndex, cellIndex, e.target.value) : null}
-                        onClick={readOnlyCheck ? () => handleInputFieldClickArrow(`${vectorIndex}-${timeIndex}-${vectorIndex}`, vectorIndex, timeIndex) : null}
+                        onClick={readOnlyCheck ? () => handleInputFieldClick(`${vectorIndex}-${timeIndex}-${vectorIndex}`, vectorIndex, timeIndex) : null}
                     />
                     {arrows.map((value, index) => (
                         !value.includes(null) && value[1][1] === vectorIndex && value[1][2] === timeIndex && (
@@ -99,10 +110,7 @@ const StyledInput = styled.input`
     border-right: 1px solid var(---tertiary);
     border-bottom: ${({isLast}) => (isLast ? '1px' : '0')} solid var(---tertiary);
     text-align: center;
-    background: ${({
-                       readOnly,
-                       isInIncrement
-                   }) => (isInIncrement ? 'var(---secondary)' : (readOnly ? 'var(---fourth)' : 'var(---primary)'))};
+    background: ${({readOnly}) => (readOnly ? 'var(---fourth)' : 'var(---primary)')};
 
     &:focus {
         outline: none;
@@ -111,7 +119,11 @@ const StyledInput = styled.input`
     cursor: ${({readOnly}) => (readOnly ? 'pointer' : 'text')};
 
     &:hover {
-        background: ${({readOnly}) => (!readOnly ? 'default' : 'var(---secondary)')};
+        background: ${({
+                           readOnly,
+                           isInIncrement,
+                           isInArrows
+                       }) => (isInArrows ? 'var(---error)' : (isInIncrement ? 'var(---fifth)' : (!readOnly ? 'default' : 'var(---secondary)')))};
     }
 `;
 
