@@ -169,3 +169,20 @@ export const StickManContainer = styled.div`
   justify-content: center;
 `;
 
+export const DropdownContainer = styled.div`
+    display: flex;
+    border-radius: 10px;
+    border: solid 2px lightgray;
+    color: var(---tertiary);
+    padding: 10px;
+    font-weight: bold;
+    justify-content: space-between;
+    align-items: center;
+    align-self: center;
+`;
+
+export const SelectContainer = styled.select`
+    border: solid 2px lightgray;
+    border-radius: 5px;
+    width: 30%;
+`;

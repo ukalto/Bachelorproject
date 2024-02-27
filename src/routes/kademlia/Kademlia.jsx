@@ -1,32 +1,70 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     FieldGrid,
     Field,
     Headline,
-    InputField, marginsInput, GridItem, FieldGridFirst
+    InputField, marginsInput, GridItem, FieldGridFirst, RangeBox, SelectContainer, DropdownContainer
 } from '../../components/GlobalComponents.jsx';
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
-import {MDBCol, MDBInput, MDBRow} from "mdb-react-ui-kit";
+import {MDBCol, MDBRow} from "mdb-react-ui-kit";
 import {getScenario} from "../../components/GlobalFunctions.jsx";
+import RangeSlider from "../../components/RangeSlider.jsx";
+import styled from "styled-components";
+import Xarrow from "react-xarrows";
 
 
 const Kademlia = () => {
-    const initialFormValues = {
-        key: '',
-        bitidentifier: '',
-        nodesamount: '',
-        startnode: '',
+    const [nodeDepth, setNodeDepth] = useState(3);
+    const [nodeArr, setNodeArr] = useState([]);
+
+    useEffect(() => {
+        createNodeArray(nodeDepth);
+    }, [nodeDepth]);
+
+    const createNodeArray = (depth) => {
+        const array = [['Root']];
+
+        for (let i = 1; i < depth; i++) {
+            const layer = [];
+            const layerSize = Math.pow(2, i);
+            for (let j = 0; j < layerSize; j++) {
+                layer.push(j.toString(2).padStart(i, '0'));
+            }
+            array.push(layer);
+        }
+
+        setNodeArr(array);
     };
 
-    const [formValue, setFormValue] = useState(initialFormValues);
+    const renderTreeOptions = (nodes) => {
+        const options = [];
 
-    const onChange = (e) => {
-        setFormValue({...formValue, [e.target.name]: e.target.value});
+        const traverseTree = (node) => {
+            if (!node) {
+                return;
+            }
+            options.push(
+                <option key={node} value={node}>
+                    {node}
+                </option>
+            );
+            traverseTree(node.left);
+            traverseTree(node.right);
+        };
+
+        nodes.forEach(layer => layer.forEach(node => traverseTree(node)));
+
+        return options;
+    };
+
+    const setExampleData = () => {
     };
 
     const resetFormValues = () => {
-        setFormValue(initialFormValues);
+    };
+
+    const handleSolveAlgorithm = async () => {
     };
 
     return (
@@ -36,50 +74,25 @@ const Kademlia = () => {
                     <InputField>
                         <Headline>Inputs</Headline>
                         <MDBRow tag="form" className='g-3' style={marginsInput}>
-                            <MDBCol md="6">
-                                <MDBInput
-                                    value={formValue.startnode}
-                                    name='startnode'
-                                    onChange={onChange}
-                                    required
-                                    label='Start Node'
-                                    type={"number"}
-                                />
+                            <MDBCol md="8">
+                                <RangeBox>
+                                    <RangeSlider text={"Tree Depth"} min={3} max={5} value={nodeDepth}
+                                                 onChange={setNodeDepth}/>
+                                </RangeBox>
                             </MDBCol>
-                            <MDBCol md="6">
-                                <MDBInput
-                                    value={formValue.bitidentifier}
-                                    name='bitidentifier'
-                                    onChange={onChange}
-                                    required
-                                    label='Bit Identifier'
-                                    type={"number"}
-                                />
+                            <MDBCol md="4">
+                                <DropdownContainer>
+                                    Final Node:
+                                    <SelectContainer>
+                                        {renderTreeOptions(nodeArr)}
+                                    </SelectContainer>
+                                </DropdownContainer>
                             </MDBCol>
                         </MDBRow>
-                        <MDBRow tag="form" className='g-3' style={marginsInput}>
-                            <MDBCol md="6">
-                                <MDBInput
-                                    value={formValue.key}
-                                    name='key'
-                                    onChange={onChange}
-                                    required
-                                    label='Key'
-                                    type={"number"}
-                                />
-                            </MDBCol>
-                            <MDBCol md="6">
-                                <MDBInput
-                                    value={formValue.nodesamount}
-                                    name='nodesamount'
-                                    onChange={onChange}
-                                    required
-                                    label='Amount of Nodes'
-                                    type={"number"}
-                                />
-                            </MDBCol>
-                        </MDBRow>
-                        <InputButtons resetForm={resetFormValues}/>
+                        <InputButtons
+                            resetForm={resetFormValues}
+                            setExampleData={setExampleData}
+                            solveAlgorithm={handleSolveAlgorithm}/>
                     </InputField>
                 </GridItem>
                 <GridItem switchRows>
@@ -88,10 +101,95 @@ const Kademlia = () => {
             </FieldGridFirst>
             <Field>
                 <Headline>Algorithm</Headline>
+                <Tree>
+                    {nodeArr.map((nodes, layerIndex) => (
+                        <Layer key={layerIndex} layerIndex={layerIndex} nodeArr={nodeArr}>
+                            {nodes.map((node, nodeIndex) => (
+                                <CircleContainer key={nodeIndex}>
+                                    <Circle id={`N${node}`}>
+                                        {node}
+                                    </Circle>
+                                </CircleContainer>
+                            ))}
+                        </Layer>
+                    ))}
+                    {nodeArr.map((nodes, layerIndex) => (
+                        <React.Fragment>
+                            {nodes.map((node, nodeIndex) => (layerIndex !== nodeArr.length - 1 &&
+                                <React.Fragment>
+                                    <Xarrow
+                                        divContainerStyle={{
+                                            color: 'var(---tertiary)',
+                                            fontWeight: 'bold',
+                                        }}
+                                        start={`N${node}`}
+                                        end={`N${nodeArr[layerIndex + 1][nodeIndex * 2]}`}
+                                        showHead={false}
+                                        showTail={false}
+                                        endAnchor={"top"}
+                                        labels={'0'}
+                                        color={'darkgray'}
+                                        curveness={0}
+                                    />
+                                    <Xarrow
+                                        divContainerStyle={{
+                                            color: 'var(---tertiary)',
+                                            fontWeight: 'bold',
+                                        }}
+                                        start={`N${node}`}
+                                        end={`N${nodeArr[layerIndex + 1][(nodeIndex * 2) + 1]}`}
+                                        showHead={false}
+                                        showTail={false}
+                                        endAnchor={"top"}
+                                        labels={'1'}
+                                        color={'darkgray'}
+                                        curveness={0}
+                                    />
+                                </React.Fragment>
+                            ))}
+                        </React.Fragment>
+                    ))}
+                </Tree>
             </Field>
         </FieldGrid>
     );
 };
 
-export default Kademlia;
+const Tree = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 30px;
+`;
 
+const Layer = styled.div`
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: ${props => props.layerIndex === props.nodeArr.length - 1 ? 0 : 40 * props.layerIndex}px;
+`;
+
+const CircleContainer = styled.div`
+    flex: 1;
+    display: flex;
+    justify-content: center;
+`;
+
+const Circle = styled.button`
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid black;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    z-index: 1;
+
+    &:hover {
+        background-color: var(---secondary);
+    }
+`;
+
+
+export default Kademlia;

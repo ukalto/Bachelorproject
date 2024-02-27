@@ -202,13 +202,9 @@ const VectorClock = () => {
         setArrows(updatedArrows);
     };
 
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
+    const openModal = () => setIsModalOpen(true);
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
+    const closeModal = () => setIsModalOpen(false);
 
     return (
         <FieldGrid>

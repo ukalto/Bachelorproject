@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
 import {
+    DropdownContainer,
     Field,
     FieldGrid, FieldGridFirst,
     GridItem,
     Headline,
     InputField,
     marginsInput,
-    RangeBox,
+    RangeBox, SelectContainer,
 } from '../../components/GlobalComponents.jsx';
 import {Scenario} from '../../components/Scenario';
 import InputButtons from '../../components/InputButtons';
@@ -338,23 +339,6 @@ const Node = styled.button`
     }};
 `;
 
-const DropdownContainer = styled.div`
-    display: flex;
-    border-radius: 10px;
-    border: solid 2px lightgray;
-    color: var(---tertiary);
-    padding: 10px;
-    font-weight: bold;
-    justify-content: space-between;
-    align-items: center;
-    align-self: center;
-`;
-
-const SelectContainer = styled.select`
-    border: solid 2px lightgray;
-    border-radius: 5px;
-    width: 30%;
-`;
 
 const FingerTable = styled.div`
     display: grid;
