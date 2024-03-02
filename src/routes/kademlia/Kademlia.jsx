@@ -17,6 +17,8 @@ import Xarrow from "react-xarrows";
 const Kademlia = () => {
     const [nodeDepth, setNodeDepth] = useState(3);
     const [nodeArr, setNodeArr] = useState([]);
+    const [startNode, setStartNode] = useState(null);
+    const [finalNode, setFinalNode] = useState(null);
 
     useEffect(() => {
         createNodeArray(nodeDepth);
@@ -44,11 +46,19 @@ const Kademlia = () => {
             if (!node) {
                 return;
             }
-            options.push(
-                <option key={node} value={node}>
-                    {node}
-                </option>
-            );
+            if (node !== 'Root') {
+                options.push(
+                    <option key={node} value={node}>
+                        {node}
+                    </option>
+                );
+            } else {
+                options.push(
+                    <option value="" hidden defaultValue key={node}>
+                        {node}
+                    </option>
+                );
+            }
             traverseTree(node.left);
             traverseTree(node.right);
         };
@@ -56,6 +66,14 @@ const Kademlia = () => {
         nodes.forEach(layer => layer.forEach(node => traverseTree(node)));
 
         return options;
+    };
+
+    const handleClickStartNode = (node) => {
+        setStartNode(node);
+    };
+
+    const handleSelectFinalNode = (node) => {
+        setFinalNode(node);
     };
 
     const setExampleData = () => {
@@ -83,7 +101,9 @@ const Kademlia = () => {
                             <MDBCol md="4">
                                 <DropdownContainer>
                                     Final Node:
-                                    <SelectContainer>
+                                    <SelectContainer
+                                        onChange={(e) => handleSelectFinalNode(e.target.value)}
+                                        value={finalNode}>
                                         {renderTreeOptions(nodeArr)}
                                     </SelectContainer>
                                 </DropdownContainer>
@@ -103,10 +123,11 @@ const Kademlia = () => {
                 <Headline>Algorithm</Headline>
                 <Tree>
                     {nodeArr.map((nodes, layerIndex) => (
-                        <Layer key={layerIndex} layerIndex={layerIndex} nodeArr={nodeArr}>
+                        <Layer key={`L${layerIndex}`} layerIndex={layerIndex} nodeArr={nodeArr}>
                             {nodes.map((node, nodeIndex) => (
-                                <CircleContainer key={nodeIndex}>
-                                    <Circle id={`N${node}`}>
+                                <CircleContainer key={`C${nodeIndex}`} onClick={() => handleClickStartNode(node)}>
+                                    <Circle id={`N${node}`} node={node} startNode={startNode}
+                                            finalNode={finalNode}>
                                         {node}
                                     </Circle>
                                 </CircleContainer>
@@ -127,6 +148,7 @@ const Kademlia = () => {
                                         showHead={false}
                                         showTail={false}
                                         endAnchor={"top"}
+                                        _cpy2Offset={-20}
                                         labels={'0'}
                                         color={'darkgray'}
                                         curveness={0}
@@ -141,6 +163,7 @@ const Kademlia = () => {
                                         showHead={false}
                                         showTail={false}
                                         endAnchor={"top"}
+                                        _cpy2Offset={-20}
                                         labels={'1'}
                                         color={'darkgray'}
                                         curveness={0}
@@ -185,6 +208,15 @@ const Circle = styled.button`
     align-items: center;
     margin: 5px;
     z-index: 1;
+    background-color: ${props => {
+        if (props.node === props.startNode) {
+            return 'var(---secondary)';
+        } else if (props.node === props.finalNode) {
+            return 'var(---fifth)';
+        } else {
+            return 'white';
+        }
+    }};
 
     &:hover {
         background-color: var(---secondary);
