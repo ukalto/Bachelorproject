@@ -117,11 +117,11 @@
       ]
     },
     {
-      "name": "Kademlia",
+      "name": "PolymorphPolyring",
       "details": [
         {
           "type": "scenario",
-          "content": "Picture a massive treasure hunt where participants work together to find hidden gems. Kademlia is like the map that tells each person which direction to go, so they can efficiently find the treasures by asking others for clues."
+          "content": "Think of a bustling city where people are constantly on the move, navigating through streets and alleys to reach their destinations. Polymorph Polyring is akin to a GPS system that guides individuals along the most efficient routes, considering the layout of the city and the locations of landmarks. As people move from one point to another, the GPS dynamically adjusts the directions, ensuring they reach their destinations with minimal detours and delays."
         },
         {
           "type": "example",

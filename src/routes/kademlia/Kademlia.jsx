@@ -15,7 +15,7 @@ import Xarrow from "react-xarrows";
 
 
 const Kademlia = () => {
-    const [nodeDepth, setNodeDepth] = useState(3);
+    const [nodeDepth, setNodeDepth] = useState(4);
     const [nodeArr, setNodeArr] = useState([]);
     const [startNode, setStartNode] = useState(null);
     const [finalNode, setFinalNode] = useState(null);
@@ -39,36 +39,10 @@ const Kademlia = () => {
         setNodeArr(array);
     };
 
-    const renderTreeOptions = (nodes) => {
-        const options = [];
-
-        const traverseTree = (node) => {
-            if (!node) {
-                return;
-            }
-            if (node !== 'Root') {
-                options.push(
-                    <option key={node} value={node}>
-                        {node}
-                    </option>
-                );
-            } else {
-                options.push(
-                    <option value="" hidden defaultValue key={node}>
-                        {node}
-                    </option>
-                );
-            }
-            traverseTree(node.left);
-            traverseTree(node.right);
-        };
-
-        nodes.forEach(layer => layer.forEach(node => traverseTree(node)));
-
-        return options;
-    };
-
     const handleClickStartNode = (node) => {
+        if (node === startNode) {
+            node = null;
+        }
         setStartNode(node);
     };
 
@@ -80,10 +54,23 @@ const Kademlia = () => {
     };
 
     const resetFormValues = () => {
+        setNodeDepth(4);
+        setStartNode(null);
+        setFinalNode(null);
     };
 
     const handleSolveAlgorithm = async () => {
+        // Check if both start and final nodes are selected
+        if (startNode && finalNode) {
+            // Simulate Kademlia algorithm logic
+
+        } else {
+            // If either start or final node is not selected, display an error message
+            console.error("Please select both start and final nodes before solving the algorithm.");
+            // You can also show a message to the user indicating that both nodes need to be selected
+        }
     };
+
 
     return (
         <FieldGrid>
@@ -104,7 +91,11 @@ const Kademlia = () => {
                                     <SelectContainer
                                         onChange={(e) => handleSelectFinalNode(e.target.value)}
                                         value={finalNode}>
-                                        {renderTreeOptions(nodeArr)}
+                                        {nodeArr.flat().map((node) => (
+                                            <option key={node} value={node}>
+                                                {node}
+                                            </option>
+                                        ))}
                                     </SelectContainer>
                                 </DropdownContainer>
                             </MDBCol>

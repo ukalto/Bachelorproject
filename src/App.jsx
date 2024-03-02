@@ -1,7 +1,6 @@
 import {Route, Routes} from "react-router-dom";
 import Home from "./components/Home";
 import ChordSystem from "./routes/chord-system/ChordSystem";
-import Kademlia from "./routes/kademlia/Kademlia";
 import Berkeley from "./routes/berkeley/Berkeley";
 import LamportsLogicalClocks from "./routes/lamports-logical-clocks/LamportsLogicalClocks";
 import DiffieHellman from "./routes/diffie-hellman/DiffieHellman";
@@ -10,6 +9,7 @@ import Greedy from "./routes/greedy/Greedy";
 import Layout from "./components/Layout";
 import 'react-toastify/dist/ReactToastify.css';
 import VectorClock from "./routes/vector-clock/VectorClock.jsx";
+import PolymorphPolyring from "./routes/polymorph-polyring/PolymorphPolyring.jsx";
 
 function App() {
     return (
@@ -18,7 +18,7 @@ function App() {
                 <Route path="/" element={<Layout/>}>
                     <Route index element={<Home/>}/>
                     <Route path="chord-system" element={<ChordSystem/>}/>
-                    <Route path="kademlia" element={<Kademlia/>}/>
+                    <Route path="polymorph-polyring" element={<PolymorphPolyring/>}/>
                     <Route path="berkeley" element={<Berkeley/>}/>
                     <Route path="lamports-logical-clocks" element={<LamportsLogicalClocks/>}/>
                     <Route path="vector-clock" element={<VectorClock/>}/>

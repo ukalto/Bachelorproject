@@ -8,7 +8,7 @@ const Home = () => {
     const [options] = useState([
         {
             label: "Peer2Peer Systems",
-            subOptions: [["Chord System", "chord-system"], ["Kademlia", "kademlia"]],
+            subOptions: [["Chord System", "chord-system"], ["Polymorph Polyring", "polymorph-polyring"]],
         },
         {
             label: "Clocks && Synchronisation",
