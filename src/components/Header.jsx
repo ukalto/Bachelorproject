@@ -37,7 +37,7 @@ const Header = () => {
     // Define your dropdown items here
     const p2pItems = [
         {text: 'Chord System', link: 'chord-system'},
-        {text: 'Kademlia', link: 'kademlia'},
+        {text: 'Polymorph Polyring', link: 'polymorph-polyring'},
     ];
 
     const csItems = [
