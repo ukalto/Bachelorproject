@@ -20,7 +20,6 @@ import data from "../../assets/data.json";
 import {Node} from "./Node.js"
 import {ToastContainer} from "react-toastify";
 import {PolymorphPolyringSolver} from "./PolymorphPolyringSolver.js";
-import {ChordSystemSolver} from "../chord-system/ChordSystemSolver.js";
 
 const PolymorphPolyring = () => {
     const [depth, setDepth] = useState(3);
