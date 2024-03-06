@@ -12,30 +12,26 @@ import {
 import {Scenario} from "../../components/Scenario";
 import InputButtons from "../../components/InputButtons";
 import {MDBCol, MDBRow} from "mdb-react-ui-kit";
-import {getScenario} from "../../components/GlobalFunctions.jsx";
+import {createToastError, getScenario} from "../../components/GlobalFunctions.jsx";
 import RangeSlider from "../../components/RangeSlider.jsx";
 import styled from "styled-components";
 import LineTo from "react-lineto";
 import data from "../../assets/data.json";
-
-class Node {
-    constructor(identifier) {
-        this.identifier = identifier;
-        this.parent = null;
-        this.children = [];
-    }
-}
+import {Node} from "./Node.js"
+import {ToastContainer} from "react-toastify";
+import {PolymorphPolyringSolver} from "./PolymorphPolyringSolver.js";
+import {ChordSystemSolver} from "../chord-system/ChordSystemSolver.js";
 
 const PolymorphPolyring = () => {
     const [depth, setDepth] = useState(3);
     const [nodesAmount, setNodesAmount] = useState(3);
+    const [graph, setGraph] = useState([]);
     const maxDepth = 3;
     const maxNodesAmount = 4;
     const [nodesCount, setNodesCount] = useState(0);
     const [nodeArr, setNodeArr] = useState([]);
     const [lines, setLines] = useState(null);
     const [pathNodes, setPathNodes] = useState([]);
-    const [nextIndexToReplace, setNextIndexToReplace] = useState(0);
     const [example] = useState(() => {
         const exampleData = data.data.find(item => item.name === 'PolymorphPolyring');
         const {
@@ -47,9 +43,11 @@ const PolymorphPolyring = () => {
             depth, nodesAmount, pathNodes
         };
     });
+    const [solutionPath, setSolutionPath] = useState([]);
 
     useEffect(() => {
         const graph = constructGraph(depth, nodesAmount);
+        setGraph(graph);
 
         const newNodeArr = [];
         let newNodesCount = 0;
@@ -69,7 +67,7 @@ const PolymorphPolyring = () => {
             const newLines = createLinesBetweenNodes(nodeArr, nodesAmount);
             setLines(newLines);
         }
-    }, [nodeArr, nodesAmount]);
+    }, [nodeArr, nodesAmount, solutionPath]);
 
 
     const constructGraph = (depth, nodeAmount) => {
@@ -118,14 +116,24 @@ const PolymorphPolyring = () => {
         return Array.from(nodesAtLayer.values());
     };
 
+    const handleNodesAmountChange = (newNodesAmount) => {
+        setNodesAmount(newNodesAmount);
+        setSolutionPath([]);
+        setPathNodes([]);
+    };
+
+    const handleDepthChange = (newDepth) => {
+        setDepth(newDepth);
+        setSolutionPath([]);
+        setPathNodes([]);
+    };
+
     const nodeClick = (nodeId) => {
         setPathNodes((prevPathNodes) => {
             const updatedPathNodes = [...prevPathNodes];
-            updatedPathNodes[nextIndexToReplace] = nodeId;
-            return updatedPathNodes;
+            return [updatedPathNodes[1], nodeId];
         });
-
-        setNextIndexToReplace((prevIndex) => (prevIndex + 1) % 2);
+        setSolutionPath([]);
     };
 
 
@@ -139,11 +147,31 @@ const PolymorphPolyring = () => {
         setDepth(3);
         setNodesAmount(3);
         setPathNodes([])
-        setNextIndexToReplace(0);
     };
 
     const handleSolveAlgorithm = async () => {
+        if (pathNodes.length !== 2) {
+            createToastError('You must select 2 Nodes!');
+        } else {
+            const solver = new PolymorphPolyringSolver(
+                graph,
+                pathNodes
+            );
+            const solveResult = solver.solve();
+            setSolutionPath(solveResult);
+        }
+    };
 
+    const checkLineInSolutionPath = (id1, id2) => {
+        if (solutionPath.includes(id1) && solutionPath.includes(id2)) {
+            const firstIdx = solutionPath.indexOf(id1);
+            if (firstIdx === solutionPath.length - 1) {
+                return solutionPath[firstIdx - 1] === id2;
+            } else {
+                return solutionPath[firstIdx - 1] === id2 || solutionPath[firstIdx + 1] === id2;
+            }
+        }
+        return false;
     };
 
     const createLineTo = (outer, arr, uniqueLines, components) => {
@@ -151,6 +179,7 @@ const PolymorphPolyring = () => {
             if (outer !== inner) {
                 const ids = [inner.identifier, outer.identifier].sort();
                 const key = `P${ids[0]}-${ids[1]}`;
+                const check = checkLineInSolutionPath(ids[0], ids[1]);
 
                 if (!uniqueLines.has(key)) {
                     uniqueLines.add(key);
@@ -159,8 +188,9 @@ const PolymorphPolyring = () => {
                             key={key}
                             from={`N${ids[0]}`}
                             to={`N${ids[1]}`}
-                            borderColor={'gray'}
+                            borderColor={check ? 'orange' : 'gray'}
                             borderWidth={3}
+                            zIndex={check ? 1 : 0}
                             borderStyle={'solid'}
                             className={'my-custom-line-class'}
                         />
@@ -186,13 +216,15 @@ const PolymorphPolyring = () => {
                         const tempArr = arr.slice(start, end);
                         tempArr.forEach(outer => {
                             createLineTo(outer, tempArr, uniqueLines, components);
+                            const check = checkLineInSolutionPath(outer.parent.identifier, outer.identifier);
 
                             components.push(
                                 <LineTo
                                     key={`P${outer.parent.identifier}-${outer.identifier}`}
                                     from={`N${outer.parent.identifier}`}
                                     to={`N${outer.identifier}`}
-                                    borderColor={'gray'}
+                                    borderColor={check ? 'orange' : 'gray'}
+                                    zIndex={check ? 1 : 0}
                                     borderWidth={3}
                                     borderStyle={'solid'}
                                 />
@@ -218,14 +250,14 @@ const PolymorphPolyring = () => {
                             <MDBCol md="4">
                                 <RangeBox>
                                     <RangeSlider text={"Depth"} min={2} max={maxDepth} value={depth}
-                                                 onChange={setDepth}/>
+                                                 onChange={handleDepthChange}/>
                                 </RangeBox>
                             </MDBCol>
                             <MDBCol md="8">
                                 <RangeBox>
                                     <RangeSlider text={"Nodes Amount/Depth"} min={2} max={maxNodesAmount}
                                                  value={nodesAmount}
-                                                 onChange={setNodesAmount}/>
+                                                 onChange={handleNodesAmountChange}/>
                                 </RangeBox>
                             </MDBCol>
                         </MDBRow>
@@ -262,6 +294,7 @@ const PolymorphPolyring = () => {
                 </NodeWrapper>
                 {lines}
             </Field>
+            <ToastContainer/>
         </FieldGrid>
     );
 };
