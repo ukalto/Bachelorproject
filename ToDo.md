@@ -15,14 +15,25 @@
 ## Routes
 - [X] Scenarios
 - [X] Input Fields
-- [ ] Algorithms
+- [X] Algorithms
   - [X] Chord-System
   - [X] Berkeley
   - [X] Diffie Hellman
   - [X] Crypto-System
   - [X] Greedy
-  - [ ] PolymorphPolyring
+  - [X] PolymorphPolyring
   - [X] LamportsLogicClocks
   - [X] Vector Clocks
 
 ## Responsive
+- [X] Home
+- [ ] Chord-System
+- [ ] Berkeley
+- [ ] Diffie Hellman
+- [ ] Crypto-System
+- [ ] Greedy
+- [ ] PolymorphPolyring
+- [ ] LamportsLogicClocks
+- [ ] Vector Clocks
+
+## Future Ideas
