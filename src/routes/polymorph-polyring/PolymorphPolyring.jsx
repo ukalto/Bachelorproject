@@ -15,7 +15,8 @@ import {MDBCol, MDBRow} from "mdb-react-ui-kit";
 import {getScenario} from "../../components/GlobalFunctions.jsx";
 import RangeSlider from "../../components/RangeSlider.jsx";
 import styled from "styled-components";
-import Xarrow from "react-xarrows";
+import LineTo from "react-lineto";
+import data from "../../assets/data.json";
 
 class Node {
     constructor(identifier) {
@@ -26,245 +27,250 @@ class Node {
 }
 
 const PolymorphPolyring = () => {
-        const [depth, setDepth] = useState(3);
-        const [nodesAmount, setNodesAmount] = useState(4);
-        const [graph, setGraph] = useState([]);
-        const [nodeArr, setNodeArr] = useState([]);
-        const [startNode, setStartNode] = useState(null);
-        const [finalNode, setFinalNode] = useState(null);
+    const [depth, setDepth] = useState(3);
+    const [nodesAmount, setNodesAmount] = useState(3);
+    const maxDepth = 3;
+    const maxNodesAmount = 4;
+    const [nodesCount, setNodesCount] = useState(0);
+    const [nodeArr, setNodeArr] = useState([]);
+    const [lines, setLines] = useState(null);
+    const [pathNodes, setPathNodes] = useState([]);
+    const [nextIndexToReplace, setNextIndexToReplace] = useState(0);
+    const [example] = useState(() => {
+        const exampleData = data.data.find(item => item.name === 'PolymorphPolyring');
+        const {
+            depth,
+            nodesAmount,
+            pathNodes
+        } = exampleData.details.find(item => item.type === 'example');
+        return {
+            depth, nodesAmount, pathNodes
+        };
+    });
 
-        useEffect(() => {
-            const newGraph = constructGraph(depth, nodesAmount);
-            setGraph(newGraph);
-            const newNodeArr = [];
-            for (let i = 0; i < depth; i++) {
-                newNodeArr.push(findNodesByLayer(newGraph, i))
-            }
-            setNodeArr(newNodeArr);
-        }, [depth, nodesAmount]);
+    useEffect(() => {
+        const graph = constructGraph(depth, nodesAmount);
 
-        const constructGraph = (depth, nodeAmount) => {
-            let graph = [];
+        const newNodeArr = [];
+        let newNodesCount = 0;
 
-            for (let i = 0; i < nodeAmount; i++) {
-                graph.push(new Node(String(i)));
-            }
+        for (let i = 0; i < depth; i++) {
+            const newLayer = findNodesByLayer(graph, i);
+            newNodeArr.push(newLayer);
+            newNodesCount += newLayer.length;
+        }
 
-            for (let d = 1; d < depth; d++) {
-                const nextLayer = [];
-                for (const node of graph) {
-                    for (let i = 0; i < nodeAmount; i++) {
-                        const childIdentifier = node.identifier + '.' + i;
-                        const child = new Node(childIdentifier);
-                        child.parent = node;
-                        node.children.push(child);
-                        nextLayer.push(child);
-                    }
+        setNodeArr(newNodeArr);
+        setNodesCount(newNodesCount);
+    }, [depth, nodesAmount]);
+
+    useEffect(() => {
+        if (nodeArr.length > 0) {
+            const newLines = createLinesBetweenNodes(nodeArr, nodesAmount);
+            setLines(newLines);
+        }
+    }, [nodeArr, nodesAmount]);
+
+
+    const constructGraph = (depth, nodeAmount) => {
+        let graph = [];
+
+        for (let i = 0; i < nodeAmount; i++) {
+            graph.push(new Node(String(i)));
+        }
+
+        for (let d = 1; d < depth; d++) {
+            const nextLayer = [];
+            for (const node of graph) {
+                for (let i = 0; i < nodeAmount; i++) {
+                    const childIdentifier = node.identifier + '.' + i;
+                    const child = new Node(childIdentifier);
+                    child.parent = node;
+                    node.children.push(child);
+                    nextLayer.push(child);
                 }
-                graph = nextLayer;
             }
+            graph = nextLayer;
+        }
 
-            return graph;
-        };
+        return graph;
+    };
 
-        const findNodesByLayer = (graph, layer) => {
-            const nodesAtLayer = new Map();
+    const findNodesByLayer = (graph, layer) => {
+        const nodesAtLayer = new Map();
 
-            const countDepth = (identifier) => (identifier.match(/\./g) || []).length;
+        const countDepth = (identifier) => (identifier.match(/\./g) || []).length;
 
-            const traverseAndCollect = (node) => {
-                const nodeDepth = countDepth(node.identifier);
-                if (nodeDepth === layer) {
-                    nodesAtLayer.set(node.identifier, node);
-                }
-                if (node.parent) {
-                    traverseAndCollect(node.parent);
-                }
-            };
-
-            graph.forEach(node => {
-                traverseAndCollect(node);
-            });
-
-            return Array.from(nodesAtLayer.values());
-        };
-
-        const handleClickStartNode = (node) => {
-            setStartNode(node);
-        };
-
-        const handleSelectFinalNode = (node) => {
-            setFinalNode(node);
-        };
-
-        const setExampleData = () => {
-        };
-
-        const resetFormValues = () => {
-        };
-
-        const handleSolveAlgorithm = async () => {
-            console.log(graph);
-            console.log("------------------------------")
-            console.log(findNodesByLayer(graph, 0))
-            console.log(findNodesByLayer(graph, 1))
-            console.log(findNodesByLayer(graph, 2))
-        };
-
-        const createArrowsBetweenNodes = (nodeArr, nodesAmount) => {
-            let components = [];
-
-            if (nodeArr) {
-                nodeArr.forEach((arr, index) => {
-                    if (index === 0) {
-                        arr.forEach(outer => {
-                            arr.forEach(inner => {
-                                if (outer !== inner) {
-                                    components.push(
-                                        <Xarrow
-                                            key={`P${outer.identifier}-${inner.identifier}`}
-                                            lineColor={'gray'}
-                                            showTail={false}
-                                            showHead={false}
-                                            curveness={0}
-                                            start={`N${outer.identifier}`}
-                                            end={`N${inner.identifier}`}
-                                            startAnchor={"middle"}
-                                            endAnchor={"middle"}
-                                        />
-                                    );
-                                }
-                            })
-                        })
-                    } else {
-                        let start = 0;
-                        let end = nodesAmount;
-                        for (let i = 0; i < Math.pow(nodesAmount, index); i++) {
-                            const tempArr = arr.slice(start, end);
-                            tempArr.forEach(outer => {
-                                tempArr.forEach(inner => {
-                                    if (outer !== inner) {
-                                        components.push(
-                                            <Xarrow
-                                                key={`C${outer.identifier}-${inner.identifier}`}
-                                                lineColor={'gray'}
-                                                showTail={false}
-                                                showHead={false}
-                                                curveness={0}
-                                                start={`N${outer.identifier}`}
-                                                end={`N${inner.identifier}`}
-                                                startAnchor={"middle"}
-                                                endAnchor={"middle"}
-                                            />
-                                        );
-                                    }
-                                })
-                                components.push(
-                                    <Xarrow
-                                        key={`P${outer.parent.identifier}-${outer.identifier}`}
-                                        lineColor={'gray'}
-                                        showTail={false}
-                                        showHead={false}
-                                        curveness={0}
-                                        start={`N${outer.identifier}`}
-                                        end={`N${outer.parent.identifier}`}
-                                        startAnchor={"middle"}
-                                        endAnchor={"middle"}
-                                    />
-                                );
-                            })
-                            start = end;
-                            end += nodesAmount;
-                        }
-                    }
-                })
+        const traverseAndCollect = (node) => {
+            const nodeDepth = countDepth(node.identifier);
+            if (nodeDepth === layer) {
+                nodesAtLayer.set(node.identifier, node);
             }
-            return components;
+            if (node.parent) {
+                traverseAndCollect(node.parent);
+            }
         };
 
+        graph.forEach(node => {
+            traverseAndCollect(node);
+        });
 
-        return (
-            <FieldGrid>
-                <FieldGridFirst>
-                    <GridItem>
-                        <InputField>
-                            <Headline>Inputs</Headline>
-                            <MDBRow tag="form" className='g-3' style={marginsInput}>
-                                <MDBCol md="4">
-                                    <RangeBox>
-                                        <RangeSlider text={"Depth"} min={2} max={3} value={depth}
-                                                     onChange={setDepth}/>
-                                    </RangeBox>
-                                </MDBCol>
-                                <MDBCol md="8">
-                                    <RangeBox>
-                                        <RangeSlider text={"Nodes Amount/Depth"} min={2} max={4} value={nodesAmount}
-                                                     onChange={setNodesAmount}/>
-                                    </RangeBox>
-                                </MDBCol>
-                            </MDBRow>
-                            <InputButtons
-                                resetForm={resetFormValues}
-                                setExampleData={setExampleData}
-                                solveAlgorithm={handleSolveAlgorithm}/>
-                        </InputField>
-                    </GridItem>
-                    <GridItem switchRows>
-                        <Scenario scenario={getScenario("PolymorphPolyring", "scenario")}/>
-                    </GridItem>
-                </FieldGridFirst>
-                <Field>
-                    <Headline>Algorithm</Headline>
-                    <NodeWrapper depth={depth}>
-                        <SubgraphContainer>
-                            {nodeArr.length > 0 && nodeArr[0].map((node, index) => (
-                                <NodeStyle
-                                    id={`N${node.identifier}`}
-                                    key={index}
-                                    index={index}
-                                    nodesAmount={nodeArr[0].length}
-                                    radius={1}>
-                                    {node.identifier}
-                                </NodeStyle>
-                            ))}
-                        </SubgraphContainer>
-                        <SubgraphContainer>
-                            {nodeArr.length > 1 && nodeArr[1].map((node, index) => (
-                                <NodeStyle
-                                    id={`N${node.identifier}`}
-                                    key={index}
-                                    index={index}
-                                    nodesAmount={nodeArr[1].length}
-                                    radius={1}>
-                                    {node.identifier}
-                                </NodeStyle>
-                            ))}
-                        </SubgraphContainer>
-                        <SubgraphContainer>
-                            {nodeArr.length > 2 && nodeArr[2].map((node, index) => (
-                                <NodeStyle
-                                    id={`N${node.identifier}`}
-                                    key={index}
-                                    index={index}
-                                    nodesAmount={nodeArr[2].length}
-                                    radius={2}>
-                                    {node.identifier}
-                                </NodeStyle>
-                            ))}
-                        </SubgraphContainer>
-                    </NodeWrapper>
-                    {createArrowsBetweenNodes(nodeArr, nodesAmount)}
-                </Field>
-            </FieldGrid>
-        );
+        return Array.from(nodesAtLayer.values());
+    };
+
+    const nodeClick = (nodeId) => {
+        setPathNodes((prevPathNodes) => {
+            const updatedPathNodes = [...prevPathNodes];
+            updatedPathNodes[nextIndexToReplace] = nodeId;
+            return updatedPathNodes;
+        });
+
+        setNextIndexToReplace((prevIndex) => (prevIndex + 1) % 2);
+    };
+
+
+    const setExampleData = () => {
+        setDepth(example.depth);
+        setNodesAmount(example.nodesAmount);
+        setPathNodes(example.pathNodes);
+    };
+
+    const resetFormValues = () => {
+        setDepth(3);
+        setNodesAmount(3);
+        setPathNodes([])
+        setNextIndexToReplace(0);
+    };
+
+    const handleSolveAlgorithm = async () => {
+
+    };
+
+    const createLineTo = (outer, arr, uniqueLines, components) => {
+        arr.forEach(inner => {
+            if (outer !== inner) {
+                const ids = [inner.identifier, outer.identifier].sort();
+                const key = `P${ids[0]}-${ids[1]}`;
+
+                if (!uniqueLines.has(key)) {
+                    uniqueLines.add(key);
+                    components.push(
+                        <LineTo
+                            key={key}
+                            from={`N${ids[0]}`}
+                            to={`N${ids[1]}`}
+                            borderColor={'gray'}
+                            borderWidth={3}
+                            borderStyle={'solid'}
+                            className={'my-custom-line-class'}
+                        />
+                    );
+                }
+            }
+        });
     }
-;
+
+    const createLinesBetweenNodes = (nodeArr, nodesAmount) => {
+        let components = [];
+        let uniqueLines = new Set();
+
+        if (nodeArr) {
+            nodeArr.forEach((arr, index) => {
+                if (index === 0) {
+                    arr.forEach(outer => {
+                        createLineTo(outer, arr, uniqueLines, components);
+                    });
+                } else {
+                    let start = 0, end = nodesAmount;
+                    for (let i = 0; i < Math.pow(nodesAmount, index); i++) {
+                        const tempArr = arr.slice(start, end);
+                        tempArr.forEach(outer => {
+                            createLineTo(outer, tempArr, uniqueLines, components);
+
+                            components.push(
+                                <LineTo
+                                    key={`P${outer.parent.identifier}-${outer.identifier}`}
+                                    from={`N${outer.parent.identifier}`}
+                                    to={`N${outer.identifier}`}
+                                    borderColor={'gray'}
+                                    borderWidth={3}
+                                    borderStyle={'solid'}
+                                />
+                            );
+                        });
+                        start = end;
+                        end += nodesAmount;
+                    }
+                }
+            });
+        }
+        return components;
+    };
+
+
+    return (
+        <FieldGrid>
+            <FieldGridFirst>
+                <GridItem>
+                    <InputField>
+                        <Headline>Inputs</Headline>
+                        <MDBRow tag="form" className='g-3' style={marginsInput}>
+                            <MDBCol md="4">
+                                <RangeBox>
+                                    <RangeSlider text={"Depth"} min={2} max={maxDepth} value={depth}
+                                                 onChange={setDepth}/>
+                                </RangeBox>
+                            </MDBCol>
+                            <MDBCol md="8">
+                                <RangeBox>
+                                    <RangeSlider text={"Nodes Amount/Depth"} min={2} max={maxNodesAmount}
+                                                 value={nodesAmount}
+                                                 onChange={setNodesAmount}/>
+                                </RangeBox>
+                            </MDBCol>
+                        </MDBRow>
+                        <InputButtons
+                            resetForm={resetFormValues}
+                            setExampleData={setExampleData}
+                            solveAlgorithm={handleSolveAlgorithm}/>
+                    </InputField>
+                </GridItem>
+                <GridItem switchRows>
+                    <Scenario scenario={getScenario("PolymorphPolyring", "scenario")}/>
+                </GridItem>
+            </FieldGridFirst>
+            <Field>
+                <Headline>Algorithm</Headline>
+                <NodeWrapper nodesCount={nodesCount}>
+                    {nodeArr.map((subArray, subIndex) => (
+                        <SubgraphContainer key={subIndex}>
+                            {subArray.map((node, index) => (
+                                <NodeStyle
+                                    className={`N${node.identifier}`}
+                                    key={index}
+                                    index={index}
+                                    depth={1.15 * (maxNodesAmount / nodesAmount)}
+                                    nodesAmount={subArray.length}
+                                    radiusDecrease={subIndex !== 1 ? 1.3 : 1}
+                                    inPath={pathNodes.includes(node.identifier)}
+                                    onClick={() => nodeClick(node.identifier)}>
+                                    {node.identifier}
+                                </NodeStyle>
+                            ))}
+                        </SubgraphContainer>
+                    ))}
+                </NodeWrapper>
+                {lines}
+            </Field>
+        </FieldGrid>
+    );
+};
 
 export default PolymorphPolyring;
 
 const NodeWrapper = styled.div`
     position: relative;
-    height: ${props => 350 + 220 * props.depth}px;
+    height: ${props => 350 + 10 * props.nodesCount}px;
     margin: 0 auto;
     width: 100%;
 `;
@@ -287,7 +293,7 @@ const NodeStyle = styled.button`
     border: 2px solid var(---tertiary);
     text-align: center;
     transform: ${props => {
-        const radius = 15 * props.nodesAmount / props.radius;
+        const radius = 10 * props.nodesAmount * props.depth / props.radiusDecrease;
         const angle = (2 * Math.PI * props.index) / props.nodesAmount;
 
         const x = Math.cos(angle) * radius;
@@ -305,7 +311,7 @@ const NodeStyle = styled.button`
         color: var(---primary);
     }
 
-    background-color: var(---primary);
+    background-color: ${props => props.inPath ? 'var(---secondary)' : 'var(---primary)'};
     border-color: var(---tertiary);
-    color: var(---tertiary);
+    color: ${props => props.inPath ? 'var(---primary)' : 'var(---tertiary)'};
 `;

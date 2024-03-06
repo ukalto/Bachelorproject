@@ -125,7 +125,12 @@
         },
         {
           "type": "example",
-          "values": {}
+          "depth": 3,
+          "nodesAmount": 3,
+          "pathNodes": [
+            "0.1.2",
+            "1.2.2"
+          ]
         }
       ]
     },
