@@ -283,7 +283,8 @@ const PolymorphPolyring = () => {
                                     depth={1.15 * (maxNodesAmount / nodesAmount)}
                                     nodesAmount={subArray.length}
                                     radiusDecrease={subIndex !== 1 ? 1.3 : 1}
-                                    inPath={pathNodes.includes(node.identifier)}
+                                    startNode={node.identifier === pathNodes[0]}
+                                    endNode={node.identifier === pathNodes[1]}
                                     onClick={() => nodeClick(node.identifier)}>
                                     {node.identifier}
                                 </NodeStyle>
@@ -343,7 +344,7 @@ const NodeStyle = styled.button`
         color: var(---primary);
     }
 
-    background-color: ${props => props.inPath ? 'var(---secondary)' : 'var(---primary)'};
+    background-color: ${props => props.startNode ? 'var(---error)' : props.endNode ? 'var(---fifth)' : 'var(---primary)'};
     border-color: var(---tertiary);
-    color: ${props => props.inPath ? 'var(---primary)' : 'var(---tertiary)'};
+    color: ${props => props.startNode || props.endNode ? 'var(---primary)' : 'var(---tertiary)'};
 `;
