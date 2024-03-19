@@ -1,6 +1,5 @@
 export class BerkeleySolver {
     constructor(serverTimes, timeDaemonIndex) {
-        console.log(serverTimes, timeDaemonIndex);
         this.servers = serverTimes.map((time, index) => [
             index,
             this.convertToSeconds(time),

@@ -25,7 +25,7 @@ export class VectorClockSolver {
     }
 
     updateVectors(vectorFrom, vectorTo) {
-        const updatedVector = vectorTo.slice();
+        const updatedVector = vectorTo.slice()
         for (let idx = 0; idx < vectorFrom.length; idx++) {
             const vFrom = vectorFrom[idx];
             const vTo = vectorTo[idx];
@@ -54,7 +54,7 @@ export class VectorClockSolver {
             }
             if (time !== this.taskList.length - 1) {
                 this.vectors.forEach(vector => {
-                    vector[time + 1] = vector[time];
+                    vector[time + 1] = vector[time].slice();
                 })
             }
         }

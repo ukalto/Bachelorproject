@@ -67,7 +67,7 @@ const VectorClock = () => {
     const setExampleData = () => {
         setVectorsAmount(example.vectorsAmount);
         setTimeSteps(example.timeSteps);
-        setVectors(Array.from({length: example.vectorsAmount}, () => Array.from({length: example.timeSteps}, () => Array(example.vectorsAmount).fill(0))));
+        setVectors(Array.from({length: vectorsAmount}, () => Array.from({length: timeSteps}, () => Array(vectorsAmount).fill(0))));
         setArrows(example.arrows);
         setIncrements(new Map(Object.entries(example.increments)));
     };
@@ -144,20 +144,16 @@ const VectorClock = () => {
         }
     }
 
-    const handleSolveAlgorithm = async () => {
+    const handleSolveAlgorithm = () => {
         if (vectors.some(vector => vector.some(timeSteps => timeSteps.includes('')))) {
             createToastError('You must fill out every input field!');
         } else {
-            const copiedVectors = deepCopyVectors();
+            const copiedVectors = Array.from({length: vectorsAmount}, () => Array.from({length: timeSteps}, () => Array(vectorsAmount).fill(0)));
             const solver = new VectorClockSolver(copiedVectors, arrows, increments, timeSteps);
             const solveResult = solver.solve();
             setVectors([...solveResult]);
         }
     }
-
-    const deepCopyVectors = () => {
-        return JSON.parse(JSON.stringify(vectors.map(vector => Array(vectors.length).fill(vector[0]))));
-    };
 
     const sortIncrementsMap = (map) => {
         const sortedEntries = [...map.entries()].sort((a, b) => {

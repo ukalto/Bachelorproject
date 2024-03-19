@@ -34,7 +34,6 @@ const Header = () => {
         };
     }, []);
 
-    // Define your dropdown items here
     const p2pItems = [
         {text: 'Chord System', link: 'chord-system'},
         {text: 'Polymorph Polyring', link: 'polymorph-polyring'},
@@ -55,7 +54,6 @@ const Header = () => {
 
     return (
         <div>
-            {/* Main Navbar */}
             {!isMobile ? (
                     <MDBNavbar expand='sm' light bgColor='light'>
                         <MDBContainer fluid>
@@ -73,7 +71,6 @@ const Header = () => {
                 : null
             }
 
-            {/* Hamburger Navbar (conditionally rendered) */}
             {isMobile ? (
                 <MDBNavbar light bgColor='light'>
                     <MDBContainer fluid>
@@ -92,12 +89,10 @@ const Header = () => {
                 </MDBNavbar>
             ) : null}
 
-            {/* Collapsed Content (conditionally rendered) */}
             {isMobile && showNavExternal ? (
                 <MDBCollapse show={showNavExternal}>
                     <div className='bg-light p-4'>
                         <div style={collapsedGrid}>
-                            {/* Content for collapsed menu */}
                             <CollapsedContent title="P2P" items={p2pItems}/>
                             <CollapsedContent title="CS" items={csItems}/>
                             <CollapsedContent title="KEM" items={kemItems}/>
